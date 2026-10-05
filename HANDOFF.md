@@ -22,6 +22,9 @@
 
 ## สถานะทางเทคนิค
 
+- demo.17 ใช้ UI กรมท่า–น้ำเงิน และ Lucide SVG inline symbols จาก 0.468.0 (ใบอนุญาตใน dist/vendor) ห้ามเพิ่ม emoji ในส่วน UI; ข้อมูลที่ผู้ใช้พิมพ์ยังเก็บตามเดิม
+- ทดสอบ logic, Excel และ DOM smoke ผ่าน; browser visual QA ของ demo.17 ยังไม่ผ่านการตรวจภาพ เนื่องจาก browser connector โหลด request-header policy ไม่สำเร็จ ต้องตรวจ desktop/mobile ในรอบที่เชื่อมต่อได้
+
 - HTML/CSS/JavaScript แบบไม่มี framework หรือขั้นตอน build
 - ข้อมูลเก็บ localStorage key `jot-money-v1`; อย่าเปลี่ยน key จนข้อมูลหายโดยไม่มี migration
 - รุ่น demo.16 เริ่ม accounts/entries ว่างและ budget 0; โหลด state ที่ไม่มีบัญชีได้ ไม่ล้างข้อมูลที่ผู้ใช้จดไว้เดิม
