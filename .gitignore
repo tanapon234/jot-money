@@ -1,0 +1,6 @@
+# Release archives are stored outside this app directory.
+*.zip
+
+# Local editor and operating-system files
+.DS_Store
+Thumbs.db
