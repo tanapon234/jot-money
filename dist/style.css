@@ -271,4 +271,181 @@ dialog h2{font-size:23px}
  footer{padding-top:20px}.footer-brand span{display:none}
 }
 @media(max-width:370px){main{padding-inline:12px}.quick-card,.recent-card,.panel,.spending-card{padding:16px}.big-number{font-size:37px}.segments button{font-size:12px;gap:5px}.account-tile .account-name{display:block}.account-tile b{margin-top:4px}.settings-list-icon{display:none}.entry-icon{width:30px;height:30px}.entry-amount{font-size:14px}.empty-state .outline{margin-left:0}}
+/* Capture-first home: a compact summary, then one focused entry form. */
+#home .hero-grid{grid-template-columns:minmax(0,1fr);margin-bottom:20px}
+#home .reserve-card{display:none}
+#home .balance-card{min-height:0;padding:22px 26px;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);column-gap:32px;align-items:center}
+#home .balance-top{grid-column:1;gap:10px}
+#home .big-number{grid-column:1;font-size:42px;margin:10px 0 0;letter-spacing:-1.5px}
+#home .balance-caption{display:none}
+#home .balance-bottom{grid-column:2;grid-row:1 / 3;border-top:0;border-left:1px solid #ffffff20;padding:4px 0 4px 26px;gap:24px;flex-wrap:wrap}
+#home .balance-bottom>div{flex:1}
+.balance-accounts-link{grid-column:1 / -1;justify-self:start;display:flex;align-items:center;gap:4px;color:#c6d6f0;font-size:12px;margin-top:8px;min-height:32px;padding:4px 0;text-align:left}
+.balance-accounts-link:hover{color:#fff}
+.balance-accounts-link .icon{width:14px;height:14px}
+#home .content-grid{grid-template-columns:minmax(0,1.2fr) minmax(0,1fr)}
+#quickCard .section-description{margin:6px 0 18px}
+.capture-onboarding{margin:16px 0 20px}
+.capture-onboarding .empty-state{padding:16px;gap:12px;flex-wrap:wrap}
+.capture-onboarding .empty-state .outline{margin-left:0}
+.capture-account-trigger{display:flex;align-items:center;gap:12px;min-height:70px;width:100%;padding:13px 15px;text-align:left;border:1px solid #d9e2f1;border-radius:12px;background:#f7f9fd}
+.capture-date-field{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:15px 0}
+.capture-date-field label{margin:0;flex-shrink:0;font-size:13px}
+.capture-date-field input{width:min(180px,65%);min-width:0;min-height:44px;margin:0;padding:9px 10px;font-size:14px;background:#f7f9fd}
+.capture-account-trigger:hover{border-color:#9bb2dc;background:#f0f4fc}
+.capture-account-trigger:disabled{opacity:.55;cursor:default}
+.capture-account-icon{width:36px;height:36px;display:grid;place-items:center;flex-shrink:0;border-radius:10px;background:#e9effb;color:#31518e}
+.capture-account-copy{flex:1;min-width:0}
+#captureAccountName{display:block;font-size:14px;font-weight:600;overflow-wrap:anywhere}
+#captureAccountHint{display:block;font-size:11px;color:var(--muted);line-height:1.7;margin-top:3px;overflow-wrap:anywhere}
+.capture-account-chevron{color:#6b82a5}
+.capture-account-dialog{width:min(520px,calc(100% - 24px))}
+.capture-account-dialog .search-field{margin:16px 0}
+#captureAccountList{display:flex;flex-direction:column;gap:8px;min-width:0}
+#captureAccountList>button{display:flex;align-items:center;gap:12px;width:100%;min-height:72px;padding:14px;text-align:left;border:1px solid var(--line);border-radius:12px;background:#fff}
+#captureAccountList>button:hover{background:#f5f8fe;border-color:#b6c6e4}
+#captureAccountList>button.selected,#captureAccountList>button[aria-pressed="true"]{background:#edf2ff;border-color:#9bb5ec;box-shadow:inset 0 0 0 1px #9bb5ec}
+#captureAccountList>button>span{min-width:0;overflow-wrap:anywhere}
+#captureAccountList .capture-account-copy,#captureAccountList .capture-account-option-copy{flex:1;min-width:0}
+#captureAccountList strong,#captureAccountList b{font-size:14px;font-weight:600;overflow-wrap:anywhere}
+#captureAccountList small{display:block;font-size:11px;color:var(--muted);overflow-wrap:anywhere}
+#captureAccountList .capture-account-value{max-width:42%;font:500 14px/1.6 Arial,var(--font);text-align:right;color:#31518e}
+#captureAccountList .capture-account-value .icon{display:block;width:15px;height:15px;margin:3px 0 0 auto}
+@media(max-width:1180px){#home .content-grid{grid-template-columns:minmax(0,1fr)}#home .balance-card{column-gap:20px}#home .balance-bottom{gap:16px;padding-left:20px}}
+@media(max-width:640px){
+ #home .hero-grid{margin-bottom:16px}
+ #home .balance-card{display:block;padding:17px 20px;border-radius:17px}
+ #home .balance-top .card-label{font-size:12px}
+ #home .balance-top>.icon{width:18px;height:18px}
+ #home .big-number{font-size:35px;line-height:1.15;letter-spacing:-1px;margin:8px 0 12px}
+ #home .balance-bottom{border-left:0;border-top:1px solid #ffffff20;padding:10px 0 0;gap:16px;flex-wrap:nowrap}
+ #home .balance-bottom span:not(.balance-art){font-size:10px}
+ #home .balance-bottom b{font-size:16px}
+ #home .balance-accounts-link{font-size:11px;margin-top:5px;min-height:28px}
+ #home .page-header{margin-bottom:16px}
+ #quickCard>.section-heading{margin-bottom:6px}
+ #quickCard .section-description{font-size:12px;margin:4px 0 14px}
+ .capture-account-trigger{min-height:66px;padding:12px;gap:10px}
+ #captureAccountName{font-size:13px}
+ .capture-account-dialog{padding:20px}
+}
+/* History and calendar: keep amounts legible without widening small screens. */
+#history{padding-bottom:70px;min-width:0}
+#history .history-toolbar{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:22px 0 0}
+#history .history-switch{width:280px;margin:0}
+#history .history-zone{font-size:11px;color:var(--muted)}
+#history .history-search{display:flex;align-items:center;gap:12px}
+#history .history-search .search-field{flex:1;min-width:0;margin:20px 0 12px}
+#history .history-search>.text-button{flex-shrink:0}
+#history .history-explanation,#history .calendar-legend{font-size:12px;line-height:1.85;color:var(--muted);margin:8px 0 24px}
+#history .history-filter-notice{padding:12px 15px;background:#edf2ff;border:1px solid #dce5fa;border-radius:10px;font-size:12px;overflow-wrap:anywhere}
+#history .history-day{margin-top:22px;border:1px solid var(--line);border-radius:15px;overflow:hidden}
+#history .history-day-heading{display:flex;align-items:center;flex-wrap:wrap;gap:10px;padding:16px 18px;background:#f5f7fc;border-bottom:1px solid var(--line)}
+#history h3{margin:0;font-size:16px;font-weight:600;overflow-wrap:anywhere}
+#history .history-day-heading .count-badge{margin-left:auto}
+#history .history-totals{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;width:100%;min-width:0}
+#history .history-totals>span{font-size:11px;color:var(--muted);min-width:0}
+#history .history-totals b{display:block;font:500 18px/1.6 Arial,var(--font);color:var(--ink);overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
+#history .history-totals b.history-income{color:#227555}
+#history .history-totals b.history-expense{color:#ac4c4c}
+#history .history-totals b.history-net{color:#31518e}
+#history .history-day>.entry{padding:16px 18px}
+#history .entry-amount{white-space:normal;overflow-wrap:anywhere;max-width:45%;text-align:right;min-width:0}
+#history .history-net-note,#history .history-filter-caption{font-size:12px;color:var(--muted);line-height:1.8;margin:10px 0}
+#history .calendar-navigation{display:flex;align-items:center;gap:12px;margin:24px 0 18px}
+#history .calendar-navigation h3{flex:1;text-align:center;font-size:19px}
+#history .calendar-navigation .icon-button{border:1px solid var(--line);border-radius:10px;flex-shrink:0}
+#history .calendar-navigation button:disabled{opacity:.35;cursor:default}
+#history .calendar-weekdays,#history .calendar-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
+#history .calendar-weekdays{margin-bottom:9px;text-align:center;font-size:12px;color:var(--muted)}
+#history .calendar-day{min-width:0;min-height:128px;border:1px solid var(--line);border-radius:12px;background:#fff;display:flex;flex-direction:column;gap:5px;align-items:stretch;padding:10px;text-align:left;position:relative}
+#history .calendar-day:hover{background:#f4f7ff;border-color:#afc1e9}
+#history .calendar-day.has-entries{background:#f7f9fd}
+#history .calendar-day.is-today{border-color:#6f8ed4}
+#history .calendar-day.is-selected{background:#172b4b;border-color:#172b4b;color:#fff;box-shadow:0 3px 12px #17253e18}
+#history .calendar-day:focus-visible{outline:3px solid #6485f0;outline-offset:2px;z-index:1}
+#history .calendar-day-top{display:flex;align-items:center;justify-content:space-between;gap:2px;font:14px/1.5 Arial,var(--font)}
+#history .calendar-day-top .icon{width:13px;height:13px}
+#history .calendar-today-tag{color:#315de4;font-size:10px;line-height:1.5}
+#history .is-selected .calendar-today-tag{color:#c2d2ff}
+#history .calendar-value{display:flex;align-items:baseline;justify-content:space-between;gap:3px;font-size:10px;line-height:1.5;color:#64748b}
+#history .calendar-value b{font:500 12px/1.5 Arial,var(--font);color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;min-width:0;text-align:right}
+#history .is-selected .calendar-value{color:#c3d1e9}
+#history .is-selected .calendar-value b{color:#fff}
+#history .calendar-income,#history .calendar-income b{color:#227555}
+#history .is-selected .calendar-income,#history .is-selected .calendar-income b{color:#a9dfc8}
+#history .calendar-expense,#history .calendar-expense b{color:#ac4c4c}
+#history .is-selected .calendar-expense,#history .is-selected .calendar-expense b{color:#ffc1b5}
+#history .calendar-net,#history .calendar-net b{color:#31518e}
+#history .is-selected .calendar-net,#history .is-selected .calendar-net b{color:#c2d2ff}
+#history .calendar-entry-mark{margin-top:auto;font-size:10px;line-height:1.5;color:var(--muted)}
+#history .calendar-mobile-net,#history .calendar-mobile-legend{display:none}
+#history .is-selected .calendar-entry-mark{color:#c3d1e9}
+#history .calendar-summary{padding:20px;border-radius:15px;border:1px solid #dfe6f3;background:#f2f5fb;margin:20px 0}
+#history .calendar-detail{border-top:1px solid var(--line);padding-top:24px}
+#history .calendar-detail>.section-heading{margin-bottom:14px}
+#history .calendar-detail #calendarDayEntries{margin-top:16px}
+@media(max-width:1000px){#history .calendar-value{flex-direction:column;gap:0}#history .calendar-day{padding:8px;min-height:138px}}
+@media(max-width:640px){
+ #history{padding-bottom:70px}
+ #history .history-toolbar{gap:8px;flex-wrap:wrap;margin-top:18px}
+ #history .history-switch{width:100%}
+ #history .history-zone{margin-left:auto}
+ #history .history-explanation,#history .calendar-legend{font-size:11px}
+ #history .history-day-heading{padding:14px 12px}
+ #history .history-day>.entry{padding:14px 12px;gap:8px}
+ #history .history-day>.entry .entry-icon{display:none}
+ #history .history-totals{gap:8px}
+ #history .history-totals b{font-size:15px}
+ #history .calendar-navigation{gap:5px;flex-wrap:wrap;margin-top:18px}
+ #history .calendar-navigation h3{font-size:16px}
+ #history .calendar-navigation>.outline{width:100%;margin-top:4px;min-height:40px}
+ #history .calendar-grid,#history .calendar-weekdays{gap:3px}
+ #history .calendar-day{padding:5px 3px;border-radius:7px;min-height:133px;gap:4px}
+ #history .calendar-day-top{font-size:12px}
+ #history .calendar-day-top .icon{width:10px;height:10px}
+ #history .calendar-value{font-size:9px;line-height:1.4}
+ #history .calendar-value b{font-size:10px;line-height:1.5;text-align:left;letter-spacing:-.2px}
+ #history .calendar-entry-mark{font-size:8px;overflow-wrap:anywhere}
+ #history .calendar-today-tag{font-size:9px}
+ #history .calendar-summary{padding:15px 12px}
+ #history .calendar-summary>.section-heading{flex-wrap:wrap}
+ #history .calendar-detail h3{font-size:16px}
+}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+
+/* Mobile calendar is a day picker, not seven narrow financial reports. */
+@media(max-width:640px){
+ #history .calendar-grid,#history .calendar-weekdays{gap:4px}
+ #history .calendar-weekdays{font-size:12px;margin-bottom:10px}
+ #history .calendar-day{min-height:64px;padding:8px 1px;border-radius:9px;gap:6px;justify-content:flex-start;align-items:center}
+ #history .calendar-day-top{font-size:15px;justify-content:center;width:100%;position:relative;line-height:24px}
+ #history .calendar-day-top b{display:inline-flex;align-items:center;justify-content:center;width:25px;height:25px;border-radius:50%;font-weight:600}
+ #history .calendar-day-top>.icon{position:absolute;width:9px;height:9px;right:0;top:-4px}
+ #history .calendar-day.is-today .calendar-day-top b{outline:1.5px solid #6f8ed4;outline-offset:1px}
+ #history .calendar-day.is-selected.is-today .calendar-day-top b{outline-color:#c2d2ff}
+ #history .calendar-value,#history .calendar-entry-mark,#history .calendar-today-tag{display:none}
+ #history .calendar-mobile-net{display:block;width:100%;min-height:16px;font:600 clamp(9.5px,2.7vw,12px)/1.6 Arial,var(--font);text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums;color:#536d9b}
+ #history .calendar-mobile-net.positive{color:#227555}
+ #history .calendar-mobile-net.negative{color:#ac4c4c}
+ #history .calendar-mobile-net .icon{width:13px;height:13px;vertical-align:middle}
+ #history .is-selected .calendar-mobile-net.positive{color:#a9dfc8}
+ #history .is-selected .calendar-mobile-net.negative{color:#ffc1b5}
+ #history .is-selected .calendar-mobile-net.zero{color:#c2d2ff}
+ #history .calendar-mobile-legend{display:block;font-size:12px;line-height:1.8;color:var(--muted);margin:12px 0}
+ #history .calendar-mobile-legend .icon{width:13px;height:13px;vertical-align:middle}
+ #history .calendar-mobile-legend .income{color:#227555}
+ #history .calendar-mobile-legend .expense{color:#ac4c4c}
+ #history .calendar-legend{display:none}
+ #history .calendar-summary{margin:16px 0;padding:14px}
+ #history #calendarView .history-totals{display:flex;flex-direction:column;gap:7px}
+ #history #calendarView .history-totals>span{display:flex;align-items:baseline;justify-content:space-between;gap:12px;font-size:13px}
+ #history #calendarView .history-totals b{font-size:17px;line-height:1.5;text-align:right;min-width:0}
+ #history .calendar-detail{padding-top:18px}
+ #history .calendar-navigation>.outline{grid-column:1/-1;justify-self:end;width:auto;margin:0;font-size:12px;min-height:34px}
+ #history .calendar-navigation{display:grid;grid-template-columns:44px minmax(0,1fr) 44px;gap:6px;margin-top:12px;margin-bottom:14px}
+ #history .calendar-navigation h3{white-space:nowrap;font-size:15px}
+ #history .history-explanation{font-size:11px;line-height:1.6;margin-bottom:12px}
+ #floatingCapture.compact-calendar{width:50px;height:50px;min-width:50px;min-height:50px;padding:0;gap:0;justify-content:center;font-size:0;border-radius:50%}
+ #floatingCapture.compact-calendar .icon{width:23px;height:23px}
+}

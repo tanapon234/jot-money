@@ -1,6 +1,9 @@
 const assert=require('node:assert/strict'),fs=require('node:fs');
 const M=require('./dist/core.js'),I=require('./dist/excel-import.js'),XLSX=require('./dist/vendor/xlsx-0.20.3.min.js');
-const source=I.read(fs.readFileSync('../2026-10-06.xlsx'),XLSX);
+const syntheticMode=process.argv.includes('--synthetic'),fixture=syntheticMode?require('./synthetic-import-fixture.cjs'):null;
+const borrowerNames=fixture?.borrowerNames||['โมยืม','เฟินยืม'];
+const bytes=fixture?.bytes||fs.readFileSync('../2026-10-06.xlsx');
+const source=I.read(bytes,XLSX);
 assert.deepEqual(source.errors,[]);assert.equal(source.rows,731);assert.equal(source.pairs,111);assert.equal(source.entries.length,620);assert.equal(source.accounts.length,16);
 const state=M.migrate({budget:300,accounts:[{id:'cash',name:'เงินสด',opening:1000}],entries:[]});
 const shortNames={accounts:[{id:'make',name:'MAKE'},{id:'mymo',name:'MyMo'},{id:'cash',name:'เงินสด'}]};
@@ -8,14 +11,14 @@ assert.equal(I.defaultAccount('เงินเก็บ(make by k bank)',shortNa
 assert.equal(I.defaultAccount('Bank Accounts(MyMo)',shortNames),undefined);
 assert.equal(I.defaultAccount('Cash',shortNames),undefined);
 assert.equal(I.defaultAccount(' make ',shortNames).id,'make');
-const mapping={accounts:Object.fromEntries(source.accounts.map(name=>[name,{name,kind:['โมยืม','เฟินยืม'].includes(name)?'borrower':'wallet'}])),categories:Object.fromEntries(source.categories.map(name=>[name,I.defaultCategory(name,state,M)]))};
+const mapping={accounts:Object.fromEntries(source.accounts.map(name=>[name,{name,kind:borrowerNames.includes(name)?'borrower':'wallet'}])),categories:Object.fromEntries(source.categories.map(name=>[name,I.defaultCategory(name,state,M)]))};
 let serial=0;const id=()=>String(++serial);
 const result=I.plan(state,source,mapping,'replace',M,id);
 assert.equal(state.accounts[0].opening,1000);assert.equal(state.entries.length,0);
 assert.equal(result.next.budget,300);assert.equal(result.added.length,620);
 assert.equal(result.added.filter(e=>e.type==='transfer').length,111);assert.equal(result.added.filter(e=>e.type==='adjustment').length,3);
 // Independently reconcile raw rows. Do not commit private sample account balances as fixtures.
-const rawWorkbook=XLSX.read(fs.readFileSync('../2026-10-06.xlsx'));
+const rawWorkbook=XLSX.read(bytes);
 const rawRows=XLSX.utils.sheet_to_json(rawWorkbook.Sheets[rawWorkbook.SheetNames[0]],{header:1}).slice(1);
 const expected={};
 for(const raw of rawRows){const name=raw[1];if(!name)continue;expected[name]=(expected[name]||0)+(String(raw[6]).startsWith('รายรับ')?Number(raw[5]):-Number(raw[5]))}
@@ -36,5 +39,4 @@ const twins=I.normalize([synthetic('a','b','รายจ่ายจากกา
 assert.equal(twins.entries.length,2);assert.notEqual(twins.entries[0].importKey,twins.entries[1].importKey);
 assert.equal(twins.entries[0].date,'2026-10-04T15:30:09.000Z');
 assert.throws(()=>I.plan(state,source,{...mapping,accounts:{...mapping.accounts,Cash:{name:'เดียวกัน',kind:'wallet'},'Bank Accounts(MyMo)':{name:'เดียวกัน',kind:'wallet'}}},'replace',M,id));
-console.log('Passed: actual XLSX 731 rows → 620 entries / 111 paired transfers, 16 balances, 3 debt adjustments, duplicate imports, signed debt, Bangkok dates and invalid rows');
-console.log(JSON.stringify({walletTotal:M.total(result.next),receivable:M.debt(result.next),payable:M.owed(result.next),categoryCount:M.categories(result.next).length}));
+console.log(`Passed: ${syntheticMode?'synthetic':'actual'} XLSX 731 rows -> 620 entries / 111 paired transfers, 16 accounts, 3 debt adjustments, duplicate imports, signed debt, Bangkok dates and invalid rows`);

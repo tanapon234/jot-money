@@ -1,5 +1,26 @@
 # ส่งต่องานให้ Codex
 
+## งานล่าสุด: demo.18
+
+- หน้าแรก capture-first: ไม่มีลิสต์บัญชี, สรุปเงินกระชับ, ทางลัดไปหน้าบัญชี; chooser dialog ค้นหาชื่อ/กลุ่ม ใช้ Money.wallets เพื่อรักษากฎบัญชีซ่อน/ถังขยะ/ผู้ยืม
+- `jot-money-v1-last-account` เก็บเฉพาะ id บัญชีล่าสุด ไม่เปลี่ยน schema/ledger; validated fallback เมื่อ id ใช้ไม่ได้ และ preference failure ไม่กระทบการบันทึกรายการ
+- `capture-ui-check.cjs` และ Chrome ผ่าน many-account layout 320/375/430/1280, picker, nested quickDialog, draft/category preservation, account save, reload preference และ ledger invariance; ผู้ตรวจแยก Sol/Medium ไม่พบปัญหาข้อมูล
+- เพิ่มรายการแบ่งรายวันและปฏิทินรายเดือนในหน้า “รายการทั้งหมด”; search ใช้ชุดข้อมูลเดียวกันกับยอดวันและเดือน
+- ช่องปฏิทินแสดงยอด “รับ” เฉพาะวันที่มีรายรับ (ใช้ข้อมูลหลังค้นหา); รายการโอนไม่ทำให้เกิดยอดรับ
+- ปฏิทินมือถือ <=640px เป็น compact day picker: แสดงสุทธิหนึ่งตัวเลขต่อวัน (+ เขียว / − แดงสุภาพ / 0 กลาง), ย่อ K/M/B, โอน/adjustment เท่านั้นใช้ SVG, ไม่มีรายการเว้นว่าง ยอดเต็มอยู่ในรายละเอียด/สรุปเดือนและ aria-label; เดสก์ท็อปคงเดิม ไม่เปลี่ยนสูตรหรือข้อมูล และห้ามเรียกสุทธิว่าเงินเหลือใช้
+- `dist/history.js` เป็น helper บริสุทธิ์: วันกรุงเทพฯสำหรับ timestamp, วันล้วน/naive รักษาวันเดิม, รวมเงินเป็นหน่วยสตางค์, income/expense เท่านั้น
+- `dist/app.js` เก็บสถานะมุมมอง/เดือน/วันเฉพาะในหน่วยความจำ ไม่แตะ ledger schema และ localStorage key `jot-money-v1`
+- หน้าต่างแก้ไขมีวันที่; `moveDate` คืน timestamp เดิมเมื่อวันไม่เปลี่ยน
+- ไม่แก้กฎบัญชีซ่อน ถังขยะ หนี้ และงบ; ไม่แก้ promo-video
+- ผู้ใช้ยืนยัน “อัพเดททั้งคู่ครับ” วันที่ 7 ตุลาคม 2026 อนุมัติอัปเดตในเครื่องและเว็บเดโมผ่าน GitHub/Cloudflare Pages; ไม่เปลี่ยน main
+- ช่อง entryDate/transferDate แก้วันได้: ใช้ History.moveDate กับเวลา ณ บันทึก, เริ่มวันนี้เวลาไทย และ reset วันที่เมื่อเปิดแผงจด/หลังบันทึก ทดสอบ deterministic clock ใกล้เที่ยงคืนไทยแล้ว
+- ตรวจ Excel ด้วย `node import-check.cjs --synthetic` และ `node import-ui-check.cjs --synthetic` เท่านั้น ไม่อ่านไฟล์การเงินจริง
+- เครื่องมือควบคุม Windows ผ่าน native pipe ใช้งานไม่ได้ในรอบนี้; ตรวจ browser แบบ headless แยก profile ไม่ถือเป็นการตรวจบน iPhone จริง
+- ผ่าน `check.cjs`, `history-check.cjs`, `history-ui-check.cjs`, synthetic import ทั้งสองชุด, syntax และ DOM smoke เดิม
+- โมดูล/UI และผู้ตรวจแยกตั้งค่า GPT-6.1 Sol / Medium; fixture/Chrome ตั้งค่า GPT-6 Luna / Low ไม่มีการยกระดับ Astra
+- Browser QA และ screenshot เป็นข้อมูลสังเคราะห์ใน `../.qa/` เท่านั้น ไม่แก้ข้อมูลใน profile ผู้ใช้
+- Chrome ผ่าน 320/375/430/1280 พิกเซล รวม document/day-cell overflow, ยอดยาว, last-row clearance, Enter เปลี่ยนเดือน และ focus; ภาพปฏิทิน/รายการ 8 ภาพ ตรวจรูปลักษณ์หลักที่ 320/375/1280 แล้ว
+
 ## เป้าหมาย
 
 รับช่วงเดโมบัญชี “จดไว” และพัฒนาต่อบนคอมของผู้ใช้ เริ่มจากอ่าน README.md และโค้ด เปิดเดโมให้ลอง พร้อมรายงานจุดที่ตรวจพบ อย่าเปลี่ยนฟีเจอร์หรือออกแบบใหม่โดยยังไม่มีคำขอเพิ่มเติม และอย่าเผยแพร่หรือเปลี่ยนเว็บไซต์เดิมจากชุดไฟล์นี้

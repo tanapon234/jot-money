@@ -1,7 +1,9 @@
 const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm'),crypto=require('node:crypto');
 const Money=require('./dist/core.js'),ExcelImport=require('./dist/excel-import.js'),XLSX=require('./dist/vendor/xlsx-0.20.3.min.js');
 (async()=>{
- const bytes=fs.readFileSync('../2026-10-06.xlsx'),source=ExcelImport.read(bytes,XLSX);
+ const syntheticMode=process.argv.includes('--synthetic'),fixture=syntheticMode?require('./synthetic-import-fixture.cjs'):null;
+ const borrowerNames=fixture?.borrowerNames||['โมยืม','เฟินยืม'];
+ const bytes=fixture?.bytes||fs.readFileSync('../2026-10-06.xlsx'),source=ExcelImport.read(bytes,XLSX);
  const original=Money.migrate({budget:300,accounts:[{id:'cash',name:'เงินสด',opening:1000}],entries:[]});
  const elements=new Map(),storage=new Map([['jot-money-v1',JSON.stringify(original)]]);
  let failWrite=false;
@@ -12,9 +14,9 @@ const Money=require('./dist/core.js'),ExcelImport=require('./dist/excel-import.j
  const context={$ ,KEY:'jot-money-v1',state:structuredClone(original),Money,ExcelImport,XLSX,crypto,esc:s=>String(s),fmt:n=>n.toFixed(2),labels:{expense:'expense',income:'income',transfer:'transfer',adjustment:'adjustment'},render(){},toast(){},confirm:()=>true,account:'cash',localStorage:{getItem:key=>storage.get(key)||null,setItem(key,value){if(failWrite&&key==='jot-money-v1')throw Error('quota');storage.set(key,value)}}};
  vm.createContext(context);vm.runInContext(fs.readFileSync('./dist/import-ui.js','utf8'),context);
  $('openImport').onclick();
- source.accounts.forEach((name,index)=>{$('importTarget'+index).value='';$('importName'+index).value=name;$('importKind'+index).value=['โมยืม','เฟินยืม'].includes(name)?'borrower':'wallet'});
+ source.accounts.forEach((name,index)=>{$('importTarget'+index).value='';$('importName'+index).value=name;$('importKind'+index).value=borrowerNames.includes(name)?'borrower':'wallet'});
  source.categories.forEach((name,index)=>{$('importCat'+index).value=ExcelImport.defaultCategory(name,original,Money)});
- $('importFile').files=[{name:'2026-10-06.xlsx',size:bytes.length,arrayBuffer:async()=>bytes}];
+ $('importFile').files=[{name:syntheticMode?'synthetic-import.xlsx':'2026-10-06.xlsx',size:bytes.length,arrayBuffer:async()=>bytes}];
  await $('importFile').listeners.change();
  assert.equal(context.state.entries.length,0,'preview must not mutate state');
  $('importMode').value='replace';$('importConsent').checked=true;
@@ -25,11 +27,11 @@ const Money=require('./dist/core.js'),ExcelImport=require('./dist/excel-import.j
  assert.equal(JSON.parse(storage.get('jot-money-v1')).entries.length,0);
  failWrite=false;$('commitImport').onclick();
  assert.equal(context.state.entries.length,620);
- assert.equal(Money.total(context.state),Money.total(ExcelImport.plan(original,source,{accounts:Object.fromEntries(source.accounts.map(name=>[name,{name,kind:['โมยืม','เฟินยืม'].includes(name)?'borrower':'wallet'}])),categories:Object.fromEntries(source.categories.map(name=>[name,ExcelImport.defaultCategory(name,original,Money)]))},'replace',Money,()=>crypto.randomUUID()).next));
+ assert.equal(Money.total(context.state),Money.total(ExcelImport.plan(original,source,{accounts:Object.fromEntries(source.accounts.map(name=>[name,{name,kind:borrowerNames.includes(name)?'borrower':'wallet'}])),categories:Object.fromEntries(source.categories.map(name=>[name,ExcelImport.defaultCategory(name,original,Money)]))},'replace',Money,()=>crypto.randomUUID()).next));
  assert.equal(JSON.parse(storage.get('jot-money-v1-before-import')).state.accounts[0].opening,1000);
  assert.equal(JSON.parse(storage.get('jot-money-v1')).entries.length,620);
  $('undoImport').onclick();
  assert.deepEqual(JSON.parse(JSON.stringify(context.state)),original);
  assert.deepEqual(JSON.parse(storage.get('jot-money-v1')),original);
- console.log('Passed: actual XLSX preview does not mutate, explicit consent, storage-failure rollback, 620-entry commit, backup and undo');
+ console.log(`Passed: ${syntheticMode?'synthetic':'actual'} XLSX preview does not mutate, explicit consent, storage-failure rollback, 620-entry commit, backup and undo`);
 })().catch(error=>{console.error(error);process.exitCode=1});
