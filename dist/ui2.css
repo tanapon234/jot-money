@@ -241,6 +241,9 @@ body.ui2-theme{
 .ui2-theme .footer-brand{font-size:17px;color:var(--secondary);letter-spacing:-.3px}
 .ui2-theme .footer-brand span{font-size:10px;color:var(--muted);letter-spacing:0}
 .ui2-theme button:focus-visible,.ui2-theme a:focus-visible,.ui2-theme summary:focus-visible{outline:3px solid var(--secondary);outline-offset:3px}
+/* Safari may restore dialog focus to this programmatic/skip-link target.
+   Suppress its page-sized native ring, not the focus rings of its controls. */
+.ui2-theme #home[tabindex="-1"]:focus{outline:none}
 .ui2-theme .capture-date-control:focus-within{outline:3px solid var(--secondary);outline-offset:3px}
 .ui2-theme .view,.ui2-theme form,.ui2-theme .section-heading>div,.ui2-theme .account-group,.ui2-theme .settings-list{min-width:0}
 @media(min-width:1700px){.ui2-theme main{margin-inline:auto;padding-left:306px;max-width:1700px}}

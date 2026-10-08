@@ -1,5 +1,11 @@
 # ส่งต่องานให้ Codex
 
+## demo.22 — กรอบฟ้าหลังปิดโอน
+
+- ภาพ IMG_2845.PNG แสดง native focus ring ครอบ #home (section tabindex=-1) ไม่ใช่ปุ่มโอน เพิ่มเฉพาะ .ui2-theme #home[tabindex="-1"]:focus{outline:none} ใน ui2.css คง skip-link/focusability และกรอบ interactive controls ไม่ใช้ blur หรือเปลี่ยน JS/data
+- ผู้ใช้อนุมัติให้อัปเดตเว็บแล้ว เตรียม demo.22 บน release/demo-22 ตรวจ preview ก่อน fast-forward demo ไม่เปลี่ยน main หรือ UI1 snapshots ต้องยืนยันผลบน Safari/iPhone จริง
+- ผ่าน capture-ui-check และ isolated Chrome regression: จำลอง focus #home ก่อนเปิด/ปิด transfer แล้ว activeElement กลับ #home โดย outlineStyle none, tabindex ยังคง -1; ส่ง Tab แล้วตรวจปุ่ม nav มี focus-visible/outline >=2px ยืนยันว่าไม่ได้ปิดกรอบคีย์บอร์ดทั้งหมด
+
 ## demo.21 — ช่องวันที่โอนบน iPhone
 
 - ผู้ใช้ส่ง IMG_2844.PNG แสดงช่องวันที่โอนกว้างเกิน input/select อื่นและข้อความอยู่กลาง แก้เฉพาะ dist/ui2.css: transfer fields width/min-width/max-width + fixed 52px height; transferDate appearance none และ WebKit value text-align left คง native date picker/validation ไม่แก้ JS หรือข้อมูล
