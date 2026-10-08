@@ -1,5 +1,33 @@
 # ส่งต่องานให้ Codex
 
+## demo.23 — ผู้ใช้อนุมัติเผยแพร่ 2026-10-08
+
+- รวมงานหัววันกดจดย้อนหลัง และแตะปฏิทินเปิดหน้าต่างสรุป/รายการเพื่อแก้ไข/ลบ/จดเพิ่ม ลบรายละเอียดซ้ำใต้ปฏิทิน คงสรุปเดือน ไม่เปลี่ยน schema หรือข้อมูลผู้ใช้
+- เตรียมบน release/demo-23 ตรวจ Cloudflare preview ก่อน fast-forward demo; ไม่เปลี่ยน main, promo-video หรือ UI1 snapshots ข้อความ local-only ด้านล่างเป็นประวัติก่อนอนุมัติ
+- ชุดตรวจ logic/DOM/category/synthetic import ทั้ง 8 ชุดและ syntax ผ่าน; Chrome isolated synthetic QA ผ่าน 320/375/430/1280 ในงานรอบก่อน ไม่ใช่ Safari/iPhone จริง
+
+## Local — แตะช่องวันเพื่อดูรายการและแก้ไข (แทน flow เปิดจดทันที)
+
+- ล่าสุดลบ section.calendar-detail ใต้ปฏิทินแล้ว renderHistory เติม calendarModalSummary/Entries โดยตรง ไม่พึ่ง DOM รายละเอียดซ้ำ; คง calendarMonthSummary ไว้ ตรวจ DOM เพิ่มว่า IDs รายละเอียดเก่าไม่อยู่ และ flow เพิ่ม/แก้/ลบผ่าน
+- ช่องวันเปิด calendarDayDialog แสดงสรุปและ row รายการรูปแบบเดียวกับรายการทั้งหมด จากผลค้นหา/กลุ่มวันที่ชุดเดียวกัน ไม่เก็บสำเนา ledger หรือเปลี่ยน schema
+- แตะรายการเปิด editDialog เดิมซ้อนด้านบน ปิด/บันทึก/ลบแล้วกลับหน้าต่างวันเดิม ข้อมูลอัปเดตผ่าน renderHistory; ย้ายรายการออกจากวันเดิมแล้ววันเดิมแสดงผลล่าสุด
+- calendarModalAdd เปิด quickDialog โดยใช้วันที่เลือก บันทึกแล้วกลับหน้าต่างวัน; ปิดหน้าต่างวันคืน focus ช่องวัน ไม่ต้องเลื่อนไปประวัติด้านล่าง
+- ตรวจ capture-ui-check (วันว่าง, เพิ่ม, แก้ยอด, ย้ายวัน, ลบ, focus), history-ui-check, history-check และ check.cjs ผ่าน งาน local เท่านั้น VERSION ยัง demo.22 ไม่ commit/push/deploy
+- isolated Chrome browser regression ผ่าน รวมหน้าต่างวัน/ผลค้นหา, เพิ่ม/แก้ยอดแล้วกลับหน้าต่างวัน, keyboard และ overflow 320/375/430/1280; ตรวจภาพหน้าต่างวัน 375/1280 แล้ว ไม่ใช่การทดสอบ Safari หรือ iPhone จริง
+
+## Local — flow เดิมที่ถูกแทน: แตะช่องวันเพื่อเปิดจดทันที
+
+- data-calendar-day click เลือกวัน/renderHistory แล้วเรียก openCapture(key,true) ทันที ใช้ quickCard/dialog เดิม ไม่สร้างสำเนา ledger เพิ่ม historyCaptureDayCell เป็น transient flag เท่านั้น
+- closeQuick คืน focus ไป data-calendar-day เมื่อเปิดจากช่องวัน (preventScroll) หลังแก้วันที่/save alignHistoryCaptureDate ตามวัน/เดือนจริง; เปิดจากหัววันใต้ปฏิทินยังคืน focus หัววันแบบเดิม เปิดจดลอยยังวันนี้ ไม่เปลี่ยน data schema หรือ UI1
+- เปลี่ยน legend/accessible label ให้สื่อว่าแตะวันเพื่อจด รายละเอียดและประวัติใต้ปฏิทินคงอยู่ งานนี้ local ไม่ commit/push/deploy เว็บยัง demo.22
+- ผ่าน capture-ui-check direct cell: วันว่าง/มีรายการ, expense/income/transfer, เปลี่ยนวันที่ข้ามปีแล้วคืน focus ช่องวันใหม่, cancel และเปิดจดทั่วไปกลับวันนี้; history-ui-check/syntax และ isolated Chrome ผ่าน รวมเปิดจากวันมีรายการ/วันว่าง บันทึกแล้วคืน focus cell และภาพจอมือถือ ไม่ใช่ iPhone จริง
+
+## Local — แตะหัววันเพื่อจดรายการ
+
+- เปลี่ยน daily h3 ให้มี native button.history-date-trigger ครอบ time/count/plus และย้าย calendarCaptureDate เข้า h3 พร้อม span#calendarDayTitle ยังคง data-capture-date/IDs/handlers เดิม ปุ่มรองรับ Enter/Space และ aria-haspopup/label
+- เอาปุ่ม “จดวันที่นี้” แยกออก ยอดสรุปอยู่ด้านนอกปุ่ม จึงไม่เปิดฟอร์มเมื่อแตะยอด ไม่เปลี่ยนข้อมูลหรือกฎวันที่ ไม่แตะ UI1 snapshots งานนี้ local ยังไม่ commit/push/deploy เว็บยัง demo.22
+- ผ่าน capture-ui-check (เพิ่ม assertions โครงปุ่มหัววัน/ไม่มีปุ่มแยก/แตะยอดไม่เปิดแผง), history-ui-check, app syntax และ isolated Chrome regression รวม Enter เปิดหัววัน คืน focus หลัง save วันว่าง/โอน/เปลี่ยนเดือน/search และ layout 320/375/390/430/1280 ดูภาพจริง mobile list และ desktop calendar แล้ว ไม่ใช่การตรวจ iPhone จริง
+
 ## demo.22 — กรอบฟ้าหลังปิดโอน
 
 - ภาพ IMG_2845.PNG แสดง native focus ring ครอบ #home (section tabindex=-1) ไม่ใช่ปุ่มโอน เพิ่มเฉพาะ .ui2-theme #home[tabindex="-1"]:focus{outline:none} ใน ui2.css คง skip-link/focusability และกรอบ interactive controls ไม่ใช้ blur หรือเปลี่ยน JS/data

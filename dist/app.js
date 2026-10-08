@@ -14,6 +14,7 @@ let state=initial(),type='expense',account='cash',manualCategory=false,editing=n
 // View state only; the ledger and localStorage schema remain unchanged.
 let historyView='list',calendarSelected=History.today(),calendarMonth=calendarSelected.slice(0,7);
 let historyCaptureDate=null;
+let historyCaptureDayCell=false;
 let editCategoryTouched=false;
 try{const s=JSON.parse(localStorage.getItem(KEY));if(s&&Array.isArray(s.accounts)&&Array.isArray(s.entries)&&Number.isFinite(s.budget))state=s}catch{}
 state=Money.migrate(state);
@@ -94,7 +95,7 @@ function renderHistory(){
  $('historyFilterNotice').classList.toggle('hidden',!q);
  $('historyFilterNotice').textContent=q?`แสดงผลค้นหา “${$('search').value.trim()}” · ${entries.length} รายการ ยอดทุกส่วนคำนวณจากผลค้นหานี้`:'';
  $('clearHistorySearch').classList.toggle('hidden',!q);
- $('allEntries').innerHTML=groups.map(g=>`<section class="history-day" aria-labelledby="history-day-${g.key||'unknown'}"><header class="history-day-heading"><h3 id="history-day-${g.key||'unknown'}">${g.key?`<time datetime="${g.key}">${esc(History.dateLabel(g.key))}</time>`:'ไม่ระบุวันที่'}</h3><span class="count-badge">${g.count} รายการ</span>${g.key?`<button type="button" class="history-capture-date text-button" data-capture-date="${g.key}" aria-label="จดรายการวันที่ ${esc(History.dateLabel(g.key,new Date(),true))}">${icon('plus')} จดวันที่นี้</button>`:''}<div class="history-totals">${historyTotals(g)}</div></header>${g.entries.map(e=>row(e)).join('')}</section>`).join('')||emptyBlock('search',q?'ไม่พบรายการที่ค้นหา':'ยังไม่มีรายการ',q?'ลองค้นด้วยชื่อรายการ หมวด หรือบัญชีอื่น':'จดรายการใหม่ หรือนำเข้าประวัติจาก Excel');
+ $('allEntries').innerHTML=groups.map(g=>`<section class="history-day" aria-labelledby="history-day-${g.key||'unknown'}"><header class="history-day-heading"><h3 id="history-day-${g.key||'unknown'}">${g.key?`<button type="button" class="history-date-trigger" data-capture-date="${g.key}" aria-haspopup="dialog" aria-label="จดรายการวันที่ ${esc(History.dateLabel(g.key,new Date(),true))}"><time datetime="${g.key}">${esc(History.dateLabel(g.key))}</time><span class="count-badge">${g.count} รายการ</span><span class="history-date-plus" aria-hidden="true">${icon('plus')}</span></button>`:`ไม่ระบุวันที่ <span class="count-badge">${g.count} รายการ</span>`}</h3><div class="history-totals">${historyTotals(g)}</div></header>${g.entries.map(e=>row(e)).join('')}</section>`).join('')||emptyBlock('search',q?'ไม่พบรายการที่ค้นหา':'ยังไม่มีรายการ',q?'ลองค้นด้วยชื่อรายการ หมวด หรือบัญชีอื่น':'จดรายการใหม่ หรือนำเข้าประวัติจาก Excel');
  $('historyListView').classList.toggle('hidden',historyView!=='list');
  $('calendarView').classList.toggle('hidden',historyView!=='calendar');
  document.querySelectorAll('[data-history-view]').forEach(b=>{const selected=b.dataset.historyView===historyView;b.classList.toggle('selected',selected);b.setAttribute('aria-pressed',String(selected))});
@@ -105,18 +106,18 @@ function renderHistory(){
  $('calendarGrid').innerHTML=History.monthGrid(calendarMonth).map(key=>{
   if(!key)return '<span class="calendar-blank" aria-hidden="true"></span>';
   const data=byDay.get(key),selected=key===calendarSelected,isToday=key===today;
-  const accessible=History.dateLabel(key,new Date(),true)+(isToday?' วันนี้':'')+(data?` · ${data.count} รายการ รับ ${fmt(data.income)} จ่าย ${fmt(data.expense)} สุทธิ ${fmt(data.net)}`:' · ยังไม่มีรายการ');
+  const accessible=History.dateLabel(key,new Date(),true)+(isToday?' วันนี้':'')+(data?` · ${data.count} รายการ รับ ${fmt(data.income)} จ่าย ${fmt(data.expense)} สุทธิ ${fmt(data.net)}`:' · ยังไม่มีรายการ')+' · ดูรายการและแก้ไขของวันที่เลือก';
   return `<button type="button" class="calendar-day ${data?'has-entries':''} ${isToday?'is-today':''} ${selected?'is-selected':''}" data-calendar-day="${key}" aria-label="${esc(accessible)}" aria-pressed="${selected}" ${isToday?'aria-current="date"':''}><span class="calendar-day-top"><b>${Number(key.slice(8))}</b>${selected?icon('check'):''}</span>${isToday?'<span class="calendar-today-tag">วันนี้</span>':''}${data?`<span class="calendar-mobile-net ${data.net>0?'positive':data.net<0?'negative':'zero'}" aria-hidden="true">${data.entries.some(e=>e.type==='income'||e.type==='expense')?calendarNetNumber(data.net):icon('transfer')}</span>${data.income>0?`<span class="calendar-value calendar-income"><span>รับ</span><b>${calendarNumber(data.income)}</b></span>`:''}<span class="calendar-value calendar-expense"><span>จ่าย</span><b>${calendarNumber(data.expense)}</b></span><span class="calendar-value calendar-net"><span>สุทธิ</span><b>${calendarNumber(data.net)}</b></span><span class="calendar-entry-mark">${data.count} รายการ</span>`:''}</button>`;
  }).join('');
  const invalid=byDay.get(null);
  $('calendarInvalidDates').classList.toggle('hidden',!invalid);$('calendarInvalidDates').textContent=invalid?`${invalid.count} รายการไม่มีวันที่ที่ถูกต้อง ดูและแก้วันที่ได้ในมุมมองรายการทั้งหมด`:'';
  $('calendarMonthSummary').innerHTML=`<div class="section-heading"><h3>สรุป ${esc(History.monthLabel(calendarMonth))}</h3><span class="count-badge">${monthSummary.count} รายการ</span></div>${q?'<p class="history-filter-caption">ยอดจากผลการค้นหา</p>':''}<div class="history-totals">${historyTotals(monthSummary)}</div>`;
  const day=byDay.get(calendarSelected)||{entries:[],...History.summary([])};
- $('calendarDayTitle').textContent=History.dateLabel(calendarSelected,new Date(),true)+(calendarSelected===today?' · วันนี้':'');
- $('calendarCaptureDate').dataset.captureDate=calendarSelected;
- $('calendarCaptureDate').setAttribute('aria-label','จดรายการวันที่ '+History.dateLabel(calendarSelected,new Date(),true));
- $('calendarDaySummary').innerHTML=`${q?'<p class="history-filter-caption">ยอดจากผลการค้นหา</p>':''}<div class="history-totals">${historyTotals(day)}</div>${historyNetNote(day)}`;
- $('calendarDayEntries').innerHTML=day.entries.map(e=>row(e)).join('')||emptyBlock('list','ยังไม่มีรายการในวันนี้',q?'ไม่มีรายการตรงกับคำค้นในวันที่เลือก':'รายการที่จดในวันนี้จะแสดงที่นี่');
+ $('calendarModalSummary').innerHTML=`${q?'<p class="history-filter-caption">ยอดจากผลการค้นหา</p>':''}<div class="history-totals">${historyTotals(day)}</div>${historyNetNote(day)}`;
+ $('calendarModalTitle').textContent=History.dateLabel(calendarSelected,new Date(),true);
+ $('calendarModalAdd').dataset.captureDate=calendarSelected;
+ $('calendarModalAdd').setAttribute('aria-label','จดรายการวันที่ '+History.dateLabel(calendarSelected,new Date(),true));
+ $('calendarModalEntries').innerHTML=day.entries.map(e=>row(e)).join('')||emptyBlock('list','ยังไม่มีรายการในวันนี้',q?'ไม่มีรายการตรงกับคำค้นในวันที่เลือก':'รายการที่จดในวันนี้จะแสดงที่นี่');
 }
 function changeCalendarMonth(month){if(!month)return;calendarMonth=month;const today=History.today();calendarSelected=today.slice(0,7)===month?today:month+'-01';renderHistory()}
 $('calendarPrev').onclick=()=>changeCalendarMonth(History.shiftMonth(calendarMonth,-1));
@@ -127,7 +128,7 @@ function tab(name){if($('quickDialog').open)$('quickDialog').close();document.qu
 document.addEventListener('click',e=>{
  const captureDate=e.target.closest('[data-capture-date]');if(captureDate){openCapture(captureDate.dataset.captureDate);return}
  const historyMode=e.target.closest('[data-history-view]');if(historyMode){historyView=historyMode.dataset.historyView;renderHistory();updateCaptureButton()}
- const calendarDay=e.target.closest('[data-calendar-day]');if(calendarDay){calendarSelected=calendarDay.dataset.calendarDay;renderHistory();document.querySelector(`[data-calendar-day="${calendarSelected}"]`)?.focus({preventScroll:true})}
+ const calendarDay=e.target.closest('[data-calendar-day]');if(calendarDay){calendarSelected=calendarDay.dataset.calendarDay;renderHistory();$('calendarDayDialog').showModal();updateCaptureButton();return}
  const nav=e.target.closest('[data-tab],[data-go]');if(nav)tab(nav.dataset.tab||nav.dataset.go);
  const addAccount=e.target.closest('[data-add-account]');if(addAccount){$('addAccountForm').reset();$('newAccountOpening').value=0;updateNewAccountKind();$('addAccountDialog').showModal();}
  const accountDetail=e.target.closest('[data-account-detail]');if(accountDetail)openAccountDetail(accountDetail.dataset.accountDetail);
@@ -241,11 +242,12 @@ function updateCaptureButton(){
  const r=$('quickCard').getBoundingClientRect();
  const homeVisible=!$('home').classList.contains('hidden');
  const visible=homeVisible&&r.top<window.innerHeight-80&&r.bottom>100;
- $('floatingCapture').classList.toggle('hidden',visible||$('quickDialog').open||$('editDialog').open);
+ $('floatingCapture').classList.toggle('hidden',visible||$('quickDialog').open||$('editDialog').open||$('calendarDayDialog').open);
 }
-function openCapture(key=null){
+function openCapture(key=null,fromDayCell=false){
  const date=key===null?History.today():History.dayKey(key);if(!date)return;
  historyCaptureDate=key===null?null:date;
+ historyCaptureDayCell=key!==null&&fromDayCell;
  $('entryDate').value=date;updateCaptureDate();$('formError').textContent='';
  $('quickSlot').appendChild($('quickCard'));
  $('quickDialog').showModal();updateCaptureButton();
@@ -260,10 +262,14 @@ $('floatingCapture').addEventListener('click',()=>openCapture());
 $('closeQuick').addEventListener('click',()=>$('quickDialog').close());
 $('quickDialog').addEventListener('close',()=>{
  $('quickAnchor').after($('quickCard'));updateCaptureButton();
- if(historyCaptureDate){const target=historyView==='calendar'?$('calendarCaptureDate'):document.querySelector(`[data-capture-date="${historyCaptureDate}"]`);target?.focus({preventScroll:true})}
+ if($('calendarDayDialog').open){$('calendarModalAdd').focus({preventScroll:true})}
+ else if(historyCaptureDate){const target=historyView==='calendar'?(historyCaptureDayCell?document.querySelector(`[data-calendar-day="${historyCaptureDate}"]`):document.querySelector(`[data-calendar-day="${historyCaptureDate}"]`)):document.querySelector(`[data-capture-date="${historyCaptureDate}"]`);target?.focus({preventScroll:true})}
  historyCaptureDate=null;
+ historyCaptureDayCell=false;
 });
-$('editDialog').addEventListener('close',updateCaptureButton);
+$('editDialog').addEventListener('close',()=>{updateCaptureButton();if($('calendarDayDialog').open)$('calendarModalAdd').focus({preventScroll:true})});
+$('closeCalendarDay').onclick=()=>$('calendarDayDialog').close();
+$('calendarDayDialog').addEventListener('close',()=>{updateCaptureButton();document.querySelector(`[data-calendar-day="${calendarSelected}"]`)?.focus({preventScroll:true})});
 window.addEventListener('scroll',updateCaptureButton,{passive:true});
 window.addEventListener('resize',updateCaptureButton);
 updateCaptureButton();

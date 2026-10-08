@@ -33,8 +33,9 @@ assert.equal(writes,0);assert.equal(memory.get('jot-money-v1'),original);
 assert.deepEqual([...el('allEntries').querySelectorAll('section time')].map(e=>e.getAttribute('datetime')),['2024-03-01','2024-02-29']);
 assert.deepEqual([...el('allEntries').querySelectorAll('[aria-labelledby="history-day-2024-02-29"] [data-edit]')].map(e=>e.dataset.edit),['legacy','adjust','transfer','out','in']);
 run("changeCalendarMonth('2024-02')");click('[data-history-view="calendar"]');click('[data-calendar-day="2024-02-29"]');
+assert.ok(document.getElementById('calendarDayDialog').hasAttribute('open'));document.getElementById('calendarDayDialog').close();
 assert.deepEqual(totals('calendarMonthSummary'),['500.00 ฿','650.00 ฿','−150.00 ฿']);
-assert.deepEqual(totals('calendarDaySummary'),['500.00 ฿','650.00 ฿','−150.00 ฿']);
+assert.deepEqual(totals('calendarModalSummary'),['500.00 ฿','650.00 ฿','−150.00 ฿']);
 const dayCell=()=>document.querySelector('[data-calendar-day="2024-02-29"]');
 assert.equal(dayCell().querySelector('.calendar-income').textContent,'รับ500');
 assert.equal(dayCell().querySelector('.calendar-expense').textContent,'จ่าย650');
@@ -44,7 +45,7 @@ assert.ok(dayCell().querySelector('.calendar-mobile-net').classList.contains('ne
 assert.equal(document.querySelector('[data-calendar-day="2024-02-28"] .calendar-mobile-net'),null,'empty day must stay blank');
 assert.equal(run('calendarNetNumber(1200)'),'+1.2K');
 assert.equal(run('calendarNetNumber(0)'),'0');
-assert.equal(el('calendarDaySummary').querySelector('.history-expense').textContent,'650.00 ฿');
+assert.equal(el('calendarModalSummary').querySelector('.history-expense').textContent,'650.00 ฿');
 fill('search','common expense');el('search').dispatchEvent(new window.Event('input'));
 assert.equal(dayCell().querySelector('.calendar-income'),null,'expense-only day must not show income');
 assert.equal(dayCell().querySelector('.calendar-mobile-net').textContent,'−650');
@@ -56,7 +57,7 @@ assert.match(el('calendarInvalidDates').textContent,/1 รายการ/);
 fill('search','common income');el('search').dispatchEvent(new window.Event('input'));
 assert.deepEqual(totals('calendarMonthSummary'),['500.00 ฿','0.00 ฿','500.00 ฿']);
 assert.equal(el('allEntries').querySelectorAll('[data-edit]').length,1);
-assert.equal(el('calendarDayEntries').querySelectorAll('[data-edit]').length,1);
+assert.equal(el('calendarModalEntries').querySelectorAll('[data-edit]').length,1);
 assert.equal(dayCell().querySelector('.calendar-income').textContent,'รับ500','filtered income must remain visible');
 assert.equal(dayCell().querySelector('.calendar-mobile-net').textContent,'+500');
 assert.ok(dayCell().querySelector('.calendar-mobile-net').classList.contains('positive'));
@@ -69,7 +70,8 @@ run("openEdit('out')");fill('editDate','2024-03-01');fill('editAmount',700);subm
 assert.equal(data().entries.find(e=>e.id==='out').date,'2024-03-01T22:00:00');
 assert.deepEqual(totals('calendarMonthSummary'),['500.00 ฿','0.00 ฿','500.00 ฿']);
 run("changeCalendarMonth('2024-03')");click('[data-calendar-day="2024-03-01"]');
-assert.deepEqual(totals('calendarDaySummary'),['0.30 ฿','700.00 ฿','−699.70 ฿']);
+document.getElementById('calendarDayDialog').close();
+assert.deepEqual(totals('calendarModalSummary'),['0.30 ฿','700.00 ฿','−699.70 ฿']);
 run("openEdit('out')");click('#deleteEntry');assert.deepEqual(totals('calendarMonthSummary'),['0.30 ฿','0.00 ฿','0.30 ฿']);
 // State replacement uses the same render path as import commit; undo uses real import-ui.
 memory.set('jot-money-v1-before-import',JSON.stringify({state:expected,filename:'synthetic.xlsx'}));

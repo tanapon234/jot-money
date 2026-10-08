@@ -1,3 +1,8 @@
+
+.ui2-theme .calendar-day-dialog{width:min(640px,calc(100% - 24px));max-width:640px}
+.ui2-theme .calendar-day-dialog h2{font-size:clamp(20px,5vw,28px)}
+.ui2-theme .calendar-day-dialog .history-totals{display:flex;flex-wrap:wrap;gap:8px 14px;margin:12px 0}
+.ui2-theme .calendar-modal-add{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin:18px 0}
 /* UI 2 / Quiet Atelier — warm paper, precise type, midnight accents.
    Existing functional layout, hidden states and calendar semantics live in style.css. */
 @font-face{font-family:"Jotwai Thai";src:url("vendor/fonts/NotoSansThai-variable.ttf") format("truetype");font-style:normal;font-weight:100 900;font-display:swap}
@@ -124,6 +129,14 @@ body.ui2-theme{
 .ui2-theme #history .history-explanation{color:var(--secondary);font-size:11px}
 .ui2-theme #history .history-day{border-color:var(--line);border-radius:17px;margin-top:22px;background:var(--surface)}
 .ui2-theme #history .history-day-heading{background:var(--surface-soft);border-color:var(--line);padding:19px 20px;gap:13px}
+.ui2-theme #history .history-day-heading>h3{flex:1 0 100%;min-width:0}
+.ui2-theme #history .calendar-date-heading{width:100%;min-width:0}
+.ui2-theme #history .history-date-trigger{display:flex;align-items:center;gap:12px;width:100%;min-width:0;min-height:44px;padding:0;text-align:left;font:inherit;color:var(--ink);border-radius:8px;background:transparent}
+.ui2-theme #history .history-date-trigger>time,.ui2-theme #calendarDayTitle{flex:1;min-width:0}
+.ui2-theme #history .history-date-trigger .count-badge{flex-shrink:0;font-weight:400}
+.ui2-theme #history .history-date-plus{display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;width:28px;height:28px;border-radius:8px;background:var(--surface);color:var(--secondary);border:1px solid var(--line)}
+.ui2-theme #history .history-date-plus .icon{width:15px;height:15px}
+.ui2-theme #history .history-date-trigger:hover .history-date-plus{background:var(--surface-hover);color:var(--accent);border-color:var(--line-strong)}
 .ui2-theme #history h3{font-size:16px;letter-spacing:-.2px}
 .ui2-theme #history .history-day>.entry{padding:18px 20px}
 .ui2-theme #history .history-totals{gap:18px;margin-top:2px}
