@@ -8,11 +8,9 @@
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="apple-touch-icon" href="icon.png">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <title>จดไว · UI2 — พื้นที่เล็ก ๆ ของเงินคุณ</title>
+  <title>จดไว — พื้นที่เล็ก ๆ ของเงินคุณ</title>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="ui2.css">
-  <link rel="stylesheet" href="ui-preview.css">
-  <script src="ui-preview.js" defer></script>
 </head>
 <body class="ui2-theme">
   <a class="skip-link" href="#home">ข้ามไปเนื้อหา</a>
@@ -65,7 +63,7 @@
     <div class="sidebar-bottom"><div class="side-note"><span class="side-note-icon"><svg class="icon" aria-hidden="true"><use href="#i-shield"/></svg></span><h3>จดนิดเดียว<br>เห็นเงินชัดขึ้น</h3><p>บัญชี รายการ และงบ<br>อยู่ด้วยกันในที่เดียว</p></div><div class="side-foot"><span class="status-dot"></span> เก็บข้อมูลในเบราว์เซอร์นี้ <span class="demo">DEMO</span></div></div>
   </aside>
   <main>
-    <header class="page-header"><div><span class="eyebrow" id="pageEyebrow">ภาพรวมการเงิน</span><h1 id="pageTitle">วันนี้ ใช้ได้อีกเท่าไหร่</h1><p id="today"></p></div><div class="header-right"><div class="design-switch" aria-label="เปรียบเทียบหน้าตาแอป"><span class="design-version">UI 2</span><button type="button" id="previewThemeToggle" class="design-compare" aria-label="สลับไปดู UI1 เดิม">เทียบ UI1 <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button></div><div class="avatar" aria-hidden="true"><svg class="icon" aria-hidden="true"><use href="#i-wallet"/></svg></div></div></header>
+    <header class="page-header"><div><span class="eyebrow" id="pageEyebrow">ภาพรวมการเงิน</span><h1 id="pageTitle">วันนี้ ใช้ได้อีกเท่าไหร่</h1><p id="today"></p></div><div class="header-right"><div class="avatar" aria-hidden="true"><svg class="icon" aria-hidden="true"><use href="#i-wallet"/></svg></div></div></header>
     <section id="home" class="view" tabindex="-1">
       <div class="hero-grid">
         <section class="balance-card" aria-label="สรุปเงินที่ใช้ได้">
@@ -111,7 +109,7 @@
       </div>
     </section>
     <section id="settings" class="view hidden"><div class="account-overview"><div><span class="eyebrow">จัดการเงินของคุณ</span><h2>ทุกบัญชี ในที่เดียว</h2><p id="accountCount" class="section-description"></p></div><div class="account-overview-total"><span>ยอดรวมทุกบัญชี</span><strong id="settingsTotal"></strong></div></div><div class="panel"><div class="section-heading"><h2>บัญชีของฉัน</h2><div class="import-actions"><button id="openGroupManager" type="button" class="outline"><svg class="icon" aria-hidden="true"><use href="#i-layers"/></svg> จัดการกลุ่ม</button><button type="button" class="primary-small" data-add-account><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg> เพิ่มบัญชี</button></div></div><p class="section-description">เลือกบัญชีเพื่อดูรายการเงินเข้า–ออกและจัดการรายละเอียด</p><form id="settingsForm"><div id="settingsList" class="settings-list"></div></form><details class="borrower-trash"><summary><svg class="icon" aria-hidden="true"><use href="#i-trash-2"/></svg> ถังขยะบัญชี <svg class="icon" aria-hidden="true"><use href="#i-chevron-down"/></svg></summary><p class="form-foot">บัญชีที่ลบจะไม่รวมในยอดหนี้ที่ติดตาม ประวัติและยอดเงินในบัญชีของคุณไม่ถูกลบ นำกลับได้ที่นี่</p><div id="borrowerTrash"></div></details></div><div class="panel secondary"><span class="round-icon"><svg class="icon" aria-hidden="true"><use href="#i-shield"/></svg></span><div><h2>พื้นที่ทดลองของคุณ</h2><p>ข้อมูลอยู่ในเบราว์เซอร์นี้ ยังไม่เชื่อมธนาคารหรือซิงก์ข้ามเครื่อง หากล้างข้อมูลเบราว์เซอร์ รายการอาจหายได้</p><button id="reset" class="text-button danger-text">เริ่มใหม่แบบไม่มีข้อมูล</button></div></div></section>
-    <footer><span class="footer-brand">จดไว<span>เงินชัด ชีวิตเบา</span></span><span>รุ่น 0.1.0-demo.19</span></footer>
+    <footer><span class="footer-brand">จดไว<span>เงินชัด ชีวิตเบา</span></span><span>รุ่น 0.1.0-demo.20</span></footer>
   </main>
   <div id="toast" role="status" aria-live="polite"></div>
   <button id="floatingCapture" class="floating-capture hidden" type="button" aria-haspopup="dialog"><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg> จดรายการ</button>
