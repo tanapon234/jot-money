@@ -1,0 +1,22 @@
+{
+  "analytics.js": "71472d5c383f30893a08027eeb57b8a2f2447c3e898619a0dfe1f6b79a169422",
+  "app.js": "26ef81e19140710e872ccda65fd724403f6b39d14fbd0d6f04c6ebe1e5b6a4e7",
+  "chart-view.js": "5e04fd696089c9dc96d29ee52077d4819e40f7e8e0b569cc1f7f106a351ddab6",
+  "core.js": "86efac52a5f776d2ae220bd89b7dee6879d152c4ba15f4d419cd2caa18279927",
+  "excel-import.js": "7373ea52d32b96a170d7ed2dffc22a0fb3727e3c0506cde45d5ec200123adb96",
+  "history.js": "384f353de2fcaa7cd6055132d33b75d495b94a9df96aae54ab59d81e8c87bf2b",
+  "icon.png": "0704c613d48af652cf2dd6c20c1ff3c9e815cfe54d18d500e1df85afbdbb2775",
+  "import-ui.js": "e8b5720d49b02390548157b2d4017fa60e3831abe1b32b4833d5a63c7c9f1b1f",
+  "index.html": "b798e56366df62869ab82be3bf567e856e7eec305b3bf22ae0833cf004b9efcc",
+  "manifest.webmanifest": "cd51fc35105b086b060d08892fe7dda0d5478baed36bdbfcd007e60133c096dd",
+  "style.css": "66b6fdbbbaf3fb8f5fdb0eb586dbbd090fd602b6cef32f22f999f28e9f71f639",
+  "ui2.css": "77be4b4398c57e57701a41c985ddd7d5b144508e8baf55c143b551d515519d33",
+  "vendor/fonts/NotoSansThai-variable.ttf": "5a1c559bb539583c8a1fd99d1c5b9491e5e14478c9cd2bd0970d5c3096cc9ef8",
+  "vendor/fonts/OFL.txt": "0e4067898723c9acddf967edda99a5ed2088cd857a8e9949084f609358efe38a",
+  "vendor/Lucide-LICENSE.txt": "c059ec5ba27c5876963f0678f63d2182a6fb6ce97d45ed8b6472ec0c2ec189bf",
+  "vendor/Lucide-README.md": "88bbb2b2be260bfc91843670c3dd159308174a66eeeedcf115db7801a330e4ef",
+  "vendor/README.md": "6288e6bb0072673e9683167526ba2abefbeee558680c8dc25f857b51c37f409f",
+  "vendor/SheetJS-LICENSE.txt": "f9463066a83f512aaa2c4f5bda7514c82110ec46b703f477d112c90d33b7ed83",
+  "vendor/xlsx-0.20.3.min.js": "ac8d774d39bb05a527f87912e2c283e237e3633120b31acf20bc6eef0e19eede",
+  "weekly.js": "92749701b50c417b8a2ee7e44e29a00732330740f31ca1bb703f4b34ca978370"
+}

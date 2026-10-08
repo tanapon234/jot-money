@@ -1,0 +1,187 @@
+/* UI3 / Midnight Journal. UI2 remains the functional layout foundation.
+   Shared tokens, surfaces and motion; no data rules live in this stylesheet. */
+body.ui3-theme{
+ --ink:#263b3d;--muted:#7d897e;--secondary:#63756a;
+ --accent:#253f4d;--accent-hover:#355764;--brass:#b39b71;
+ --paper:#f0f1e9;--surface:#fffef9;--surface-soft:#f2f4eb;--surface-hover:#e9eee2;
+ --line:#e0e4d8;--line-strong:#c5d0bc;
+ --income:#477965;--income-soft:#edf4eb;--expense:#ab706c;--expense-soft:#f8eeea;
+ --income-on-dark:#b2d8bf;--expense-on-dark:#edbcb1;
+ --green:var(--accent);--dark:var(--accent);--red:var(--expense);
+ --shadow:0 3px 5px #233f3602,0 12px 28px #233f3604;
+ background:radial-gradient(ellipse at 80% 0%,#fffef6 0,transparent 55%),var(--paper);
+ color:var(--ink);font-variant-numeric:tabular-nums;
+}
+.ui3-theme main{padding-top:34px}
+.ui3-theme h1,.ui3-theme h2,.ui3-theme h3{font-weight:500}
+.ui3-theme h1{font-size:clamp(27px,2.6vw,35px);letter-spacing:-.8px}
+.ui3-theme h2{font-size:22px;letter-spacing:-.5px}
+.ui3-theme .eyebrow{font-size:10px;letter-spacing:.05em;color:#849180}
+.ui3-theme .section-description,.ui3-theme .form-foot{line-height:1.9}
+.ui3-theme .page-header{padding-bottom:23px;border-bottom:1px solid #dce2d4;margin-bottom:27px}
+.ui3-theme .page-header h1{margin-top:6px}.ui3-theme .page-header p{font-size:11px;color:#8a9486}
+.ui3-theme .avatar{width:48px;height:48px;border-radius:15px;background:#f9faf2;border:1px solid #dce4d4;color:#54745d;box-shadow:0 4px 12px #29443b04}
+/* Navigation: the dark spine carries the same material as the day journal. */
+.ui3-theme .sidebar{background:linear-gradient(165deg,#203744,#2e4952);border-right:1px solid #38505a;color:#b6c9bf;padding:38px 20px 24px}
+.ui3-theme .brand{color:#fffdf4;font-size:30px;font-weight:500;letter-spacing:-1px}.ui3-theme .brand small{color:#a5bcb1;font-size:10px}
+.ui3-theme .brand-mark{background:linear-gradient(135deg,#d0d9bc,#a8bea2);color:#2b4b42;box-shadow:0 5px 14px #152c3019;border:1px solid #d7e1c4;border-radius:15px}
+.ui3-theme .nav-label{color:#8aa69c;font-size:9px;letter-spacing:.12em;margin-top:45px}
+.ui3-theme .nav{color:#adc2b8;background:transparent;border:1px solid transparent;font-size:13px;padding:15px 16px;border-radius:13px;min-height:54px;box-shadow:none}
+.ui3-theme .nav:hover{background:#ffffff0b;color:#f2f4e7}
+.ui3-theme .nav.active{background:linear-gradient(115deg,#ffffff15,#ffffff08);border-color:#ffffff22;color:#fffdf4;box-shadow:inset 3px 0 #c5d5b6,0 5px 15px #102c3010}
+.ui3-theme .nav-dot{background:#c7d3b4;width:5px;height:5px}
+.ui3-theme .side-note{background:#ffffff06;border:1px solid #ffffff16;border-radius:17px;padding:20px 17px;position:relative;overflow:hidden}
+.ui3-theme .side-note::after{content:"";position:absolute;width:130px;height:130px;right:-60px;bottom:-90px;border:1px solid #c5d7be25;border-radius:50%;box-shadow:0 0 0 20px #ffffff03;pointer-events:none}
+.ui3-theme .side-note-icon{background:#ffffff0b;color:#bfd2b6;border:1px solid #ffffff0b}.ui3-theme .side-note h3{font-size:19px;color:#e4ecdc;font-weight:400}.ui3-theme .side-note p{font-size:10px;color:#a7bdb0}
+.ui3-theme .side-foot{color:#93afa0;font-size:9px;line-height:1.8}.ui3-theme .side-foot .demo{color:#b8cbb3;border-color:#ffffff20;background:#ffffff08}
+/* Home: keep capture near the top, with a single clear financial hero. */
+.ui3-theme #home .balance-card{background:linear-gradient(120deg,#213a48,#35535c);border:1px solid #385762;border-radius:22px;position:relative;isolation:isolate;overflow:hidden;padding:24px 28px;box-shadow:0 10px 25px #203c4810}
+.ui3-theme #home .balance-card::after{content:"";position:absolute;right:-40px;bottom:-220px;width:350px;height:350px;border-radius:50%;border:1px solid #d7e1c422;box-shadow:0 0 0 28px #ffffff03,0 0 0 56px #ffffff02;z-index:-1;pointer-events:none}
+.ui3-theme #home .big-number{font-family:var(--font);font-size:48px;line-height:1.3;font-weight:400;letter-spacing:-1.8px;color:#fffdf5}
+.ui3-theme .balance-top{color:#c5d4c9}.ui3-theme .balance-top .icon{color:#c3d0b2}.ui3-theme .balance-card .status-dot{background:#bfcead;box-shadow:0 0 0 4px #d1e4bc0d}
+.ui3-theme #home .balance-bottom{border-left-color:#ffffff24;gap:26px}.ui3-theme .balance-bottom b{font-family:var(--font);font-weight:400;color:#f1f4e8}.ui3-theme .balance-bottom span:not(.balance-art){color:#aec5b7;font-size:10px}
+.ui3-theme .balance-accounts-link{color:#c2d3c0;font-size:10px;gap:7px}
+.ui3-theme .quick-card,.ui3-theme .recent-card,.ui3-theme .spending-card,.ui3-theme .panel{background:var(--surface);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);padding:25px}
+.ui3-theme #quickCard{padding:22px;border-color:#d6dfcd;box-shadow:0 5px 18px #27433305}
+.ui3-theme #quickCard>.capture-heading{background:linear-gradient(115deg,#213a47,#34515b);border:1px solid #38535d;border-radius:15px;padding:17px 18px;align-items:center;margin-bottom:13px;gap:12px;color:#fffdf5}
+.ui3-theme .capture-heading h2{color:#fffdf5;font-size:25px;font-weight:400;padding:0}.ui3-theme .capture-heading .eyebrow{color:#a7c0ae;font-size:9px;margin-bottom:5px}
+.ui3-theme .capture-date-control{color:#d0ddd0;border-color:#ffffff19;background:#ffffff05;border-radius:9px}.ui3-theme .capture-date-display{font-size:10px;padding-inline:8px}.ui3-theme .capture-date-control:hover{background:#ffffff12;border-color:#ffffff35;color:#fffdf5}.ui3-theme .capture-date-status{background:#ffffff12;color:#d4dfcf}
+.ui3-theme #quickCard .section-description{font-size:11px;margin:8px 2px 17px;color:#84917f}
+.ui3-theme .segments,.ui3-theme .analytics-tabs{border:1px solid #e1e6d8;border-radius:13px;background:#edf0e5;padding:4px;gap:4px}
+.ui3-theme .segments button{font-size:12px;min-height:44px;border-radius:10px;color:#89937e;transition:background .2s,color .2s,box-shadow .2s}
+.ui3-theme .segments button.selected{color:#2b493b;background:#fffef8;box-shadow:0 2px 7px #2c443b0b;font-weight:500}
+.ui3-theme #types [data-type=expense].selected{color:#ab706c}.ui3-theme #types [data-type=income].selected{color:#477965}
+.ui3-theme label,.ui3-theme .field-label{font-weight:500;font-size:11px;color:#61735f}
+.ui3-theme input,.ui3-theme select{background:#fffef9;border:1px solid #dfe5d6;border-radius:11px;color:#2e4539;min-height:51px;padding:12px 14px;transition:border-color .18s,box-shadow .18s}
+.ui3-theme input:focus,.ui3-theme select:focus{outline:0;border-color:#8aa085;box-shadow:0 0 0 3px #78906816}
+.ui3-theme input::placeholder{color:#9ba58f}
+.ui3-theme #quick{background:#fbfcf5;border:1px solid #d9e2cc;border-radius:13px;min-height:66px;font-size:22px;box-shadow:inset 0 1px 3px #37553803}.ui3-theme #quick::placeholder{font-size:20px;color:#9ba68d}
+.ui3-theme .examples{font-size:10px;color:#95a08c}.ui3-theme .examples button{background:#f5f7ef;border:1px solid #e6eadf;border-radius:8px;min-height:36px;padding:4px 9px;font-size:10px;color:#7b8b70}
+.ui3-theme .capture-account-trigger{background:#f7f9f1;border:1px solid #e0e7d8;border-radius:13px;min-height:70px;padding:13px 14px}.ui3-theme .capture-account-trigger:hover{background:#eef3e6;border-color:#bfcfb5}
+.ui3-theme .capture-account-icon{background:#e8eedf;border:1px solid #dde6d1;color:#6e8760;border-radius:11px}.ui3-theme #captureAccountName{font-size:13px;font-weight:500}.ui3-theme #captureAccountHint{font-size:10px;color:#919c87}
+.ui3-theme .category-details{border-color:#e4e8dc}.ui3-theme .category-details summary{font-size:11px}.ui3-theme .category-details summary b{background:#eef2e6;color:#708263;border-radius:6px;padding:4px 8px;font-weight:500}
+.ui3-theme .save,.ui3-theme .primary-small{background:linear-gradient(115deg,#253f4d,#365762);border:1px solid #38545d;border-radius:11px;color:#fffdf7;box-shadow:0 4px 10px #223e4610;font-weight:500;position:relative;overflow:hidden;isolation:isolate}
+.ui3-theme .save{min-height:52px;font-size:13px}.ui3-theme .save:hover,.ui3-theme .primary-small:hover{background:linear-gradient(115deg,#2e4d5b,#416772);box-shadow:0 6px 16px #223e4615}
+.ui3-theme .save:disabled{opacity:.45;box-shadow:none}.ui3-theme .save .icon{width:17px;height:17px;transition:transform .2s}.ui3-theme .save:hover .icon{transform:translateX(3px)}
+.ui3-theme .outline,.ui3-theme .icon-button{background:#f8faf2;border:1px solid #dfe6d5;color:#61765b;border-radius:10px;min-height:44px;font-size:11px}.ui3-theme .outline:hover,.ui3-theme .icon-button:hover{background:#edf3e4;border-color:#c0cfb5}
+.ui3-theme .text-button{font-size:11px;color:#637b5d}.ui3-theme .count-badge,.ui3-theme .period-badge{background:#eff2e6;border-color:#e2e8d9;color:#7e8b73;border-radius:7px;font-size:10px;font-weight:400}
+/* Every ledger row has the same tactile card treatment. */
+.ui3-theme .entry{padding:14px 12px;min-height:78px;border:1px solid #e4e8dc;border-radius:13px;background:#fffef9;gap:12px;margin-top:9px;transition:background .18s,border-color .18s,box-shadow .18s}
+.ui3-theme .entry:hover{background:#f5f8ef;border-color:#c7d6bd;box-shadow:0 3px 10px #26423505}.ui3-theme .entry-icon{border-radius:11px;background:#f7eeea;border:1px solid #f1e4dc;color:var(--expense);width:36px;height:36px}
+.ui3-theme .entry-icon.incoming{background:#edf3e9;border-color:#e2ebdb;color:var(--income)}.ui3-theme .entry-icon.transfer-icon,.ui3-theme .entry-icon.pending{background:#eef1e7;border-color:#e4e9d9;color:#84917c}
+.ui3-theme .entry-title{font-size:12px;font-weight:500;line-height:1.75;white-space:normal;overflow-wrap:anywhere}.ui3-theme .entry-meta{font-size:10px;line-height:1.8;color:#929d88;overflow-wrap:anywhere;white-space:normal}
+.ui3-theme .entry-amount{font-size:16px;font-weight:500;color:var(--expense);letter-spacing:-.4px}.ui3-theme .entry-amount.plus{color:var(--income)}.ui3-theme .entry-amount.transfer-amount{color:#83927b}
+.ui3-theme .recent-card>.section-heading,.ui3-theme .spending-card>.section-heading{border-bottom:1px solid #e7eade;padding-bottom:18px;margin-bottom:16px}.ui3-theme .recent-card h2,.ui3-theme .spending-card h2{font-size:21px}
+.ui3-theme .debt-line{background:#f2f5eb;border:1px solid #e3e9d9;border-radius:12px;padding:13px;margin-top:13px;color:#718368;font-size:11px}.ui3-theme .debt-line b{color:#4f6954;font-size:16px;font-weight:500}.ui3-theme .debt-line small{font-size:9px;color:#99a18d}
+.ui3-theme .bar-track{height:6px;border-radius:6px;background:#ecf0e3;overflow:hidden}.ui3-theme .bar-fill{background:linear-gradient(90deg,#41665a,#86a28b);border-radius:6px}.ui3-theme .bar-row b{font-size:13px;font-weight:500;color:#4e6b52}.ui3-theme .bar-row{font-size:11px;color:#8d9983}
+.ui3-theme .sample-banner{font-size:10px;color:#9ba38f}.ui3-theme .round-icon{border-radius:11px;background:#e9efde;color:#879b72;border:1px solid #e3e9d7}
+/* History uses one shared visual grammar across list, calendar and summary. */
+.ui3-theme #history .history-panel{padding:25px}.ui3-theme #history .history-toolbar{border:0;margin:0;padding:0;gap:10px}
+.ui3-theme #history .history-switch{background:#edf1e5;border-color:#e0e6d6}.ui3-theme #history .history-switch .selected{background:#263f4d;color:#f8fbf0;box-shadow:0 3px 8px #263f4d0d}
+.ui3-theme #history .calendar-summary{background:linear-gradient(120deg,#213b48,#34535b);border:1px solid #38565e;border-radius:15px;position:relative;isolation:isolate;overflow:hidden;color:#f4f6eb;padding:18px 20px}
+.ui3-theme #history .calendar-summary::after{content:"";position:absolute;width:180px;height:180px;right:-40px;bottom:-145px;border:1px solid #cedebc22;border-radius:50%;box-shadow:0 0 0 22px #ffffff03;pointer-events:none;z-index:-1}
+.ui3-theme #history .calendar-summary h3{color:#d5e0ce;font-weight:400;font-size:12px}.ui3-theme #history .calendar-summary .count-badge{background:#ffffff0b;border:1px solid #ffffff14;color:#b4c8b4;font-size:9px}
+.ui3-theme #history .calendar-summary .history-totals>span{color:#aec5b3;font-size:10px}.ui3-theme #history .calendar-summary .history-totals b{color:#f2f6e8;font-size:23px;font-weight:400;letter-spacing:-.6px}
+.ui3-theme #history .calendar-summary b.history-income{color:#b5d7bc}.ui3-theme #history .calendar-summary b.history-expense{color:#edbfb3}.ui3-theme #history .calendar-summary b.history-net{color:#e1dfc2}
+.ui3-theme #history .history-day{border:1px solid #e0e6d6;border-radius:15px;background:#fafcf5;overflow:hidden}.ui3-theme #history .history-day-heading{background:#f0f4e8;border-color:#e1e8d7;padding:16px 17px}.ui3-theme #history .history-date-trigger{color:#3a5743;font-size:14px;font-weight:500}.ui3-theme #history .history-date-plus{background:#fffef8;border-color:#d8e2cd;color:#809671;border-radius:9px}
+.ui3-theme #history .history-day>.entry{margin:9px;width:calc(100% - 18px);padding:14px 12px}.ui3-theme #history .history-day .history-totals{gap:14px}.ui3-theme #history .history-day .history-totals b{font-size:16px}.ui3-theme #history .history-net-note{font-size:10px;color:#90977e}
+.ui3-theme #history .history-period{margin-top:18px;margin-bottom:18px}.ui3-theme #history .calendar-navigation h3{font-size:20px;font-weight:500;color:#385342}
+.ui3-theme #history .calendar-grid,.ui3-theme #history .calendar-weekdays{gap:7px}.ui3-theme #history .calendar-weekdays{color:#a0aa92;font-size:10px}
+.ui3-theme #history .calendar-day{background:#fdfef8;border:1px solid #e5e9dc;border-radius:12px;transition:background .18s,border-color .18s,box-shadow .18s}.ui3-theme #history .calendar-day.has-entries{background:#f4f7ed;border-color:#dfe8d3}.ui3-theme #history .calendar-day:hover{background:#e9f0df;border-color:#b9cfa9;box-shadow:0 3px 8px #2b472c07}
+.ui3-theme #history .calendar-day.is-selected{background:linear-gradient(130deg,#294651,#3b5a61);border-color:#3e6265;color:#fffdf4;box-shadow:0 3px 10px #223c480d}.ui3-theme #history .calendar-day.is-today:not(.is-selected){border-color:#b9a471;background:#faf8ed}.ui3-theme #history .calendar-day-top b{font-weight:500}
+.ui3-theme #history .calendar-income,.ui3-theme #history .calendar-income b{color:#5f8a6b}.ui3-theme #history .calendar-expense,.ui3-theme #history .calendar-expense b{color:#ba8680}.ui3-theme #history .is-selected .calendar-income,.ui3-theme #history .is-selected .calendar-income b{color:#b5d7bc}.ui3-theme #history .is-selected .calendar-expense,.ui3-theme #history .is-selected .calendar-expense b{color:#edbfb3}
+.ui3-theme #history .calendar-mobile-net.positive{color:#4d7c58}.ui3-theme #history .calendar-mobile-net.negative{color:#ad7970}.ui3-theme #history .is-selected .calendar-mobile-net.positive{color:#b5d7bc}.ui3-theme #history .is-selected .calendar-mobile-net.negative{color:#edbfb3}
+.ui3-theme .weekly-panel{background:transparent;border:0;box-shadow:none;padding:0}.ui3-theme .analytics-trigger{background:#eff4e7;border:1px solid #dce7cf;color:#56784c;border-radius:12px;min-height:48px;padding-inline:15px}.ui3-theme .weekly-week{background:#fcfdf7;border-color:#e3e9d9;border-radius:12px;padding:15px;margin-bottom:10px}.ui3-theme .weekly-week h3{font-size:14px;font-weight:500;color:#536d4a}.ui3-theme .weekly-week .report-totals b{font-size:16px;font-weight:500}.ui3-theme .weekly-week .eyebrow{font-size:9px;color:#929f82}.ui3-theme .weekly-help{font-size:11px;color:#8e9c7d}
+.ui3-theme .data-management{background:#f2f5e9;border:1px solid #dfe8d1;box-shadow:none;border-radius:13px;padding:17px;margin-top:20px}.ui3-theme .data-management>summary{font-size:12px;color:#617a52}
+/* Accounts and budgets: a calm dark overview, grouped cards below. */
+.ui3-theme .account-overview{background:linear-gradient(125deg,#213b48,#36565f);border:1px solid #3c5b63;border-radius:20px;padding:28px;overflow:hidden;isolation:isolate;color:#fffdf4}
+.ui3-theme .account-overview::after{content:"";position:absolute;width:240px;height:240px;right:-55px;bottom:-190px;border:1px solid #cedbc12b;border-radius:50%;box-shadow:0 0 0 25px #ffffff03;z-index:-1;pointer-events:none}
+.ui3-theme .account-overview .eyebrow{color:#aac2ad}.ui3-theme .account-overview h2{font-size:27px;font-weight:400;color:#fffdf4}.ui3-theme .account-overview .section-description{font-size:11px;color:#acc6b4}.ui3-theme .account-overview-total span{font-size:10px;color:#adc5b0}.ui3-theme .account-overview-total strong{font-size:38px;color:#f1f4df;font-weight:400;overflow-wrap:anywhere}
+.ui3-theme .account-group-heading{background:#f0f4e7;border:1px solid #e2e9d7;border-radius:11px;padding:12px 14px}.ui3-theme .account-group-heading h3{font-size:12px;font-weight:500;color:#647b52}.ui3-theme .account-group-heading>span{font-size:10px;color:#8b9b79}
+.ui3-theme .settings-list-row{background:#fffef9;border:1px solid #e3e8da;border-radius:13px;padding:17px 14px;min-height:86px;gap:12px;margin-top:9px}.ui3-theme .settings-list-row:hover{background:#f5f8ed;border-color:#c3d4b6}.ui3-theme .settings-list-icon,.ui3-theme .account-icon{background:#edf2e3;border:1px solid #e0e9d2;color:#819b6d;border-radius:12px;width:40px;height:40px}
+.ui3-theme .settings-list-copy b{font-size:13px;font-weight:500}.ui3-theme .settings-list-copy small{font-size:10px;color:#99a28e}.ui3-theme .settings-list-value{font-size:22px;letter-spacing:-.7px;font-weight:400;color:#42603f}.ui3-theme .settings-list-value small{font-size:9px;color:#99a38b}
+.ui3-theme .budget-item{background:#f6f3e7;border:1px solid #e7e0cc;border-radius:15px}.ui3-theme .budget-icon{background:#ece5cd;border-color:#e0d7b6;color:#aa9461}.ui3-theme .budget-item h3{color:#88764f}.ui3-theme .borrower-trash{border-color:#e4e9d8;font-size:11px;color:#91a080}.ui3-theme .secondary{background:#eef2e4;border-color:#dde6cf;box-shadow:none}.ui3-theme .secondary h2{color:#6b7e59;font-size:16px}.ui3-theme .secondary p{font-size:11px;color:#8d9b7c}
+/* All dialogs share the journal's header, controls, spacing and close button. */
+.ui3-theme dialog{background:#fafbf4;border:1px solid #e0e6d7;border-radius:22px;padding:24px;box-shadow:0 24px 90px #19352c16;scrollbar-width:thin;animation:none}
+.ui3-theme dialog[open]{animation:ui3-dialog-in .3s cubic-bezier(.16,1,.3,1)}
+.ui3-theme dialog::backdrop{background:#203b4030;backdrop-filter:blur(8px)}
+.ui3-theme dialog:not(.calendar-day-dialog):not(.analytics-dialog):not(.quick-dialog)>.section-heading:first-child,
+.ui3-theme dialog>form>.section-heading{background:linear-gradient(120deg,#213b48,#34535b);border:1px solid #3b5860;border-radius:15px;padding:20px 18px;gap:15px;align-items:flex-start;margin-bottom:18px;color:#fffdf5}
+.ui3-theme dialog:not(.calendar-day-dialog):not(.analytics-dialog):not(.quick-dialog)>.section-heading:first-child h2,
+.ui3-theme dialog>form>.section-heading h2{color:#fffdf5;font-size:23px;font-weight:400;line-height:1.5}
+.ui3-theme dialog:not(.calendar-day-dialog):not(.analytics-dialog):not(.quick-dialog)>.section-heading:first-child .eyebrow,
+.ui3-theme dialog>form>.section-heading .eyebrow{color:#a9c4ae;font-size:9px}
+.ui3-theme .close-button{background:#edf2e4;border:1px solid #dce6cf;color:#7d9569;width:42px;height:42px;min-height:42px;flex-shrink:0}
+.ui3-theme dialog>form>.section-heading .close-button,
+.ui3-theme dialog:not(.calendar-day-dialog):not(.analytics-dialog):not(.quick-dialog)>.section-heading:first-child .close-button{background:#ffffff08;border-color:#ffffff25;color:#dbe6d3}
+.ui3-theme .quick-dialog{padding:20px}.ui3-theme .quick-dialog .sheet-heading{background:linear-gradient(115deg,#253f4d,#35565f);border:1px solid #3b5962;border-radius:14px;padding:13px 15px;margin-bottom:12px;color:#bdd0b9;font-size:10px}.ui3-theme .sheet-heading .close-button{background:#ffffff08;border-color:#ffffff20;color:#dce7d5}
+.ui3-theme .quick-dialog #quickCard{border:0;background:transparent;padding:8px 2px;box-shadow:none}.ui3-theme .quick-dialog #quickCard>.capture-heading{padding:0;background:none;border:0;color:var(--ink);margin:2px 0 12px}.ui3-theme .quick-dialog .capture-heading h2{color:#2c453d;font-weight:500}.ui3-theme .quick-dialog .capture-heading .eyebrow{color:#8da17d}.ui3-theme .quick-dialog .capture-date-control{color:#6e875c;background:#f0f5e7;border-color:#e0e8d5}.ui3-theme .quick-dialog .capture-date-status{background:#e9f0dd;color:#7d9366}
+.ui3-theme .account-detail-summary{background:linear-gradient(120deg,#eef4e7,#f9faf1);border:1px solid #dae6cd;border-radius:15px;padding:22px}.ui3-theme .account-detail-summary>b{color:#496f4e;font-size:40px;font-weight:400}.ui3-theme .account-detail-summary>span,.ui3-theme .account-detail-summary>small{color:#8ca079;font-size:11px}
+.ui3-theme .transfer-hint{background:#edf4e4;border:1px solid #dae8cc;border-radius:12px;color:#779465;font-size:11px}.ui3-theme .transfer-direction{color:#90a77c;position:relative}.ui3-theme .transfer-direction .icon{background:#f0f5e7;border:1px solid #dce7cf;border-radius:50%;padding:8px;box-sizing:content-box;width:16px;height:16px}
+.ui3-theme .delete{background:#f8eeea;border-color:#eddbd3;color:#ae7970;border-radius:11px;min-height:46px;font-size:12px}.ui3-theme .delete:hover{background:#f2e3dd}.ui3-theme .danger-text{color:#ad7970}
+.ui3-theme .category-manager-row{background:#fffef8;border:1px solid #e2e8d8;border-radius:11px;margin-bottom:8px;padding:12px;font-size:12px}.ui3-theme .category-manager-row button{background:#eff4e5;border-color:#e1e9d6;color:#809a69;border-radius:8px;font-size:10px}.ui3-theme .category-manager-list{border:0;scrollbar-width:thin}.ui3-theme .category-manager-row small{font-size:10px;color:#99a98a}
+.ui3-theme #captureAccountList>button{background:#fffef8;border:1px solid #e3e9d8;border-radius:12px;padding:14px;margin-top:9px}.ui3-theme #captureAccountList>button[aria-pressed=true]{background:#edf4e4;border-color:#bfd2ad;box-shadow:inset 3px 0 #92ad7b}.ui3-theme #captureAccountList .capture-account-value{color:#668555;font-size:15px}
+.ui3-theme .import-dialog details{background:#fffef8;border-color:#e1e8d5;border-radius:12px}.ui3-theme .import-dialog summary{color:#6e885b;font-size:12px}.ui3-theme .import-account-map{background:#f5f8ed;border-color:#e0e9d3;border-radius:11px}.ui3-theme .import-table th{background:#eef3e4;color:#82956b}.ui3-theme .import-table td{border-color:#e5eadc;color:#6c815d}.ui3-theme .import-table tr:nth-child(even) td{background:#f7f9f1}
+.ui3-theme .analytics-header{background:#fafbf4}.ui3-theme .analytics-tabs button[aria-pressed=true]{background:#fffef8;color:#3f624d;box-shadow:0 2px 6px #2a4e340a}.ui3-theme .analytics-dialog .chart-selection{background:#eff4e7;border-color:#dce7d1}.ui3-theme .analytics-dialog .chart-category.is-selected{background:linear-gradient(115deg,#edf4e5,#f9fbf1);border-color:#d3e0c7}
+.ui3-theme .calendar-day-dialog{background:#fafbf4}.ui3-theme .day-dialog-hero{background:linear-gradient(120deg,#213b48,#34535b)}.ui3-theme .day-list-toolbar .calendar-modal-add{background:#294751;color:#fffdf4;border-color:#365961}.ui3-theme #calendarModalEntries .day-entry{margin-top:0}
+/* Micro-interactions stay short and respect system motion preferences. */
+.ui3-theme button:active:not(:disabled){transform:scale(.98)}
+.ui3-theme button:focus-visible,.ui3-theme a:focus-visible,.ui3-theme summary:focus-visible{outline:2px solid #7d9a69;outline-offset:3px}
+.ui3-theme .floating-capture{background:linear-gradient(120deg,#284752,#3e6267);border:1px solid #557979;color:#fffdf1;border-radius:16px;box-shadow:0 7px 20px #29464c24}
+.ui3-theme #toast{background:#294950;color:#f1f7e7;border:1px solid #5a7a6c;border-radius:13px;box-shadow:0 6px 24px #1738301c;padding:14px 20px;font-size:12px;max-width:calc(100vw - 32px)}
+.ui3-theme .empty-state{background:linear-gradient(135deg,#f4f7ed,#fcfdf6);border:1px dashed #dce5cd;border-radius:14px;padding:30px 18px}.ui3-theme .empty-state .icon{color:#96aa7e}.ui3-theme .empty-state p{color:#9ba78a;font-size:11px}
+.ui3-theme footer{color:#a3ae94;border-top:1px solid #dfe6d4;font-size:10px;margin-top:22px;padding-top:20px}.ui3-theme .footer-brand{color:#68875b;font-weight:500}.ui3-theme .footer-brand span{font-size:9px;color:#9eae8e}
+@keyframes ui3-dialog-in{from{opacity:0;transform:translateY(12px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+@media(max-width:1100px){.ui3-theme main{padding-inline:25px}.ui3-theme .quick-card,.ui3-theme .recent-card,.ui3-theme .spending-card,.ui3-theme .panel{padding:22px}.ui3-theme #home .content-grid{gap:20px}.ui3-theme #quickCard>.capture-heading{padding:16px 14px;flex-wrap:wrap}}
+@media(max-width:900px){
+ .ui3-theme main{margin-left:0;padding:25px 22px 110px}.ui3-theme .sidebar{position:static;width:auto;padding:18px 22px;background:transparent;border:0;display:block}.ui3-theme .brand{color:#29473f;font-size:26px;padding:0}.ui3-theme .brand small{color:#9ba58d}.ui3-theme .brand-mark{width:40px;height:40px;border-radius:13px;background:linear-gradient(120deg,#253f4d,#3e5f65);color:#d9e8c9;border-color:#48686a;box-shadow:0 5px 12px #264b3f0b}
+ .ui3-theme .sidebar nav{position:fixed;z-index:30;inset:auto 14px max(10px,env(safe-area-inset-bottom)) 14px;border:1px solid #ffffff30;border-radius:19px;padding:6px;background:linear-gradient(115deg,#243e4af5,#35545bf5);box-shadow:0 8px 25px #213f4324;backdrop-filter:blur(16px);gap:5px}
+ .ui3-theme .nav{min-height:53px;padding:8px 5px;margin:0;gap:4px;border-radius:13px;color:#a8bdae;font-size:10px;box-shadow:none;flex-direction:column;justify-content:center;border:1px solid transparent}.ui3-theme .nav.active{background:#ffffff0f;border-color:#ffffff15;box-shadow:none;color:#e7efd8}.ui3-theme .nav.active .nav-dot{display:none}.ui3-theme .nav .icon{width:18px;height:18px}
+ .ui3-theme .page-header{padding-bottom:19px;margin-bottom:22px}.ui3-theme h1{font-size:27px}.ui3-theme .sidebar-bottom,.ui3-theme .nav-label{display:none}
+ .ui3-theme #home .balance-card{padding:22px}.ui3-theme #home .big-number{font-size:43px}.ui3-theme .account-overview{padding:24px}.ui3-theme .account-overview h2{font-size:25px}
+}
+@media(max-width:600px){
+ .ui3-theme main{padding:12px 16px 112px}.ui3-theme .sidebar{padding:18px 18px 9px}.ui3-theme .page-header{gap:10px;padding-bottom:16px;margin-bottom:19px}.ui3-theme h1{font-size:24px;line-height:1.5}.ui3-theme .page-header .eyebrow{font-size:9px;margin-bottom:4px}.ui3-theme .page-header p{font-size:10px;margin-top:5px}.ui3-theme .avatar{width:37px;height:37px;border-radius:12px}.ui3-theme .avatar .icon{width:17px;height:17px}
+ .ui3-theme #home .hero-grid{margin-bottom:18px}.ui3-theme #home .balance-card{padding:19px 20px;border-radius:18px}.ui3-theme #home .balance-top .card-label{font-size:10px}.ui3-theme #home .big-number{font-size:37px;margin-top:8px}.ui3-theme #home .balance-bottom{gap:24px;padding:14px 0 0;border-top:1px solid #ffffff1c;border-left:0;margin-top:14px}.ui3-theme .balance-bottom b{font-size:19px}.ui3-theme .balance-accounts-link{font-size:10px;margin-top:7px}
+ .ui3-theme .quick-card,.ui3-theme .recent-card,.ui3-theme .spending-card,.ui3-theme .panel{padding:18px;border-radius:17px}.ui3-theme #quickCard{padding:17px}.ui3-theme #quickCard>.capture-heading{padding:15px 14px;border-radius:12px;gap:9px;flex-wrap:nowrap}.ui3-theme .capture-heading h2{font-size:22px}.ui3-theme .capture-heading .eyebrow{font-size:8px}.ui3-theme .capture-date-display{font-size:9px;padding-inline:6px}.ui3-theme #quick{font-size:21px;min-height:64px}.ui3-theme #quick::placeholder{font-size:19px}.ui3-theme .segments button{font-size:11px}
+ .ui3-theme #home .content-grid{gap:18px}.ui3-theme .recent-card h2,.ui3-theme .spending-card h2{font-size:20px}.ui3-theme .entry{padding:13px 10px;gap:9px;border-radius:12px}.ui3-theme .entry-icon{width:32px;height:32px}.ui3-theme .entry-title{font-size:12px}.ui3-theme .entry-meta{font-size:10px}.ui3-theme .entry-amount{font-size:14px}.ui3-theme .debt-line b{font-size:14px}
+ .ui3-theme #history .history-panel{padding:14px}.ui3-theme #history .history-toolbar{gap:6px}.ui3-theme #history .history-switch button{font-size:10px;min-height:43px}.ui3-theme #history .calendar-summary{padding:15px 13px;border-radius:13px}.ui3-theme #history .calendar-summary h3{font-size:11px}.ui3-theme #history .calendar-summary .history-totals b{font-size:17px}.ui3-theme #history .calendar-summary .history-totals>span{font-size:9px}
+ .ui3-theme #history .calendar-grid,.ui3-theme #history .calendar-weekdays{gap:4px}.ui3-theme #history .calendar-day{padding:5px 3px;border-radius:9px}.ui3-theme #history .calendar-navigation h3{font-size:17px}.ui3-theme #history .history-day-heading{padding:13px 12px}.ui3-theme #history .history-day>.entry{width:calc(100% - 14px);margin:7px;padding:13px 10px}.ui3-theme #history .history-day .history-totals{gap:11px}.ui3-theme #history .history-day .history-totals b{font-size:14px}.ui3-theme .weekly-week{padding:13px}.ui3-theme .weekly-week .report-totals b{font-size:14px}
+ .ui3-theme .account-overview{padding:23px 21px;border-radius:18px}.ui3-theme .account-overview h2{font-size:24px}.ui3-theme .account-overview-total strong{font-size:34px}.ui3-theme .settings-list-row{padding:15px 11px;gap:10px}.ui3-theme .settings-list-icon{width:36px;height:36px}.ui3-theme .settings-list-value{font-size:20px}.ui3-theme .settings-list-copy b{font-size:12px}
+ .ui3-theme dialog{padding:18px;border-radius:20px;max-height:calc(100dvh - 24px);max-width:calc(100vw - 24px)}.ui3-theme dialog:not(.calendar-day-dialog):not(.analytics-dialog):not(.quick-dialog)>.section-heading:first-child,.ui3-theme dialog>form>.section-heading{padding:17px 15px;border-radius:13px;gap:10px}.ui3-theme dialog:not(.calendar-day-dialog):not(.analytics-dialog):not(.quick-dialog)>.section-heading:first-child h2,.ui3-theme dialog>form>.section-heading h2{font-size:21px}.ui3-theme .close-button{width:40px;height:40px;min-height:40px}.ui3-theme .quick-dialog{padding:16px}.ui3-theme .quick-dialog #quickCard{padding:8px 0}.ui3-theme .quick-dialog #quickCard>.capture-heading{flex-wrap:nowrap}.ui3-theme .quick-dialog .capture-date-display{font-size:10px}.ui3-theme .quick-dialog .sheet-heading{padding:12px 13px}
+ .ui3-theme .calendar-day-dialog{padding:15px}.ui3-theme .calendar-day-dialog .day-dialog-hero{border-radius:15px}.ui3-theme .analytics-dialog{padding:19px 16px}.ui3-theme .analytics-header{padding-top:0}.ui3-theme .floating-capture{bottom:calc(94px + env(safe-area-inset-bottom));right:17px;min-height:49px;border-radius:14px;font-size:12px;padding:12px 17px}.ui3-theme #toast{bottom:calc(170px + env(safe-area-inset-bottom));font-size:11px;padding:12px 16px}
+}
+@media(max-width:360px){.ui3-theme main{padding-inline:12px}.ui3-theme .sidebar{padding-inline:14px}.ui3-theme #quickCard{padding:14px}.ui3-theme #quickCard>.capture-heading{flex-wrap:wrap}.ui3-theme .capture-date-field{margin-left:auto}.ui3-theme h1{font-size:22px}.ui3-theme #history .history-panel{padding:11px}.ui3-theme #history .history-switch button{font-size:9px}.ui3-theme #history .calendar-summary .history-totals b{font-size:15px}.ui3-theme .quick-dialog #quickCard>.capture-heading{flex-wrap:wrap}}
+@media(prefers-reduced-motion:reduce){.ui3-theme *,.ui3-theme *::before,.ui3-theme *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}.ui3-theme button:active:not(:disabled){transform:none}.ui3-theme .save:hover .icon{transform:none}}
+.ui3-theme #history.calendar-compact .calendar-summary>.section-heading h3{color:#d5e0ce}
+.ui3-theme #history.calendar-compact .calendar-summary .history-totals>span{color:#aec5b3}
+.ui3-theme #history.calendar-compact .calendar-summary .history-totals>span+span{border-left-color:#ffffff20}
+@media(max-width:600px){.ui3-theme #history .calendar-day{padding-inline:1px}.ui3-theme #history .calendar-mobile-net{font-size:10px;letter-spacing:-.25px}}
+.ui3-theme .save,.ui3-theme .primary-small,.ui3-theme .nav,.ui3-theme .calendar-day{position:relative;overflow:hidden}
+.ui3-touch-glow{position:absolute;pointer-events:none;border-radius:50%;background:radial-gradient(circle,#d8eac947 0,#d8eac912 60%,transparent 72%);z-index:2}
+.ui3-theme{--expense:#99655f;--red:var(--expense)}
+.ui3-theme .entry-meta,.ui3-theme .settings-list-copy small,.ui3-theme #captureAccountHint,.ui3-theme .debt-line small,.ui3-theme #quickCard .section-description,.ui3-theme .bar-row,.ui3-theme .examples button{color:var(--secondary)}
+.ui3-theme input::placeholder,.ui3-theme #quick::placeholder{color:#6c7a64}
+.ui3-theme #types [data-type=expense].selected{color:var(--expense)}
+.ui3-theme #history .calendar-mobile-net.negative{color:var(--expense)}
+.ui3-theme #history .is-selected .calendar-mobile-net.negative{color:var(--expense-on-dark)}
+.ui3-theme input[type=checkbox]{width:20px;height:20px;min-height:20px;padding:0;accent-color:var(--income)}
+.ui3-theme input[type=file]{padding:8px;font-size:12px}
+.ui3-theme input[type=file]::file-selector-button{font:inherit;color:#61755b;background:#edf3e4;border:1px solid #d7e4c9;border-radius:7px;padding:8px 12px;margin-right:10px;cursor:pointer}
+/* Inline date: a quiet secondary action with a full 44px native-picker target. */
+.ui3-theme #quickCard>.capture-heading{grid-template-columns:minmax(0,1fr) auto;column-gap:8px;row-gap:0}
+.ui3-theme #quickCard .capture-date-field{grid-column:2;grid-row:2;align-items:flex-end;flex-direction:column;margin:0;gap:1px}
+.ui3-theme #quickCard .capture-date-control{width:136px;height:44px;border:0;background:transparent;border-radius:7px;color:#c5d6c5}
+.ui3-theme #quickCard .capture-date-display{font-size:11px;font-weight:400;gap:5px;padding:0;justify-content:flex-end}
+.ui3-theme #quickCard .capture-date-display .icon{width:13px;height:13px}
+.ui3-theme #quickCard .capture-date-display .icon:last-child{width:11px;height:11px;opacity:.65}
+.ui3-theme #quickCard .capture-date-control:hover{background:#ffffff06;color:#f0f5e7}
+.ui3-theme #quickCard .capture-date-control:focus-within{outline:2px solid #c2d4b5;outline-offset:2px}
+.ui3-theme #quickCard .capture-date-control input{color:inherit;background:#314e57;font-size:13px;padding:6px;border-radius:7px;box-shadow:none;color-scheme:dark}
+.ui3-theme #quickCard .capture-date-status{margin:0;font-size:9px;background:#ffffff0a;color:#d3dfcc}
+.ui3-theme .quick-dialog #quickCard .capture-date-control{color:#68805d;background:transparent;border:0}
+.ui3-theme .quick-dialog #quickCard .capture-date-control:hover{background:#eaf0e1;color:#3f6546}
+.ui3-theme .quick-dialog #quickCard .capture-date-control input{background:#f0f4e8;color:#426347;color-scheme:light}
+.ui3-theme .quick-dialog #quickCard .capture-date-control:focus-within{outline-color:#718c62}
+.ui3-theme .quick-dialog #quickCard .capture-date-status{color:#68805d;background:#edf3e5}
+@media(max-width:600px){.ui3-theme #quickCard .capture-date-control{width:128px}.ui3-theme #quickCard .capture-date-display,.ui3-theme .quick-dialog #quickCard .capture-date-display{font-size:10px}.ui3-theme #quickCard .capture-heading h2{align-self:center}}

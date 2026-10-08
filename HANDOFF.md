@@ -1,5 +1,118 @@
 # ส่งต่องานให้ Codex
 
+## เผยแพร่ demo.24 (2026-10-09)
+
+- รุ่น 0.1.0-demo.24 รวม UI3 Midnight Journal, กราฟรายรับ/รายจ่ายและรายสัปดาห์, หน้าต่าง Day Journal และการจัดวันที่ inline
+- ชุดตรวจ logic/UI แบบ synthetic 11 ชุดและ syntax checks ของ app/core/ui3/analytics/chart-view/weekly ผ่านก่อนเผยแพร่; ไม่ใช้ข้อมูลบัญชีจริง
+- คง localStorage key `jot-money-v1` และ schema เดิม; ไม่แก้ promo-video และไม่แตะ main
+- เว็บไซต์: https://jot-money-demo.pages.dev/ — ตรวจ deployment/commit ที่เผยแพร่ได้หลัง push
+
+## Local ล่าสุด — Inline capture date (2026-10-09)
+
+- ลดกรอบวันที่ในหัวจดรายการ UI3 เป็นไอคอนและข้อความแบบ inline ข้างชื่อฟอร์ม ไม่มีกรอบเด่น ไม่ตกแถวที่ 320px คงพื้นที่แตะ 44px และ native date picker พร้อม focus คีย์บอร์ด ใช้ทั้งภาพรวมและแผงจด
+- เปลี่ยนเฉพาะท้าย dist/ui3.css ไม่แก้ข้อมูล/วันที่/handlers; capture UI check ผ่าน
+
+## Local ล่าสุด — UI3 Midnight Journal (2026-10-09)
+
+- Chrome synthetic QA ผ่าน 320/375/390/430/1280 ครบ 3 หน้าหลักและ 8 dialogs; 7-column/ยอดยาว/geometry calendar↔summary/field transfer เท่ากัน/แก้วันและยอด/ลบ/import undo/empty ผ่าน พร้อม ripple cleanup, reduced motion และ ledger invariance ตรวจภาพ home/settings/calendar/quick/edit/account/category/import มือถือและ desktop แล้ว ไม่ใช่ Safari/iPhone จริง
+
+- UI3 Midnight Journal ใช้โทนกรมท่า–ไอวอรี–เขียวและทองหม่นจากหน้าต่างรายวันเป็นระบบเดียวทั้งแอป: ภาพรวม จดรายการ ประวัติ ปฏิทิน สรุป บัญชี งบ โอน และหน้าต่างจัดการทั้งหมด พร้อม fade เปลี่ยนหน้า/เปิดส่วนย่อย แสงตอบสนองการแตะ และข้อความบันทึกสำเร็จเคลื่อนไหว รองรับ reduced motion
+- ใหม่ dist/ui3.css + ui3.js, index.html เพิ่ม stylesheet/script และ class ui3-theme ร่วม ui2-theme เพื่อคงฐาน layout ฟีเจอร์/hidden/วันที่เดิม ไม่แตะ core/schema/key
+- สำรอง static app ก่อน UI3 ทั้งชุดที่ ui-versions/ui2-2026-10-09/dist พร้อม SHA256.json ไม่มี browser ledger และไม่ทำสำเนา UI1 ซ้ำ
+- กลไก UI3 เป็น presentation-only: navigation fade, details toggle fade, ephemeral pointer glow (cleanup เมื่อ animation เสร็จ/ยกเลิก), toast fade; ไม่อ่าน/เขียน storage ไม่แทน handler เดิม เคารพ reduced motion
+- ผู้ช่วย GPT-6.1 Sol/Medium ตรวจ 11 synthetic suites baseline ผ่านและตรวจ UI3 แยก พบ title summary มืดบนพื้นเข้ม แก้ cascade แล้ว; main Chrome พบ −123M ล้นช่องจอเล็ก แก้ padding/font แล้ว ไม่มีปัญหาค้างจากผู้ตรวจ
+- งาน local ไม่ commit/push/deploy VERSION คง demo.23 ไม่แก้ promo-video หรือ UI1
+
+## Local ล่าสุด — Calendar Day Journal (2026-10-09)
+
+- ปรับหน้าต่างรายการของวันที่แตะจากปฏิทินเป็น Day Journal: หัววันที่กรมท่าพร้อมวันในสัปดาห์/จำนวนรายการ การ์ดยอดรับ–จ่าย–สุทธิ ปุ่มจดเพิ่มใกล้หัวรายการ และการ์ดรายการพร้อมลูกศรแก้ไข ลดวันที่ซ้ำในแต่ละรายการ ไม่เปลี่ยนยอด/วันที่/การกรองและกลไกแก้ไขเดิม
+- เปลี่ยน index.html, ui2.css และ app.js row(e,context,dayDetail) แบบ opt-in เฉพาะ calendarModalEntries หน้าอื่นใช้ row เดิม
+- history-ui/capture ผ่าน; Chrome synthetic QA ตรวจเปิดวัน→จดเพิ่ม→แก้ไข→กลับวัน พร้อมรูป 320/375/430/1280 และยอด/ชื่อยาว ตรวจภาพหลายประเภทรายการ 320/375/1280 แล้ว ยังไม่ทดสอบ Safari/iPhone จริง
+- Local only VERSION คง demo.23 ไม่ commit/push/deploy
+
+## Local ล่าสุด — Income Donut (2026-10-09)
+
+- Chrome synthetic QA ผ่าน 320/375/430/1280 รวมรายรับ500=100%, สลับสามแท็บไม่มี overflow และตรวจภาพ income 320/1280 แล้ว ไม่มีการทดสอบบน iPhone จริง
+
+เพิ่มแท็บ “รายรับตามหมวด” ในกราฟวิเคราะห์ ข้างรายจ่ายและรายสัปดาห์ ใช้ Interactive Donut โทนเขียวพร้อมยอด/เปอร์เซ็นต์เฉพาะรายรับของเดือนเดียวกัน ไม่รวมโอนและปรับยอด มีสถานะไม่มีรายรับ
+
+- analytics.js expose incomeTotal/incomeCategories แยกจาก expense API เดิม ใช้ History cent/day/month; chart-view.categoryPanel reuse one visible SVG เพื่อไม่ซ้ำ id; app activeDonutCategories ยึดแท็บ income/categories ทุก handlers และ refresh
+- ผู้ช่วย GPT-6.1 Sol/Medium ทำสูตรและ tests แยกไฟล์ ผู้จัดการตรวจสูตร/เชื่อม UI; analytics/chart-view/history-ui/capture ผ่าน รวมสลับหมวดและสถานะไม่มีรายรับ ไม่เปลี่ยน ledger/schema
+- Local only VERSION คง demo.23 ไม่ commit/push/deploy
+
+## Local ล่าสุด — Interactive Donut (2026-10-09)
+
+- ปรับ Donut เป็นวง SVG ไล่แสงเงา มีช่องแบ่งและชิ้นหมวดที่เลือกขยับออก พร้อมชื่อ/เปอร์เซ็นต์/ยอดกลางวง มีแอนิเมชันเปิดและเปลี่ยนตัวเลข เลือกได้ด้วยแตะ hover เมาส์ ปุ่มก่อนหน้า/ถัดไป และคีย์บอร์ดซ้ายขวา รองรับ reduced motion ไม่เปลี่ยนสูตรหรือข้อมูล
+- Renderer และ DOM checks ผ่าน รวมวนหมวด/hover/ลูกศร ขนาด 320/375/430/1280 ผ่าน Chrome และตรวจภาพหลายหมวดที่ 375/1280 แล้ว ยังไม่ตรวจบน Safari/iPhone จริง
+- แก้ chart-view.js, app.js, ui2.css และ history-ui-check.cjs งาน local ไม่ commit/push/deploy
+
+## Local ล่าสุด — ปรับกราฟให้อ่านง่าย (2026-10-09)
+
+ปรับกราฟวิเคราะห์เป็นแท็บแยก “รายจ่ายตามหมวด / รับ–จ่ายรายสัปดาห์” โทนกรมท่า/เขียว/แดงสุภาพ Donut มีรอยแบ่งและแถบสัดส่วนหมวด กราฟแท่งมีช่วงวันที่ และการ์ดยอดรับ–จ่าย–สุทธิของสัปดาห์ที่เลือก เริ่มจากสัปดาห์ที่ยอดรับ+จ่ายมากที่สุด ตัวเลขยาวจัดแถวบนมือถือ คงสูตรเดือนและข้อมูลเดิม
+
+- สูตรไม่เปลี่ยน; analytics/chart-view/history-ui/capture-ui ผ่าน Chrome synthetic QA 320/375/430/1280 รวมสลับแท็บและ long values/transfer-only ตรวจภาพหลายหมวด/สัปดาห์ทั้ง 375 และ1280 แล้ว ไม่ใช่ iPhone จริง
+- แก้ chart-view.js, app.js, ui2.css และ renderer test; local only ไม่ commit/push/deploy VERSION คง demo.23
+
+## Local ล่าสุด — กราฟวิเคราะห์ (2026-10-09)
+
+- เพิ่ม “ดูกราฟวิเคราะห์” ใน รายการทั้งหมด → สรุป เปิด dialog แยกรายจ่ายตามหมวดด้วย Donut และเทียบรับ–จ่ายรายสัปดาห์ด้วย SVG ไม่เพิ่ม dependency ใช้เดือนที่เลือกและข้อมูลทั้งหมด ไม่ใช้คำค้น ไม่รวมโอน/ปรับยอด แตะหมวดหรือสัปดาห์เพื่อดูยอดเต็ม มีตารางตัวเลขและสถานะว่าง ข้อมูลเดิมไม่เปลี่ยน
+- dist/analytics.js derive จาก Weekly/History, dist/chart-view.js สร้าง SVG และ escape ชื่อหมวด, app.js derive ใหม่ขณะเปิดและเมื่อ render หลัง ledger เปลี่ยน ไม่มี storage/schema เปลี่ยน
+- analytics-check, chart-view-check, history-ui-check, capture-ui-check, weekly-check, import-ui-check และ core check ผ่าน ผู้ช่วย GPT-6.1 Sol/Medium ตรวจ integration แยกไม่พบปัญหามีหลักฐาน ไม่ใช้ Astra
+- งาน local ไม่ commit/push/deploy VERSION คง demo.23 จนอนุมัติเผยแพร่
+- Chrome synthetic browser QA ผ่าน 320/375/430/1280: เปิด/ปิดและคืน focus, Enter เลือกสัปดาห์, ยอดเต็ม, overflow, refresh ขณะเปิด และเดือนมีเฉพาะโอน ตรวจภาพ analytics 375/1280 หลัง animation แล้ว ไม่ใช่ Safari/iPhone จริง
+
+## Local ล่าสุด — สลับปฏิทิน/สรุปให้โครงเข้ากัน (2026-10-09)
+
+- history-search-slot จองพื้นที่ปุ่มค้นหาแม้ซ่อนใน summary ไม่ให้ segments ยืด แยก calendarPeriod/weeklyPeriod ไว้ตำแหน่งร่วมเหนือแถบยอด; labels ปี/เดือนยังมี sr-only
+- weeklyMonthSummary ใช้ calendar-summary/history-totals ชุดเดียวกับ calendarMonthSummary มีป้าย “ข้อมูลทั้งหมด” ยังคงไม่กรองยอด weekly ด้วย search; หัวข้อสรุปซ้ำถูกเอาออก คำอธิบายยาวอยู่ใน weekly-help
+- changeCalendarMonth sync weeklyYear/Month; weekly selectors/current เรียก changeCalendarMonth; เมื่อเข้า summary ยึดเดือน calendarMonth ที่ดูอยู่ เพื่อไม่กระโดดไปเดือนอื่น ไม่ mutate ledger/date/account/schema
+- weekly-week เปลี่ยนเป็น compact rows แสดงวัน/จำนวนและยอดครบ รองรับตัวเลขยาวใน mobile ด้วยแถวเต็ม; ปุ่มจัดการข้อมูลและ handlers เดิมคงอยู่
+- history DOM/capture/weekly/syntax ผ่าน รวม assertion เดือนร่วมกัน งาน local ไม่ commit/push/deploy VERSION คง demo.23
+- Chrome synthetic regression ผ่าน 320/375/430/1280 พร้อมตรวจ geometry ว่าตำแหน่ง/ความกว้างแท็บ, แถวเดือน, ตำแหน่งและความสูงแถบยอดตรงกันเมื่อสลับ calendar→summary ปุ่มเดือนนี้ไม่ clip; ตรวจภาพ mobile/desktop แล้ว ไม่ใช่ Safari/iPhone จริง
+
+## Local ล่าสุด — รายสัปดาห์ในเดือนแทนไตรมาส (2026-10-09)
+
+- แท็บ summary ใช้ weeklyYear/weeklyMonth เลือกเดือนแทน Q1–Q4, ปุ่ม “เดือนนี้”, renderWeekly แสดงยอดเดือนและทุก 4/5/6 สัปดาห์พร้อมช่วงวันจริง
+- dist/weekly.js ใช้ History.monthGrid แบ่งแถวจันทร์–อาทิตย์ กรอง null ต้น/ท้ายเพื่อจำกัดเฉพาะเดือน History.dayKey/summary กฎเวลาไทย/cent เดิม ไม่ mutate หรือเปลี่ยน schema/key; ส่ง state.entries ทั้งหมดไม่ใช้ search
+- นำ quarter.js/quarter-check.cjs ที่สร้างในงาน local ก่อนหน้าออก ใช้ weekly.js/weekly-check.cjs แทน ไม่แตะ snapshot หรือข้อมูลผู้ใช้ บันทึกไตรมาสด้านล่างเป็นประวัติที่ถูกแทน
+- ผู้ช่วย Sol/Medium สร้างและตรวจสูตร weekly แยก ผ่านช่วง Oct2026, 4/5/6 สัปดาห์, ข้ามเดือน/ปี/เที่ยงคืน, ทศนิยม, exclusion, รวมตรงเดือน/immutability; ตรวจ integration read-only ไม่พบปัญหามีหลักฐาน
+- history-ui-check ปรับยอดรายเดือนพร้อม edit ย้ายออก/เข้าเดือน, delete, import replacement/undo, search isolation/current month; capture/weekly/syntax ผ่าน ยังไม่ commit/push/deploy VERSION คง demo.23
+- Chrome synthetic QA ผ่าน 320/375/430/1280 รวมเลือกเดือน/ปี สรุปยอด 500−650=−150 การ์ด 5 สัปดาห์และนำเข้าจากแท็บสรุป ตรวจภาพ weekly 375/1280 แล้ว ไม่ใช่ iPhone/Safari จริง
+
+## Local ล่าสุด — สรุปเป็นแท็บถัดจากปฏิทิน (2026-10-09)
+
+- data-history-view เรียง list/calendar/summary; ย้าย section#summary เข้า history-panel เอา class.view ออกและลบ data-tab=summary เมนูหลักกลับ home/history/settings
+- renderHistory สลับ summary เช่นเดียวกับอีกสองมุมมอง เมื่ออยู่สรุปซ่อนแถบยอด list/month และค้นหา/notice เพราะไตรมาสใช้ข้อมูลทั้งหมด การกรองเดิมยังอยู่เมื่อกลับ list/calendar ไม่เปลี่ยนยอดหรือ schema
+- จัดปุ่มสามตัวให้พอดีมือถือ ไม่แสดงไอคอนซ้ำในตัวสลับจอแคบ คงไอคอนเมนูหลัก; quarter panel ลดกรอบ/ระยะซ้อน ยังคงจัดการข้อมูลในแท็บสรุป
+- DOM/capture/quarter/syntax ผ่าน ยังไม่ commit/push/deploy VERSION คง demo.23 บันทึกหน้าสรุปแยกด้านล่างเป็นประวัติก่อนย้าย
+- Chrome synthetic regression ผ่าน 320/375/430/1280 รวมส่วนหัวร่วม ค้นหาแบบทับ ยอดไตรมาส และนำเข้าจากแท็บสรุป ตรวจภาพปุ่มสามตัวที่ 320 และแท็บสรุปที่ 375 แล้ว ไม่ใช่ iPhone/Safari จริง
+
+## Local ล่าสุด — ส่วนหัวประวัติร่วม / ค้นหาแบบทับ / สรุปไตรมาส (2026-10-09)
+
+- แทน flow historyUtilities ที่ขยายแทรกปฏิทิน: toggleHistoryTools เปิด historySearchDialog มี search ID เดิม ภายหลังปิดเหลือ historyFilterNotice + clearHistoryFilter ค้นหาทั้งสองมุมมองร่วมกัน ไม่ดัน grid เมื่อเปิดหน้าต่าง
+- history.calendar-compact ใช้ทั้ง list/calendar; calendarMonthSummary อยู่เหนือทั้งสอง view แสดงยอดทุกผลรายการใน list หรือยอดเดือนที่กำลังดูใน calendar พร้อมชื่อขอบเขต/จำนวนรายการ/ผลค้นหา
+- เพิ่ม nav summary และ section#summary; quarterYear/quarterPeriod ค่าเริ่มไตรมาสปัจจุบัน เลือกปีที่มีข้อมูลหรือปีปัจจุบันได้ Quarter.summarize ใช้ History.dayKey/summary ไม่ mutate ไม่มี migration/ledger ใหม่
+- renderHistory เรียก renderQuarter จาก state.entries ทั้งหมด ไม่กรองด้วย search ทุก render หลังเพิ่ม/แก้/ลบ/import/undo อัปเดตทั้งสองส่วน; quarterly transfer/adjustment นับจำนวนรายการ แต่ไม่รวมรับ/จ่าย/สุทธิ
+- openImport/export/undoImport IDs เดิมย้ายเข้า details.data-management ใน summary; ปุ่มจัดการข้อมูลทำกับข้อมูลทั้งหมด ไม่กรองตามไตรมาส คง handlers เดิม
+- ผู้ช่วย GPT-6.1 Sol / Medium เป็นเจ้าของ dist/quarter.js + quarter-check.cjs และตรวจ integration แบบ read-only แยก ผ่านสูตร/date/immutability/query isolation/quarter boundary edit/import refresh ไม่ใช้ Astra
+- ชุดตรวจ 9 ชุดรวม quarter-check + history UI สำหรับแก้ยอด/ลบ/import replacement/undo/query isolation/เลือกไตรมาสผ่าน ยังไม่ commit/push/deploy VERSION คง demo.23 งาน local ก่อนหน้านี้ยังรักษาไว้
+- Chrome isolated synthetic QA ผ่าน 320/375/430/1280: toolbar/summary ตำแหน่งตรงกันทั้งสองมุมมอง, เปิด search dialog grid ไม่เลื่อน, close/query/filter clear, ยอดไตรมาส 500−650=−150, 3 monthly rows และนำเข้าจากหน้าสรุป ภาพ list/calendar/search/quarter mobile+desktop ตรวจแล้ว ไม่ใช่ Safari/iPhone จริง
+
+## Local — ทดลองปฏิทินกระชับ (2026-10-09)
+
+- history.calendar-compact เฉพาะ calendar view ซ่อน inner heading/zone/explanation ซ้ำ; toggleHistoryTools แสดง historyUtilities ที่มี search/import/export/undo IDs เดิม เมื่อมีคำค้นจะเห็นช่องค้นหาและ notice เสมอ list view ยังแสดงเครื่องมือ
+- สรุปเดือน 3 คอลัมน์ ยอดเต็ม wrap ได้ navigation แถวเดียว ไม่ย่อช่องวันที่เพิ่ม; legends ย้ายเข้า details.calendar-help พร้อมคำอธิบายสุทธิ ต้องเปิดอ่านเมื่อสงสัย ไม่มี emoji/dependency/schema ใหม่ ยังไม่ commit/push/deploy VERSION คง demo.23
+- หากยอดเดือนใด >= 100,000 ใช้ has-long-totals บนมือถือเพื่อเรียง 3 แถวกระชับ แสดงยอดเต็ม ไม่ตัดกลางตัวเลข; ยอดทั่วไปยัง 3 คอลัมน์ ตรวจ Chrome 320/375/430/1280 และภาพมือถือ/desktop แล้ว ไม่ใช่ iPhone จริง
+
+## Local — สรุปเดือนด้านบนปฏิทิน (2026-10-09)
+
+- ย้าย section#calendarMonthSummary เป็นองค์ประกอบแรกของ calendarView เหนือ navigation/grid ใช้ ID/render/CSS/สูตรเดิม เพิ่ม DOM assertion ว่าอยู่บนสุดและไม่ซ้ำ ยังไม่ commit/push/deploy
+
+## Local — วันที่หน้าภาพรวมเป็นวันนี้ (2026-10-09)
+
+- tab('home') เรียก resetCaptureDate; quickDialog close จาก historyCaptureDate คืนวันที่ฟอร์มร่วมเป็น History.today() หลังคืน focus โดยคงข้อความ/หมวดร่าง เลือกวันที่เองระหว่างใช้งานยังอยู่จนบันทึกหรือกลับเข้าหน้าภาพรวม
+- ปฏิทินยังเปิดจดตามวันที่เลือก ไม่เปลี่ยนข้อมูลเดิม; capture-ui-check เพิ่มเคส cancel ย้อนหลัง, กลับ home, render ไม่ล้างวันที่ที่แก้เอง และจดจากปฏิทิน ชุดตรวจ capture/history DOM + logic และ syntax ผ่าน ยังไม่ commit/push/deploy VERSION คง demo.23
+
 ## demo.23 — ผู้ใช้อนุมัติเผยแพร่ 2026-10-08
 
 - รวมงานหัววันกดจดย้อนหลัง และแตะปฏิทินเปิดหน้าต่างสรุป/รายการเพื่อแก้ไข/ลบ/จดเพิ่ม ลบรายละเอียดซ้ำใต้ปฏิทิน คงสรุปเดือน ไม่เปลี่ยน schema หรือข้อมูลผู้ใช้
