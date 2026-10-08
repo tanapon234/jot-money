@@ -1,0 +1,8 @@
+/* Comparison controls remain available in both visual themes. No ledger state. */
+.design-switch{display:flex;align-items:center;gap:8px;white-space:nowrap}
+.design-version{display:inline-flex;align-items:center;padding:4px 7px;border:1px solid #dce3fc;border-radius:6px;background:#e9edfe;color:#3559ce;font:600 10px/1.5 Arial,sans-serif}
+.design-compare{display:inline-flex;align-items:center;justify-content:center;gap:4px;min-height:44px;padding:0 4px;color:#526996;font-size:11px;text-decoration:underline;text-underline-offset:4px}
+.design-compare .icon{width:15px;height:15px}
+.design-compare:focus-visible{outline:3px solid #6485f0;outline-offset:3px}
+@media(max-width:640px){.header-right .avatar{display:none}.design-switch{gap:3px;flex-direction:column;align-items:flex-end}.design-compare{font-size:10px}.page-header{align-items:flex-start}}
+@media(prefers-reduced-motion:reduce){.design-compare{transition:none}}

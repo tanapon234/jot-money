@@ -1,0 +1,30 @@
+// Synthetic data only. Optional user-choice metadata; no migration or balance changes.
+const assert=require('node:assert/strict'),M=require('./dist/core.js');
+const manual=(category,time='2024-03-01T00:00:00Z',type='expense',note='กาแฟ')=>({id:Math.random().toString(),type,note,category,amount:65,date:'2024-01-01',account:'cash',categoryChoice:'user',categoryChoiceAt:time});
+const state=M.migrate({budget:30,accounts:[{id:'cash',opening:1000}],entries:[]});
+const untouched=JSON.stringify(state);
+assert.deepEqual(M.categorySuggestion(state,'กาแฟ'),{category:'อาหาร',source:'rule'});
+assert.deepEqual(M.categorySuggestion(state,'ไม่รู้จัก'),{category:'รอจัดหมวด',source:'pending'});
+assert.equal(JSON.stringify(state),untouched);
+state.entries=[...Array.from({length:8},()=>manual('อาหาร')),...Array.from({length:2},()=>manual('อื่น ๆ','2025-01-01T00:00:00Z'))];
+assert.equal(M.suggestCategory(state,'กาแฟ'),'อาหาร','frequency wins over newer minority');
+state.entries=[manual('อาหาร'),manual('อื่น ๆ','2024-03-02T00:00:00Z')];
+assert.equal(M.suggestCategory(state,'กาแฟ'),'อื่น ๆ','latest explicit choice breaks equal counts');
+state.entries.push(...Array.from({length:100},()=>({...manual('อาหาร'),categoryChoice:undefined})));
+assert.equal(M.suggestCategory(state,'กาแฟ'),'อื่น ๆ','auto/legacy choices cannot reinforce themselves');
+state.entries.push(manual('เงินเดือน','2025-01-01T00:00:00Z','income'));
+assert.equal(M.suggestCategory(state,'กาแฟ','income'),'เงินเดือน');
+assert.equal(M.suggestCategory(state,'กาแฟ','expense'),'อื่น ๆ');
+for(const type of ['transfer','adjustment']){state.entries.push(manual('อาหาร','2030-01-01T00:00:00Z',type));assert.equal(M.suggestCategory(state,'กาแฟ'),'อื่น ๆ')}
+state.entries=[manual('อื่น ๆ','2024-03-01T00:00:00Z','expense','  COFFEE   SHOP ')];
+assert.equal(M.suggestCategory(state,'coffee shop'),'อื่น ๆ');assert.equal(M.suggestCategory(state,'coffee shop extra'),'รอจัดหมวด');
+assert.equal(M.suggestCategory(state,'ＣＯＦＦＥＥ SHOP'),'อื่น ๆ');
+state.entries=[manual('อื่น ๆ')];
+const cash=M.total(state),budget=state.budget;
+assert.equal(M.saveCategory(state,'ร้านโปรด','อื่น ๆ','expense'),'');
+assert.equal(M.suggestCategory(state,'กาแฟ'),'ร้านโปรด');
+assert.equal(M.total(state),cash);assert.equal(state.budget,budget);
+const migrated=M.migrate(JSON.parse(JSON.stringify(state)));assert.deepEqual(migrated,state);assert.equal(M.suggestCategory(migrated,'กาแฟ'),'ร้านโปรด');
+state.entries=[];assert.equal(M.suggestCategory(state,'กาแฟ'),'อาหาร','deleting learned entries removes their votes');
+state.entries=[manual('รอจัดหมวด')];assert.equal(M.suggestCategory(state,'กาแฟ'),'อาหาร');
+console.log('PASS: explicit-only frequency, recent tie, no auto/legacy feedback, income/expense separation, transfer/adjustment exclusion, normalized exact notes, rename/delete/reload and unchanged balances/schema.');

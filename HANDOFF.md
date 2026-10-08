@@ -1,5 +1,44 @@
 # ส่งต่องานให้ Codex
 
+## ออกรุ่น demo.19 — อนุมัติ 2026-10-08
+
+- ผู้ใช้สั่ง “update เว็ปเลยครับ” อนุมัติ commit/push และอัปเดตเว็บเดโมของงาน local ล่าสุดทั้งหมด รวม Quiet Atelier UI2 และฟีเจอร์หลัง demo.18 ข้อห้ามเผยแพร่ในบันทึกเก่าด้านล่างเป็นสถานะก่อนอนุมัติครั้งนี้
+- เตรียมรุ่น 0.1.0-demo.19 บน release/demo-19 ตรวจ Cloudflare preview ก่อน fast-forward demo; ไม่เปลี่ยน main, ข้อมูลผู้ใช้ หรือ promo-video เก็บ UI1 ทั้งสองชุดไม่แก้ไข
+
+## UI2 preview — เก็บ UI1 แล้ว (2026-10-08)
+
+- User approved complete visual redesign for review, retain every feature, save old UI as ui1; do not push/deploy. UI1 exact pre-redesign snapshot is `ui-versions/ui1/dist/` (+ root docs/tests), served copy `dist/ui1/`; SNAPSHOT.md records hashes. These include all latest uncommitted capture/category changes, not just deployed demo.18.
+- Main `dist/index.html` loads `ui2.css` over original style.css, body.ui2-theme, comparison controls and ui-preview.js/css. Main app/core/history/excel-import/import-ui and original style.css remain byte-identical to the saved UI1.
+- `previewThemeToggle` toggles the UI2 stylesheet and body class only, preserving forms/drafts/calendar/state/storage. No persisted preference yet; reload opens UI2 until user decides. Exact archived UI1 at `/ui1/index.html` remains unchanged. Normal comparison should use the in-page toggle.
+- UI2 revised direction is Quiet Atelier / private finance: warm ivory/porcelain surfaces, graphite text, solid midnight balance/primary actions, restrained brass detail; one token/component system across home/history/calendar/accounts/dialogs/import. Semantic green/red retain income/expense meaning. Sol/Medium defines direction and owns ui2.css; Luna/Low provides bounded read-only color/mobile-risk audit (no Light setting exposed); independent Sol/Medium reviews data regressions. No Astra escalation needed for this visual-only scope.
+- NotoSansThai-variable.ttf + OFL copied from existing promo-video/public/fonts without modifying that folder; runtime serves font locally.
+- Two assistants configured GPT-6.1 Sol/Medium: ui2_design owned ui2.css; review_history read-only reviewed all IDs/8 forms/business script order, snapshot byte parity and 6 logic/DOM suites. Main added font/contrast/search-padding polish and in-page toggle after design handoff; no Astra escalation.
+- Chrome isolated synthetic QA passed 320/375/430/1280: existing history/capture/category/import checks, all 8 dialogs' viewport bounds, home/history/settings overflow, toggle preserving ledger/draft/day/storage, local font loaded. Actual screenshots inspected desktop/home/settings/history/calendar/import/transfer. This is not physical iPhone testing.
+- Preserve `ui-versions/ui1` and `dist/ui1` unchanged. UI rollback should restore UI presentation only, keeping future business logic and user storage. Current VERSION stays demo.18 with local changes in Unreleased; no commit/push/deploy.
+- Quiet Atelier QA: all 8 logic/DOM/synthetic import suites pass; Chrome isolated profile passes existing full flow + 320/375/430/1280 overflow/dialog/toggle checks. Root inspected newly rendered home/history/calendar/accounts/capture/transfer screens. Supporting text/income/expense palette contrast on porcelain is 5.42/5.53/5.34:1; selected-day income/expense is 8.38/7.73:1 on midnight. These are palette checks, not a full accessibility audit or physical iPhone test. Chrome screenshot runner waits for calendar-button transitions before capture.
+
+## งาน local ล่าสุด — 2026-10-08
+
+- Money.createInitialState สร้าง empty ledger + categoryPreset:'general-v1' พร้อม generalExpenseCategories 9 / generalIncomeCategories 6 และ categoryTypes แยก; app initial เรียก factory เฉพาะไม่มี valid storage หรือ explicit reset ผู้ใช้ยืนยัน Existing valid ledgerแม้ว่างยัง migrate แบบ legacy ไม่มี marker
+- categories/generalSuggest เข้า branch เฉพาะ general-v1; defaultCategories/incomeCategories legacy ไม่เปลี่ยน, aliases general rename รองรับและ categorylearningยังใช้ explicit-only เหมือนเดิม ไม่เปลี่ยน schemaVersion2 หรือ jot-money-v1
+- ผู้ช่วย new_category_tests ตั้งค่า GPT-6.1 Sol/Medium owner new-user-category-check.cjs; reviewer แยก Sol/Medium read-only ตรวจ old migrationเทียบHEAD, aliases, totals/debt/budget, import append/replace/undo invariance ผ่าน ไม่ใช้ Astra
+- ผ่านชุดตรวจเดิม+category/new-user/capture และ Chrome truefresh isolated storage: preset zero-state, 10 expense / 7 income optionsรวมรอจัดหมวด, สร้างบัญชี/save/reload/learning, categorydialog320pxไม่ล้น; ดูภาพจริงแล้ว ไม่ใช่ iPhone จริง ไม่มี commit/push/deploy
+
+- categorySuggestion ใน core เลือกหมวด frequency ของ exact normalized note แยก income/expense จาก entries.categoryChoice==='user' เท่านั้น tie latest categoryChoiceAt แล้ว insertion index; fallback rule/aliases เดิม ไม่ใช้ legacy/import/auto/transfer/adjustment หรือรอจัดหมวดเป็นหลักฐาน
+- app เพิ่ม optional entry metadata categoryChoice/categoryChoiceAt เมื่อ manualCategory save หรือ explicit category edit (editCategoryTouched/different category); แก้เพียงยอด/วันไม่สร้างหลักฐานใหม่ ไม่เปลี่ยน schemaVersion 2, localStorage key, รายการเก่า, ยอดบัญชี/งบ ไม่เพิ่ม dependency/backend
+- หลักฐานมาจากรายการปัจจุบัน ลบรายการแล้ว vote หาย แก้/เปลี่ยนชื่อหมวดตาม ledger ไม่มี cache แยก คง backup/import undo; เริ่มเรียนหลังอัปเดตนี้ ไม่เดาว่าผู้ใช้เลือกหมวดเก่าเอง
+- ผ่าน category-check, capture-ui-check, history/core, synthetic import ทั้งสองชุด และ Chrome จริง manual/auto/reload/type split; reviewer ตั้งค่า GPT-6.1 Sol/Medium ตรวจ read-only + frozen-state probe ผ่าน ไม่มีการยกระดับ Astra
+
+- เพิ่ม data-capture-date ที่หัวกลุ่มวัน + calendarCaptureDate ในรายละเอียดวัน (รวมวันว่าง) เรียก openCapture(key) ด้วย quickCard/input เดิม ไม่สร้างสำเนาฟอร์มหรือ ledger
+- historyCaptureDate เป็น transient context; alignHistoryCaptureDate(date) ก่อน render หลัง save รับ/จ่าย/โอน ทำให้ปฏิทินตามวันที่/เดือนจริง คง search/notice; close ล้าง context และคืน focus ปุ่มประวัติ เปิดจดทั่วไปยังใช้วันนี้
+- ผ่าน synthetic capture/history/core tests และ Chrome จริง: Enter เปิดปุ่มวัน, native submit รับ/จ่าย/โอน, วันที่ว่าง, ข้ามปี, คืน focus หลัง native close event, layout 320/375/430/1280; reviewer Sol/Medium ตรวจ read-only ผ่าน ไม่เปลี่ยนสูตร/schema ข้อมูลเดิมหรือ promo-video
+
+- ผู้ใช้อนุมัติย้ายวันที่เข้าหัวข้อจดรายการ เฉพาะ local; ห้าม push/deploy จนมีคำสั่งใหม่ การอนุมัติเผยแพร่วันที่ 7 ต.ค. เป็นงานที่เสร็จแล้ว
+- entryDate อยู่ใน capture-heading ใช้ form="entryForm" รักษา native required validation; ใช้ input เดียวทั้งหน้าแรกและ quickDialog
+- วันที่ไทยแบบย่อแสดงเป็นข้อความพร้อมไอคอน ไม่มีกรอบเด่น จัดแนวเดียวกับ h2 ด้วย grid; ป้ายแสดงเฉพาะย้อนหลัง/ล่วงหน้า ไม่แสดงวันนี้ซ้ำ; <=370px จัดใต้หัวข้อ Native date input แสดงเมื่อ focus ใช้คีย์บอร์ดได้ ไม่เปลี่ยน date/storage/balance rules
+- ผ่าน check, history-check, history-ui-check, capture-ui-check, synthetic import ทั้งสองชุด, app syntax และ Chrome 320/375/430/1280; ตรวจภาพจริงที่ 320/375 ไม่ใช่ iPhone จริง
+- คง VERSION demo.18 และบันทึกใน CHANGELOG Unreleased ไม่แก้ released ZIP ไม่มี commit/push/deploy หรือปิดเครื่องในงานนี้
+
 ## งานล่าสุด: demo.18
 
 - หน้าแรก capture-first: ไม่มีลิสต์บัญชี, สรุปเงินกระชับ, ทางลัดไปหน้าบัญชี; chooser dialog ค้นหาชื่อ/กลุ่ม ใช้ Money.wallets เพื่อรักษากฎบัญชีซ่อน/ถังขยะ/ผู้ยืม

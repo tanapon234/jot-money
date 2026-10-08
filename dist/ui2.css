@@ -1,0 +1,395 @@
+/* UI 2 / Quiet Atelier — warm paper, precise type, midnight accents.
+   Existing functional layout, hidden states and calendar semantics live in style.css. */
+@font-face{font-family:"Jotwai Thai";src:url("vendor/fonts/NotoSansThai-variable.ttf") format("truetype");font-style:normal;font-weight:100 900;font-display:swap}
+body.ui2-theme{
+  --font:"Jotwai Thai","Leelawadee UI",Tahoma,sans-serif;
+  --ink:#242a31;--muted:#747a80;--secondary:#616a72;
+  --accent:#24313e;--accent-hover:#354553;--brass:#a88d62;
+  --paper:#f4f3ef;--surface:#fffdf9;--surface-soft:#f5f4f0;--surface-hover:#eeede7;
+  --line:#e4e2dc;--line-strong:#c9c8bf;
+  --income:#26745d;--income-soft:#edf4ef;--expense:#af4852;--expense-soft:#f9efef;
+  --income-on-dark:#a8d8c3;--expense-on-dark:#f0b8b7;
+  --green:var(--accent);--dark:var(--accent);--lime:#e8e4d9;--red:var(--expense);
+  --radius:20px;--shadow:0 2px 5px #242a3102,0 12px 28px #242a3103;
+  background:var(--paper);color:var(--ink);letter-spacing:0;
+}
+.ui2-theme main{margin-left:250px;padding:40px clamp(24px,4vw,64px) 28px;max-width:1630px}
+.ui2-theme .sidebar{width:250px;padding:38px 22px 24px;background:var(--surface);border-right:1px solid var(--line);color:var(--muted)}
+.ui2-theme .brand{color:var(--ink);font-size:30px;gap:12px;padding:0 10px;letter-spacing:-1px}
+.ui2-theme .brand small{color:var(--muted);font-size:10px;letter-spacing:0;margin-top:1px}
+.ui2-theme .brand-mark{width:46px;height:46px;border-radius:14px;background:var(--accent);box-shadow:0 7px 14px #24313e0c}
+.ui2-theme .nav-label{margin:48px 15px 15px;font-size:11px;color:var(--muted)}
+.ui2-theme .nav{padding:15px 17px;gap:13px;margin-bottom:9px;border-radius:14px;font-size:14px;color:var(--secondary);min-height:54px}
+.ui2-theme .nav:hover{color:var(--accent);background:var(--surface-soft)}
+.ui2-theme .nav.active{background:var(--accent);color:var(--surface);box-shadow:0 6px 15px #24313e12}
+.ui2-theme .nav-dot{width:5px;height:5px;background:#b6a381}
+.ui2-theme .side-note{padding:22px 18px;background:var(--surface-soft);border:1px solid var(--line);border-radius:18px}
+.ui2-theme .side-note-icon{background:var(--surface-soft);color:var(--secondary);border-radius:12px;margin-bottom:16px}
+.ui2-theme .side-note h3{color:var(--ink);font-size:18px;font-weight:600;letter-spacing:-.3px}
+.ui2-theme .side-note p{color:var(--secondary);font-size:11px;line-height:1.9}
+.ui2-theme .side-foot{font-size:9px;gap:5px;color:var(--secondary);margin-top:20px}
+.ui2-theme .side-foot .demo{background:var(--surface);color:var(--secondary);border-color:var(--line);font-size:8px}
+.ui2-theme .status-dot{background:var(--income)}
+.ui2-theme .page-header{margin-bottom:30px;align-items:center}
+.ui2-theme h1{font-weight:600;font-size:clamp(27px,2.5vw,34px);letter-spacing:-.5px;line-height:1.5}
+.ui2-theme h2{font-size:21px;letter-spacing:-.5px;font-weight:600}
+.ui2-theme .eyebrow{font-size:11px;letter-spacing:.3px;color:var(--secondary);margin-bottom:5px}
+.ui2-theme .page-header p{margin-top:7px;color:var(--secondary)}
+.ui2-theme .header-right{gap:12px;flex-shrink:0}
+.ui2-theme .avatar{width:44px;height:44px;border-radius:50%;color:var(--accent);background:var(--surface);border-color:var(--line);box-shadow:0 3px 9px #24313e03}
+.ui2-theme .header-right>.demo{font-size:9px;letter-spacing:1px;color:var(--secondary);background:transparent;border:0;padding:0}
+.ui2-theme .design-switch{display:flex;align-items:center;gap:8px;padding:0 4px;font-size:10px;white-space:nowrap}
+.ui2-theme .design-version{color:var(--secondary);background:var(--surface-soft);border:1px solid var(--line);padding:4px 7px;border-radius:5px;font:500 10px/1.5 Arial,sans-serif}
+.ui2-theme .design-compare{display:inline-flex;align-items:center;min-height:44px;color:var(--secondary);font-size:11px;text-decoration:underline;text-decoration-color:var(--line-strong);text-underline-offset:4px}
+.ui2-theme .design-compare:hover{color:var(--accent)}
+.ui2-theme #home .hero-grid{margin-bottom:24px}
+.ui2-theme #home .balance-card{padding:22px 28px;column-gap:40px;background:var(--accent);border:1px solid #34424f;border-radius:20px;box-shadow:0 8px 20px #24313e08}
+.ui2-theme .balance-top{color:#d7dcd9}
+.ui2-theme #home .balance-top .card-label{font-size:12px;letter-spacing:.15px}
+.ui2-theme .balance-card .status-dot{background:#b6a381;box-shadow:none}
+.ui2-theme #home .big-number{font-size:46px;font-weight:400;letter-spacing:-1.3px;line-height:1.18;margin:10px 0 0}
+.ui2-theme #home .balance-bottom{gap:28px;padding:5px 0 5px 32px;border-left-color:#ffffff30}
+.ui2-theme .balance-bottom span:not(.balance-art){color:#bdc6c8;font-size:11px}
+.ui2-theme .balance-bottom b{font-size:21px;font-weight:400;letter-spacing:-.2px}
+.ui2-theme .balance-art{display:none}
+.ui2-theme .balance-accounts-link{color:#d5dcd9;margin-top:8px;font-size:11px;min-height:44px}
+.ui2-theme .balance-accounts-link:hover{color:white;text-decoration:underline;text-underline-offset:4px}
+.ui2-theme #home .content-grid{grid-template-columns:minmax(0,1.12fr) minmax(0,1fr);gap:24px;margin-bottom:24px}
+.ui2-theme .quick-card,.ui2-theme .recent-card,.ui2-theme .spending-card,.ui2-theme .panel{padding:28px;background:var(--surface);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow)}
+.ui2-theme .quick-card{border-top:1px solid var(--line);box-shadow:var(--shadow)}
+.ui2-theme #quickCard>.section-heading{margin-bottom:6px}
+.ui2-theme #quickCard .section-description{font-size:12px;color:var(--secondary);margin:5px 0 20px;line-height:1.8}
+.ui2-theme .capture-heading h2{font-size:25px;font-weight:600;padding-top:4px}
+.ui2-theme .capture-date-control{color:var(--secondary);background:transparent;border:1px solid transparent;border-radius:10px}
+.ui2-theme .capture-date-display{font-size:11px;padding-inline:9px}
+.ui2-theme .capture-date-control:hover{background:var(--surface-soft);color:var(--accent);border-color:var(--line-strong)}
+.ui2-theme .capture-date-status{color:var(--secondary);background:var(--surface-soft)}
+.ui2-theme .segments{padding:5px;background:var(--surface-soft);border:1px solid var(--surface-soft);border-radius:13px;margin-bottom:20px;gap:5px}
+.ui2-theme .segments button{min-height:44px;font-size:13px;color:var(--secondary);border-radius:9px}
+.ui2-theme .segments .selected{background:var(--accent);color:var(--surface);box-shadow:0 2px 5px #24313e0c;font-weight:500}
+.ui2-theme label,.ui2-theme .field-label{font-size:12px;color:var(--accent);font-weight:600}
+.ui2-theme input,.ui2-theme select{border-color:var(--line);border-radius:12px;background:var(--surface);min-height:50px;color:var(--ink);padding:12px 15px}
+.ui2-theme input::placeholder{color:var(--muted)}
+.ui2-theme input:focus,.ui2-theme select:focus{outline:3px solid #d8d2c3;border-color:var(--muted)}
+.ui2-theme #quick{min-height:66px;background:var(--surface);border-color:var(--line-strong);font-size:22px;box-shadow:none;padding-inline:18px}
+.ui2-theme #quick::placeholder{font-size:20px;color:var(--secondary)}
+.ui2-theme .examples{gap:7px;margin-top:8px;color:var(--secondary)}
+.ui2-theme .examples button{min-height:44px;padding:5px 10px;font-size:11px;color:var(--secondary);background:var(--surface);border:1px solid var(--surface-soft);border-radius:9px}
+.ui2-theme .examples button:hover{border-color:var(--line-strong);background:var(--surface-soft);color:var(--accent)}
+.ui2-theme .label-line{margin-top:16px;margin-bottom:8px}
+.ui2-theme .capture-account-trigger{background:var(--surface);border-color:var(--line);border-radius:13px;min-height:72px;padding:14px 16px;gap:12px}
+.ui2-theme .capture-account-trigger:hover{background:var(--surface-soft);border-color:var(--muted)}
+.ui2-theme .capture-account-icon{width:38px;height:38px;border-radius:12px;background:var(--surface-soft);color:var(--secondary)}
+.ui2-theme #captureAccountName{font-size:13px}
+.ui2-theme #captureAccountHint{font-size:12px;color:var(--secondary)}
+.ui2-theme .category-details{margin-top:19px;border-top-color:var(--line);padding-top:6px}
+.ui2-theme .category-details summary{font-size:12px;min-height:48px;color:var(--secondary)}
+.ui2-theme .category-details summary b{color:var(--secondary);background:var(--surface-soft);border-radius:6px;font-size:11px}
+.ui2-theme .save,.ui2-theme .primary-small{background:var(--accent);border-radius:12px;font-weight:600;box-shadow:0 5px 10px #24313e13}
+.ui2-theme .save{min-height:52px;font-size:14px;margin-top:15px}
+.ui2-theme .save:hover,.ui2-theme .primary-small:hover{background:var(--accent-hover);box-shadow:0 4px 12px #24313e0c}
+.ui2-theme .save:disabled{box-shadow:none}
+.ui2-theme .form-foot{font-size:12px;color:var(--secondary)}
+.ui2-theme .round-icon{background:var(--surface-soft);color:var(--secondary);border-radius:12px}
+.ui2-theme .section-heading{margin-bottom:20px}
+.ui2-theme .text-button{color:var(--accent);font-size:12px;min-height:44px}
+.ui2-theme .outline{background:var(--surface);border-color:var(--line);color:var(--accent);border-radius:10px;min-height:44px;font-size:12px}
+.ui2-theme .outline:hover{background:var(--surface-soft);border-color:var(--line-strong)}
+.ui2-theme .entry{padding:18px 2px;gap:13px;min-height:83px;border-bottom-color:var(--line)}
+.ui2-theme .entry:hover{background:var(--surface-soft);border-radius:10px}
+.ui2-theme .entry-title{font-size:13px;font-weight:600;letter-spacing:.05px}
+ .ui2-theme .entry-meta{font-size:12px;color:var(--secondary);margin-top:5px}
+.ui2-theme .entry-amount{font-size:17px;color:var(--expense);font-weight:500;letter-spacing:-.3px;max-width:44%;white-space:normal;overflow-wrap:anywhere;text-align:right}
+.ui2-theme .entry-amount.plus{color:var(--income)}
+.ui2-theme .entry-amount.transfer-amount{color:var(--secondary)}
+.ui2-theme .entry-icon{background:var(--expense-soft);color:var(--expense);width:40px;height:40px;border-radius:13px}
+.ui2-theme .entry-icon.incoming{background:var(--income-soft);color:var(--income)}
+.ui2-theme .entry-icon.pending{background:var(--surface-soft);color:var(--secondary)}
+.ui2-theme .entry-icon.transfer-icon{background:var(--surface-soft);color:var(--secondary)}
+.ui2-theme .debt-line{background:var(--surface-soft);border-color:var(--line);border-radius:13px;padding:15px;font-size:11px;color:var(--secondary);margin-top:15px;gap:10px}
+.ui2-theme .debt-line b{font-size:17px;color:var(--accent);max-width:45%;white-space:normal;overflow-wrap:anywhere;text-align:right}
+.ui2-theme .debt-line small{color:var(--muted);font-size:10px}
+.ui2-theme .period-badge{background:var(--surface);border-color:var(--line);border-radius:7px;color:var(--secondary);font-size:11px}
+.ui2-theme #spending{column-gap:48px}
+.ui2-theme .bar-row{font-size:12px;color:var(--secondary);margin:12px 0}
+.ui2-theme .bar-row b{font-weight:600;font-size:14px;color:var(--accent)}
+.ui2-theme .bar-track{background:var(--surface-soft);height:6px}
+.ui2-theme .bar-fill{background:#71838c}
+.ui2-theme .bar-row:nth-child(3n+2) .bar-fill{background:#87a99c}
+.ui2-theme .bar-row:nth-child(3n) .bar-fill{background:#b6b0a3}
+.ui2-theme .sample-banner{color:var(--muted);font-size:11px;padding:19px 5px}
+.ui2-theme .sample-banner .icon{width:17px;height:17px}
+.ui2-theme .count-badge{background:var(--surface-soft);color:var(--secondary);border-radius:6px;font-size:11px}
+.ui2-theme .search-field input{background:var(--surface);border-color:var(--line);padding-left:46px}
+.ui2-theme .search-field .icon{color:var(--secondary)}
+.ui2-theme .list-caption{color:var(--secondary);font-size:11px;border-color:var(--line)}
+.ui2-theme #history .history-toolbar{padding-top:20px;margin-top:8px;border-top:1px solid var(--surface-soft);gap:16px}
+.ui2-theme #history .history-switch{width:286px}
+.ui2-theme #history .history-explanation{color:var(--secondary);font-size:11px}
+.ui2-theme #history .history-day{border-color:var(--line);border-radius:17px;margin-top:22px;background:var(--surface)}
+.ui2-theme #history .history-day-heading{background:var(--surface-soft);border-color:var(--line);padding:19px 20px;gap:13px}
+.ui2-theme #history h3{font-size:16px;letter-spacing:-.2px}
+.ui2-theme #history .history-day>.entry{padding:18px 20px}
+.ui2-theme #history .history-totals{gap:18px;margin-top:2px}
+.ui2-theme #history .history-totals>span{font-size:10px;color:var(--secondary)}
+.ui2-theme #history .history-totals b{font-weight:500;font-size:19px;letter-spacing:-.4px}
+.ui2-theme #history .history-totals b.history-income{color:var(--income)}
+.ui2-theme #history .history-totals b.history-expense{color:var(--expense)}
+.ui2-theme #history .history-totals b.history-net{color:var(--secondary)}
+.ui2-theme #history .history-filter-notice{background:var(--surface-soft);border-color:var(--line);color:var(--secondary);border-radius:12px}
+.ui2-theme #history .calendar-navigation{margin:26px 0 20px;gap:14px}
+.ui2-theme #history .calendar-navigation h3{font-size:21px;font-weight:600}
+.ui2-theme .icon-button{width:44px;min-height:44px;background:var(--surface);border-radius:11px}
+.ui2-theme #history .calendar-weekdays{color:var(--secondary);font-size:11px;margin-bottom:12px}
+.ui2-theme #history .calendar-grid,.ui2-theme #history .calendar-weekdays{gap:7px}
+.ui2-theme #history .calendar-day{border-color:var(--line);border-radius:12px;background:var(--surface);padding:11px;min-height:138px}
+.ui2-theme #history .calendar-day.has-entries{background:var(--surface)}
+.ui2-theme #history .calendar-day:hover{background:var(--surface-soft);border-color:var(--line-strong)}
+.ui2-theme #history .calendar-day.is-today{border-color:var(--brass)}
+.ui2-theme #history .calendar-day.is-selected{background:var(--accent);border-color:var(--accent);color:var(--surface);box-shadow:none}
+.ui2-theme #history .calendar-day-top{font-size:15px}
+.ui2-theme #history .calendar-value,.ui2-theme #history .calendar-entry-mark{color:var(--secondary)}
+.ui2-theme #history .calendar-value b{color:var(--ink)}
+.ui2-theme #history .calendar-today-tag{color:var(--accent)}
+.ui2-theme #history .calendar-income,.ui2-theme #history .calendar-income b{color:var(--income)}
+.ui2-theme #history .calendar-expense,.ui2-theme #history .calendar-expense b{color:var(--expense)}
+.ui2-theme #history .calendar-net,.ui2-theme #history .calendar-net b{color:var(--accent)}
+.ui2-theme #history .is-selected .calendar-value,.ui2-theme #history .is-selected .calendar-entry-mark{color:#c5cecf}
+.ui2-theme #history .is-selected .calendar-value b{color:var(--surface)}
+.ui2-theme #history .is-selected .calendar-income,.ui2-theme #history .is-selected .calendar-income b{color:var(--income-on-dark)}
+.ui2-theme #history .is-selected .calendar-expense,.ui2-theme #history .is-selected .calendar-expense b{color:var(--expense-on-dark)}
+.ui2-theme #history .is-selected .calendar-net,.ui2-theme #history .is-selected .calendar-net b,.ui2-theme #history .is-selected .calendar-today-tag{color:#ded9c8}
+.ui2-theme #history .calendar-mobile-net{color:var(--secondary)}
+.ui2-theme #history .calendar-mobile-net.positive,.ui2-theme #history .calendar-mobile-legend .income{color:var(--income)}
+.ui2-theme #history .calendar-mobile-net.negative,.ui2-theme #history .calendar-mobile-legend .expense{color:var(--expense)}
+.ui2-theme #history .is-selected .calendar-mobile-net.positive{color:var(--income-on-dark)}
+.ui2-theme #history .is-selected .calendar-mobile-net.negative{color:var(--expense-on-dark)}
+.ui2-theme #history .is-selected .calendar-mobile-net.zero{color:#ded9c8}
+.ui2-theme #history .calendar-day.is-today .calendar-day-top b{outline-color:var(--brass)}
+.ui2-theme #history .calendar-day.is-selected.is-today .calendar-day-top b{outline-color:#d4c6aa}
+.ui2-theme #history .calendar-summary{background:var(--surface-soft);border-color:var(--line);border-radius:18px;padding:23px;margin-block:24px}
+.ui2-theme #history .calendar-detail{border-top-color:var(--line);padding-top:25px}
+.ui2-theme .account-overview{background:var(--surface-soft);border-color:var(--line);padding:30px 32px;border-radius:20px;position:relative}
+.ui2-theme .account-overview h2{font-size:28px;letter-spacing:-.8px}
+.ui2-theme .account-overview-total span{color:var(--secondary);font-size:11px}
+.ui2-theme .account-overview-total strong{font-weight:400;color:var(--accent);font-size:38px;letter-spacing:-.8px}
+.ui2-theme .account-group{margin:28px 0}
+.ui2-theme .account-group-heading{background:var(--surface);border:1px solid var(--surface-soft);border-radius:11px;padding:13px 15px;margin-bottom:8px}
+.ui2-theme .account-group-heading h3{color:var(--accent);font-size:13px}
+.ui2-theme .account-group-heading>span{font-size:11px;color:var(--secondary)}
+.ui2-theme .settings-list-row{padding:21px 6px;border-bottom-color:var(--line);border-radius:9px;gap:15px}
+.ui2-theme .settings-list-row:hover{background:var(--surface-soft)}
+.ui2-theme .settings-list-icon,.ui2-theme .account-icon{background:var(--surface-soft);color:var(--secondary);border-radius:13px;width:44px;height:44px}
+.ui2-theme .settings-list-copy b{font-size:14px;font-weight:600}
+.ui2-theme .settings-list-copy small{font-size:11px;color:var(--muted)}
+.ui2-theme .settings-list-value{font-size:23px;font-weight:500;letter-spacing:-.6px;color:var(--accent)}
+.ui2-theme .settings-list-value small{font-size:10px;color:var(--muted);letter-spacing:0}
+.ui2-theme .account-tile{border-color:var(--line);border-radius:17px;padding:21px 20px;box-shadow:var(--shadow)}
+.ui2-theme .budget-item{background:var(--surface-soft);border-color:var(--line);border-radius:17px;margin-top:26px}
+.ui2-theme .settings-item summary{padding:20px;min-height:82px}
+.ui2-theme .budget-icon{background:#eee8dc;color:var(--brass)}
+.ui2-theme .borrower-trash{border-color:var(--line);padding-top:18px;margin-top:28px;color:var(--secondary)}
+.ui2-theme .secondary{background:var(--surface-soft);border:1px solid var(--line);box-shadow:none;padding:25px 28px}
+.ui2-theme .secondary h2{font-size:16px;color:var(--secondary)}
+.ui2-theme .danger-text{color:var(--expense)}
+.ui2-theme dialog{background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:20px;padding:30px;box-shadow:0 24px 90px #24313e0c;max-height:calc(100dvh - 40px)}
+.ui2-theme dialog::backdrop{background:#24313e0c;backdrop-filter:blur(7px)}
+.ui2-theme dialog h2{font-size:24px;letter-spacing:-.5px}
+.ui2-theme dialog .section-description{font-size:12px;color:var(--secondary)}
+.ui2-theme .close-button{background:var(--surface-soft);color:var(--secondary);border:1px solid var(--surface-soft);width:44px;min-height:44px}
+.ui2-theme .close-button:hover{background:var(--surface-soft);color:var(--accent)}
+.ui2-theme .quick-dialog{padding:20px;border-radius:20px}
+.ui2-theme .quick-dialog .quick-card{border:0;box-shadow:none;padding:10px 8px}
+.ui2-theme .sheet-heading{padding:0 5px 15px;margin-bottom:15px;color:var(--muted);border-bottom-color:var(--line);font-size:11px}
+.ui2-theme .account-detail-summary{background:var(--surface-soft);border:1px solid var(--line);border-radius:17px;padding:24px}
+.ui2-theme .account-detail-summary>b{font-size:40px;font-weight:400;color:var(--accent);letter-spacing:-1.4px}
+.ui2-theme .account-detail-summary>span,.ui2-theme .account-detail-summary>small{font-size:12px;color:var(--secondary)}
+.ui2-theme .delete{background:var(--expense-soft);border-color:#ecd9dc;color:var(--expense);border-radius:11px;min-height:48px}
+.ui2-theme .delete:hover{background:var(--expense-soft)}
+.ui2-theme .transfer-hint{background:var(--surface-soft);border-color:var(--line);color:var(--secondary);border-radius:12px;font-size:12px;padding:16px}
+.ui2-theme .transfer-direction{color:var(--muted);margin:17px 0 0}
+.ui2-theme .category-manager-list{margin-block:20px;border-color:var(--line);max-height:38vh}
+.ui2-theme .category-manager-row{padding:12px 4px;border-color:var(--line);gap:12px;font-size:13px}
+.ui2-theme .category-manager-row button{background:var(--surface);border:1px solid var(--surface-soft);border-radius:9px;font-size:11px;color:var(--secondary);min-height:44px}
+.ui2-theme .category-manager-row small{font-size:11px;color:var(--muted)}
+.ui2-theme .import-dialog{padding:32px}
+.ui2-theme .import-dialog details{border:1px solid var(--line);border-radius:13px;padding:0 16px 12px;background:var(--surface);margin:18px 0}
+.ui2-theme .import-dialog summary{font-size:13px;color:var(--accent);min-height:48px;padding:13px 0}
+.ui2-theme .import-account-map{background:white;border-color:var(--line);border-radius:12px;padding:16px;gap:12px}
+.ui2-theme .import-account-map legend{font-size:12px;color:var(--secondary)}
+.ui2-theme .import-table-scroll{border:1px solid var(--surface-soft);border-radius:11px;background:var(--surface)}
+.ui2-theme .import-table{font-size:11px}
+.ui2-theme .import-table th{background:var(--surface-soft);color:var(--secondary);font-weight:600;padding:14px 12px;border-bottom-color:var(--line)}
+.ui2-theme .import-table td{padding:14px 12px;color:var(--accent);border-bottom-color:var(--line)}
+.ui2-theme .import-table tr:nth-child(even) td{background:var(--surface)}
+.ui2-theme .import-consent{color:var(--secondary);font-size:12px;line-height:1.8}
+.ui2-theme #captureAccountList>button{min-height:76px;border-color:var(--line);border-radius:13px;padding:15px}
+.ui2-theme #captureAccountList>button.selected,.ui2-theme #captureAccountList>button[aria-pressed="true"]{background:var(--surface-soft);border-color:var(--muted);box-shadow:inset 3px 0 var(--secondary)}
+.ui2-theme #captureAccountList .capture-account-value{font-size:15px;color:var(--secondary)}
+.ui2-theme .chips button{border-color:var(--line);border-radius:10px;min-height:44px;color:var(--secondary)}
+.ui2-theme .chips .selected{background:var(--surface-hover);border-color:var(--line-strong);color:var(--accent);box-shadow:inset 0 0 0 1px var(--line-strong)}
+.ui2-theme .empty-state .empty-symbol{background:var(--surface-soft);color:var(--secondary)}
+.ui2-theme .empty-state{border-color:var(--line);background:var(--surface);border-radius:16px}
+.ui2-theme .empty-block{padding:42px 18px;color:var(--muted)}
+.ui2-theme .empty-block strong{color:var(--secondary);font-size:14px}
+.ui2-theme .empty-block>.icon{color:var(--muted);background:var(--surface);box-sizing:content-box;padding:13px;border-radius:17px}
+.ui2-theme .floating-capture{border-radius:15px;background:var(--accent);box-shadow:0 7px 23px #24313e0c;min-height:54px;right:32px;bottom:28px}
+.ui2-theme #toast{background:var(--ink);border-radius:13px;border:1px solid #ffffff15;box-shadow:0 8px 25px #24313e0c}
+.ui2-theme footer{font-size:10px;color:var(--muted);padding-top:24px}
+.ui2-theme .footer-brand{font-size:17px;color:var(--secondary);letter-spacing:-.3px}
+.ui2-theme .footer-brand span{font-size:10px;color:var(--muted);letter-spacing:0}
+.ui2-theme button:focus-visible,.ui2-theme a:focus-visible,.ui2-theme summary:focus-visible{outline:3px solid var(--secondary);outline-offset:3px}
+.ui2-theme .capture-date-control:focus-within{outline:3px solid var(--secondary);outline-offset:3px}
+.ui2-theme .view,.ui2-theme form,.ui2-theme .section-heading>div,.ui2-theme .account-group,.ui2-theme .settings-list{min-width:0}
+@media(min-width:1700px){.ui2-theme main{margin-inline:auto;padding-left:306px;max-width:1700px}}
+@media(max-width:1180px){
+  .ui2-theme .sidebar{width:218px;padding-inline:17px}
+  .ui2-theme main{margin-left:218px;padding:32px 28px 24px}
+  .ui2-theme #home .content-grid{grid-template-columns:minmax(0,1fr)}
+  .ui2-theme #home .balance-card{column-gap:24px;padding:25px}
+  .ui2-theme #home .balance-bottom{padding-left:24px;gap:18px}
+  .ui2-theme #home .big-number{font-size:43px}
+  .ui2-theme .quick-card,.ui2-theme .recent-card,.ui2-theme .spending-card,.ui2-theme .panel{padding:26px}
+}
+@media(max-width:820px){
+  .ui2-theme .sidebar{width:186px;padding-inline:12px}
+  .ui2-theme main{margin-left:186px;padding-inline:22px}
+  .ui2-theme .brand{font-size:26px;gap:9px;padding-inline:3px}
+  .ui2-theme .brand-mark{width:40px;height:40px;border-radius:13px}
+  .ui2-theme .brand small{font-size:8px}
+  .ui2-theme .nav{padding-inline:12px;font-size:12px;gap:9px}
+  .ui2-theme .side-note{padding:18px 14px}
+  .ui2-theme .side-note h3{font-size:16px}
+  .ui2-theme .page-header{align-items:flex-start}
+  .ui2-theme .header-right{gap:7px;flex-wrap:wrap;justify-content:flex-end;max-width:155px}
+  .ui2-theme .header-right>.demo{display:none}
+  .ui2-theme .avatar{display:none}
+  .ui2-theme #home .balance-card{display:block}
+  .ui2-theme #home .balance-bottom{border-left:0;border-top:1px solid #ffffff25;padding:17px 0 0;gap:24px;margin-top:19px}
+  .ui2-theme .account-overview{padding:25px}
+  .ui2-theme #history .calendar-day{padding:7px;min-height:138px}
+}
+@media(max-width:640px){
+  .ui2-theme .sidebar{position:static;width:auto;padding:0;background:none;border:0}
+  .ui2-theme .sidebar nav{background:#fffdf9fa;border-top:1px solid var(--line);box-shadow:0 -5px 24px #24313e06;padding:9px 12px calc(9px + env(safe-area-inset-bottom));gap:8px}
+  .ui2-theme .nav{min-height:53px;font-size:10px;gap:4px;margin:0;padding:6px 2px;color:var(--secondary);border-radius:12px}
+  .ui2-theme .nav.active{background:var(--ink);color:var(--surface);box-shadow:none}
+  .ui2-theme .nav:hover{background:var(--surface-soft);color:var(--accent)}
+  .ui2-theme main{margin:0;padding:24px 18px calc(110px + env(safe-area-inset-bottom))}
+  .ui2-theme .page-header{margin-bottom:20px;gap:10px;align-items:center}
+  .ui2-theme h1{font-size:25px;letter-spacing:-.7px;line-height:1.5}
+  .ui2-theme .page-header .eyebrow{font-size:10px;margin-bottom:4px}
+  .ui2-theme .page-header p{font-size:10px;margin-top:5px}
+  .ui2-theme .header-right{max-width:88px;gap:0}
+  .ui2-theme .design-switch{flex-direction:column;align-items:flex-end;gap:0;padding:0}
+  .ui2-theme .design-version{font-size:9px;padding:3px 6px}
+  .ui2-theme .design-compare{font-size:10px;min-height:44px}
+  .ui2-theme #home .hero-grid{margin-bottom:18px}
+  .ui2-theme #home .balance-card{padding:18px 20px 11px;border-radius:20px}
+  .ui2-theme #home .balance-top .card-label{font-size:11px}
+  .ui2-theme #home .big-number{font-size:36px;letter-spacing:-.8px;margin:10px 0 13px;line-height:1.15}
+  .ui2-theme #home .balance-bottom{margin-top:0;padding-top:11px;gap:20px;flex-wrap:nowrap}
+  .ui2-theme .balance-bottom span:not(.balance-art){font-size:10px}
+  .ui2-theme .balance-bottom b{font-size:17px;line-height:1.6}
+  .ui2-theme .balance-accounts-link{min-height:44px;font-size:10px;margin-top:2px}
+  .ui2-theme #home .content-grid{gap:18px;margin-bottom:18px}
+  .ui2-theme .quick-card,.ui2-theme .recent-card,.ui2-theme .spending-card,.ui2-theme .panel{padding:21px;border-radius:18px}
+  .ui2-theme .capture-heading h2{font-size:23px}
+  .ui2-theme #quickCard .section-description{font-size:12px;margin:4px 0 16px}
+  .ui2-theme .capture-date-control{width:145px}
+  .ui2-theme .capture-date-display{font-size:10px;gap:4px;padding-inline:6px}
+  .ui2-theme .capture-date-display .icon{width:13px;height:13px}
+  .ui2-theme .segments{margin-bottom:17px;padding:4px;gap:4px}
+  .ui2-theme .segments button{font-size:12px;gap:5px;min-height:44px}
+  .ui2-theme #quick{font-size:21px;min-height:62px;padding-inline:15px}
+  .ui2-theme #quick::placeholder{font-size:19px}
+  .ui2-theme .examples{gap:6px;font-size:10px}
+  .ui2-theme .examples button{font-size:10px;padding:5px 8px}
+  .ui2-theme .capture-account-trigger{min-height:68px;padding:12px}
+  .ui2-theme .category-details{margin-top:16px}
+  .ui2-theme h2{font-size:19px}
+  .ui2-theme .section-heading{margin-bottom:16px;gap:10px}
+  .ui2-theme .entry{gap:10px;padding:17px 0;min-height:78px}
+  .ui2-theme .entry-icon{width:35px;height:35px;border-radius:11px}
+  .ui2-theme .entry-title{font-size:12px}
+  .ui2-theme .entry-meta{font-size:11px}
+  .ui2-theme .entry-amount{font-size:15px}
+  .ui2-theme .debt-line{padding:13px;font-size:10px;gap:9px}
+  .ui2-theme .debt-line b{font-size:15px}
+  .ui2-theme #spending{grid-template-columns:1fr}
+  .ui2-theme .sample-banner{padding-inline:2px;font-size:10px}
+  .ui2-theme #history .history-toolbar{padding-top:17px;margin-top:5px;gap:8px}
+  .ui2-theme #history .history-switch{width:100%}
+  .ui2-theme #history .history-day{border-radius:14px;margin-top:18px}
+  .ui2-theme #history .history-day-heading{padding:15px 13px;gap:10px}
+  .ui2-theme #history h3{font-size:14px}
+  .ui2-theme #history .history-totals{gap:8px}
+  .ui2-theme #history .history-totals b{font-size:15px;letter-spacing:-.2px}
+  .ui2-theme #history .history-day>.entry{padding:15px 13px;gap:8px}
+  .ui2-theme #history .calendar-navigation{gap:6px;margin:15px 0 16px}
+  .ui2-theme #history .calendar-navigation h3{font-size:16px}
+  .ui2-theme #history .calendar-navigation>.outline{min-height:44px}
+  .ui2-theme #history .calendar-grid,.ui2-theme #history .calendar-weekdays{gap:4px}
+  .ui2-theme #history .calendar-weekdays{font-size:11px;margin-bottom:10px}
+  .ui2-theme #history .calendar-day{min-height:68px;padding:8px 1px;border-radius:10px;gap:5px}
+  .ui2-theme #history .calendar-day-top{font-size:15px}
+  .ui2-theme #history .calendar-summary{margin:18px 0;padding:16px;border-radius:14px}
+  .ui2-theme #history .calendar-detail{padding-top:20px}
+  .ui2-theme #history #calendarView .history-totals>span{font-size:12px}
+  .ui2-theme #history #calendarView .history-totals b{font-size:17px}
+  .ui2-theme .account-overview{padding:23px;border-radius:18px;gap:18px;margin-bottom:18px}
+  .ui2-theme .account-overview h2{font-size:24px}
+  .ui2-theme .account-overview-total strong{font-size:34px}
+  .ui2-theme .account-group{margin:23px 0}
+  .ui2-theme .account-group-heading{padding:12px}
+  .ui2-theme .settings-list-row{padding:19px 0;gap:11px}
+  .ui2-theme .settings-list-icon{width:36px;height:36px;border-radius:11px}
+  .ui2-theme .settings-list-copy b{font-size:13px}
+  .ui2-theme .settings-list-copy small{font-size:10px}
+  .ui2-theme .settings-list-value{font-size:19px;max-width:43%}
+  .ui2-theme .settings-item summary{padding:15px}
+  .ui2-theme .secondary{padding:22px;gap:12px}
+  .ui2-theme dialog{padding:23px;border-radius:18px;max-height:calc(100dvh - 24px);max-width:calc(100vw - 24px)}
+  .ui2-theme dialog h2{font-size:21px}
+  .ui2-theme .quick-dialog{padding:15px}
+  .ui2-theme .quick-dialog .quick-card{padding:8px 4px}
+  .ui2-theme .account-detail-summary{padding:21px}
+  .ui2-theme .account-detail-summary>b{font-size:34px}
+  .ui2-theme .import-dialog{padding:22px}
+  .ui2-theme .import-dialog details{padding-inline:12px}
+  .ui2-theme .import-account-map{padding:13px;grid-template-columns:1fr}
+  .ui2-theme .category-manager-row{gap:8px;flex-wrap:wrap}
+  .ui2-theme .category-manager-row>span{min-width:0;overflow-wrap:anywhere}
+  .ui2-theme .floating-capture{right:18px;bottom:calc(89px + env(safe-area-inset-bottom));min-height:50px;padding:12px 18px}
+  .ui2-theme footer{padding-top:19px;font-size:9px}
+}
+@media(max-width:370px){
+  .ui2-theme main{padding-inline:12px;padding-top:19px}
+  .ui2-theme h1{font-size:22px;letter-spacing:-.7px}
+  .ui2-theme .header-right{max-width:73px}
+  .ui2-theme .design-compare{font-size:9px}
+  .ui2-theme .page-header{gap:6px;margin-bottom:17px}
+  .ui2-theme #home .balance-card{padding:16px 18px 9px;border-radius:18px}
+  .ui2-theme #home .big-number{font-size:34px}
+  .ui2-theme .balance-bottom b{font-size:16px}
+  .ui2-theme .quick-card,.ui2-theme .recent-card,.ui2-theme .spending-card,.ui2-theme .panel{padding:18px;border-radius:18px}
+  .ui2-theme .capture-heading h2{font-size:22px;padding:3px 0 0}
+  .ui2-theme .capture-heading .capture-date-field{margin-top:4px}
+  .ui2-theme .capture-date-control{width:148px}
+  .ui2-theme .capture-date-display{justify-content:flex-start;padding-left:8px}
+  .ui2-theme .segments button{font-size:11px;gap:4px}
+  .ui2-theme .segments .icon{width:15px;height:15px}
+  .ui2-theme .entry-icon{width:30px;height:30px}
+  .ui2-theme .entry-amount{font-size:14px}
+  .ui2-theme .account-overview{padding:20px}
+  .ui2-theme .settings-list-value{font-size:17px}
+  .ui2-theme dialog{padding:19px}
+  .ui2-theme .import-dialog{padding:18px}
+  .ui2-theme #history .calendar-day{border-radius:8px;min-height:66px}
+}
+/* Supporting copy and native date hit target remain legible at every size. */
+.ui2-theme .eyebrow,.ui2-theme .entry-meta,.ui2-theme .form-foot,.ui2-theme .section-description,.ui2-theme .page-header p,.ui2-theme #captureAccountHint,.ui2-theme .debt-line small,.ui2-theme .list-caption,.ui2-theme .period-badge,.ui2-theme .sample-banner{color:var(--secondary)}
+.ui2-theme #history .history-explanation,.ui2-theme #history .history-totals>span,.ui2-theme #history .calendar-weekdays{color:var(--secondary)}
+.ui2-theme input::placeholder,.ui2-theme #quick::placeholder{color:var(--secondary)}
+.ui2-theme .capture-date-control input{min-height:44px;padding:8px;background:var(--surface-soft)}
+@media(prefers-reduced-motion:reduce){.ui2-theme *,.ui2-theme *::before,.ui2-theme *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}

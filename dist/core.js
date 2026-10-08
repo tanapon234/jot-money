@@ -38,9 +38,17 @@ const Money = {
   },
   defaultCategories: ['รอจัดหมวด','อาหาร','น้ำมัน','โทรศัพท์','เครื่องมือ','ซ่อมรถ','แต่งรถ','ของใช้','การเรียน','งาน/รายได้เสริม','อื่น ๆ'],
   incomeCategories: ['เงินเดือน','งาน/รายได้เสริม','โบนัส','ดอกเบี้ย','ของขวัญ','อื่น ๆ'],
+  generalExpenseCategories: ['อาหารและเครื่องดื่ม','เดินทางและรถ','บ้านและบิล','ซื้อของและของใช้','สุขภาพ','การศึกษา','บันเทิงและท่องเที่ยว','ครอบครัวและสัตว์เลี้ยง','รายจ่ายอื่น ๆ'],
+  generalIncomeCategories: ['เงินเดือน','รายได้เสริม','ขายของ','ผลตอบแทนและดอกเบี้ย','ของขวัญและเงินช่วยเหลือ','รายรับอื่น ๆ'],
+  createInitialState() {
+    const expense=this.generalExpenseCategories,income=this.generalIncomeCategories;
+    return {budget:0,accounts:[],entries:[],categoryPreset:'general-v1',categories:['รอจัดหมวด',...expense,...income],categoryTypes:Object.fromEntries([...expense.map(c=>[c,['expense']]),...income.map(c=>[c,['income']])])};
+  },
   categories(state,type=null) {
-    const incomeDefaults=this.incomeCategories.map(name=>state.categoryAliases?.[name]||name);
-    const all=[...new Set(['รอจัดหมวด',...(state.categories||this.defaultCategories),...incomeDefaults,...state.entries.filter(e=>e.type!=='transfer').map(e=>e.category).filter(Boolean)])];
+    const general=state.categoryPreset==='general-v1';
+    const incomeDefaults=(general?this.generalIncomeCategories:this.incomeCategories).map(name=>state.categoryAliases?.[name]||name);
+    const defaults=general?this.generalExpenseCategories:this.defaultCategories;
+    const all=[...new Set(['รอจัดหมวด',...(state.categories||defaults),...incomeDefaults,...state.entries.filter(e=>e.type!=='transfer').map(e=>e.category).filter(Boolean)])];
     if(type!=='expense'&&type!=='income')return all;
     return all.filter(name=>{
       if(name==='รอจัดหมวด'||name==='อื่น ๆ')return true;
@@ -67,14 +75,26 @@ const Money = {
     if(previous){
       state.entries.forEach(e=>{if(e.type!=='transfer'&&e.category===previous)e.category=name});
       state.categoryAliases=state.categoryAliases||{};
-      [...this.defaultCategories,...this.incomeCategories].forEach(c=>{if((state.categoryAliases[c]||c)===previous)state.categoryAliases[c]=name});
+      [...this.defaultCategories,...this.incomeCategories,...this.generalExpenseCategories,...this.generalIncomeCategories].forEach(c=>{if((state.categoryAliases[c]||c)===previous)state.categoryAliases[c]=name});
     }
     return '';
   },
-  suggestCategory(state,note,type='expense') {
-    const original=this.suggest(note),name=state.categoryAliases?.[original]||original;
-    return this.categories(state,type).includes(name)?name:'รอจัดหมวด';
+  categoryNoteKey(note) {return String(note||'').normalize('NFKC').toLocaleLowerCase('th-TH').trim().replace(/\s+/g,' ')},
+  categorySuggestion(state,note,type='expense') {
+    if(type!=='expense'&&type!=='income')return {category:'รอจัดหมวด',source:'pending'};
+    const key=this.categoryNoteKey(note),available=new Set(this.categories(state,type)),votes=new Map();
+    if(key)state.entries.forEach((e,index)=>{
+      if(e.type!==type||e.categoryChoice!=='user'||e.category==='รอจัดหมวด'||!available.has(e.category)||this.categoryNoteKey(e.note)!==key)return;
+      const vote=votes.get(e.category)||{count:0,latest:-Infinity,index:-1};
+      const time=Date.parse(e.categoryChoiceAt),latest=Number.isFinite(time)?time:0;
+      vote.count++;vote.latest=Math.max(vote.latest,latest);vote.index=Math.max(vote.index,index);votes.set(e.category,vote);
+    });
+    const learned=[...votes].sort((a,b)=>b[1].count-a[1].count||b[1].latest-a[1].latest||b[1].index-a[1].index)[0];
+    if(learned)return {category:learned[0],source:'learned'};
+    const original=state.categoryPreset==='general-v1'?this.generalSuggest(String(note||''),type):this.suggest(String(note||'')),name=state.categoryAliases?.[original]||original;
+    return available.has(name)&&name!=='รอจัดหมวด'?{category:name,source:'rule'}:{category:'รอจัดหมวด',source:'pending'};
   },
+  suggestCategory(state,note,type='expense') {return this.categorySuggestion(state,note,type).category},
   activeAccounts(state) { return state.accounts.filter(a=>!a.archived&&!a.deleted); },
   wallets(state) { return this.activeAccounts(state).filter(a=>a.kind!=='borrower'); },
   migrate(state) {
@@ -133,6 +153,26 @@ const Money = {
     if (/โทรศัพท์|เติมเงิน|ค่าเน็ต/.test(note)) return 'โทรศัพท์';
     if (/ข้าว|อาหาร|กาแฟ|หมู|ไก่|ไข่|ชาบู|น้ำดื่ม|ขนม/.test(note)) return 'อาหาร';
     return 'รอจัดหมวด';
+  },
+  generalSuggest(note,type='expense') {
+    if(type==='income'){
+      if(/เงินเดือน|โบนัส/.test(note))return 'เงินเดือน';
+      if(/ดอกเบี้ย|ปันผล/.test(note))return 'ผลตอบแทนและดอกเบี้ย';
+      if(/ของขวัญ|เงินช่วยเหลือ/.test(note))return 'ของขวัญและเงินช่วยเหลือ';
+      if(/ขาย/.test(note))return 'ขายของ';
+      if(/ค่าจ้าง|รายได้เสริม|รับงาน/.test(note))return 'รายได้เสริม';
+      return 'รอจัดหมวด';
+    }
+    if(/ค่าไฟ|ค่าน้ำ|ค่าเช่า|อินเทอร์เน็ต|ค่าเน็ต|เติมเงิน|บิล/.test(note))return 'บ้านและบิล';
+    if(/โรงพยาบาล|คลินิก|ค่าหมอ|ค่ายา|รักษา|ตรวจสุขภาพ/.test(note))return 'สุขภาพ';
+    if(/ค่าเรียน|ค่าเทอม|หนังสือเรียน|คอร์ส|การเรียน/.test(note))return 'การศึกษา';
+    if(/อาหารสัตว์|สัตวแพทย์|ค่าเลี้ยงลูก|ครอบครัว|สัตว์เลี้ยง/.test(note))return 'ครอบครัวและสัตว์เลี้ยง';
+    if(/แท็กซี่|รถเมล์|รถไฟ|ค่ารถ|ที่จอดรถ|ทางด่วน/.test(note))return 'เดินทางและรถ';
+    if(/ดูหนัง|ภาพยนตร์|คอนเสิร์ต|เกม|ท่องเที่ยว|โรงแรม/.test(note))return 'บันเทิงและท่องเที่ยว';
+    if(/ซื้อเสื้อ|เสื้อผ้า|ของใช้|ซื้อโทรศัพท์|เครื่องมือ|ประแจ|ไขควง/.test(note))return 'ซื้อของและของใช้';
+    if(/ชานม|เครื่องดื่ม|ลูกชิ้น|ก๋วยเตี๋ยว|บะหมี่/.test(note))return 'อาหารและเครื่องดื่ม';
+    const legacy=this.suggest(note);
+    return ({อาหาร:'อาหารและเครื่องดื่ม',น้ำมัน:'เดินทางและรถ',ซ่อมรถ:'เดินทางและรถ',แต่งรถ:'เดินทางและรถ',โทรศัพท์:'บ้านและบิล',เครื่องมือ:'ซื้อของและของใช้'})[legacy]||'รอจัดหมวด';
   },
   balance(state, id) {
     const a=state.accounts.find(a=>a.id===id);if(!a)return 0;

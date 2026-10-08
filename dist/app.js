@@ -9,10 +9,12 @@ function borrowerLabel(a){return Money.balance(state,a.id)<0?'เราติด
 function groupOptions(selected,kind){return Money.groups(state).map(g=>`<option value="${g.id}" ${g.id===selected?'selected':''}>${esc(g.label)}</option>`).join('')}
 function settingsAccountRow(a){return `<button type="button" class="settings-list-row" data-account-detail="${esc(a.id)}"><span class="settings-list-icon ${a.archived?'archived':''}" aria-hidden="true">${accountIcon(a)}</span><span class="settings-list-copy"><b>${esc(a.name)}</b><small>${a.kind==='borrower'?'ผู้ยืม · '+borrowerLabel(a):a.archived?'ซ่อนไว้ · ยังรวมในยอดทั้งหมด':'ยอดปัจจุบัน · ดูรายการเงินเข้า–ออก'}</small></span><span class="settings-list-value">${fmt(Money.balance(state,a.id))}<small>ดูรายละเอียด ${icon('chevron-right')}</small></span></button>`}
 function renderAccountGroups(){return Money.groupedAccounts(state).map(group=>`<section class="account-group" aria-labelledby="account-group-${group.id}"><div class="account-group-heading"><h3 id="account-group-${group.id}">${esc(group.label)} <span class="count-badge">${group.accounts.length}</span></h3><span>${group.id==='archived'?'เก็บยอดและประวัติไว้':group.accounts.some(a=>a.kind==='borrower')?(group.accounts.some(a=>a.kind!=='borrower')?'เงินของเรา '+fmt(group.cashTotal)+' · ':'')+'เขาติดเรา '+fmt(group.debtTotal)+' · เราติดเขา '+fmt(group.payable):'รวม '+fmt(group.total)}</span></div><div>${group.accounts.map(settingsAccountRow).join('')}</div></section>`).join('')}
-const initial=()=>({budget:0,accounts:[],entries:[]});
+const initial=()=>Money.createInitialState();
 let state=initial(),type='expense',account='cash',manualCategory=false,editing=null,detailAccount=null,returnToAccount=null;
 // View state only; the ledger and localStorage schema remain unchanged.
 let historyView='list',calendarSelected=History.today(),calendarMonth=calendarSelected.slice(0,7);
+let historyCaptureDate=null;
+let editCategoryTouched=false;
 try{const s=JSON.parse(localStorage.getItem(KEY));if(s&&Array.isArray(s.accounts)&&Array.isArray(s.entries)&&Number.isFinite(s.budget))state=s}catch{}
 state=Money.migrate(state);
 const LAST_ACCOUNT_KEY=KEY+'-last-account';
@@ -30,7 +32,15 @@ function row(e,context=null){
  return `<button type="button" class="entry" data-edit="${esc(e.id)}" aria-label="แก้ไข ${esc(e.note)}"><span class="entry-icon ${transfer?'transfer-icon':plus?'incoming':e.category==='รอจัดหมวด'?'pending':''}" aria-hidden="true">${icon(transfer?'transfer':plus?'down':'up')}</span><span class="entry-info"><span class="entry-title">${esc(e.note)}</span><span class="entry-meta">${route}${e.subcategory?' · '+esc(e.subcategory):''}${e.extraNote?' · '+esc(e.extraNote):''} · ${labels[e.type]} · ${esc(History.dateLabel(History.dayKey(e.date)))}</span></span><span class="entry-amount ${transfer&&!context?'transfer-amount':plus?'plus':''}">${sign}${fmt(e.amount)}</span></button>`;
 }
 function rememberCaptureAccount(id){if(!Money.wallets(state).some(a=>a.id===id))return;try{localStorage.setItem(LAST_ACCOUNT_KEY,id)}catch{}}
-function resetCaptureDate(){$('entryDate').value=History.today();}
+function updateCaptureDate(){
+ const key=History.dayKey($('entryDate').value),today=History.today();
+ const months=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+ $('captureDateLabel').textContent=key?Number(key.slice(8,10))+' '+months[Number(key.slice(5,7))-1]+' '+(Number(key.slice(0,4))+543):'เลือกวันที่';
+ $('captureDateStatus').textContent=!key?'กรุณาเลือกวันที่':key<today?'ย้อนหลัง':key>today?'ล่วงหน้า':'';
+}
+function resetCaptureDate(){$('entryDate').value=History.today();updateCaptureDate();}
+$('entryDate').addEventListener('input',updateCaptureDate);
+$('entryDate').addEventListener('change',updateCaptureDate);
 resetCaptureDate();
 function renderCaptureAccount(){
  const selected=Money.wallets(state).find(a=>a.id===account);
@@ -84,7 +94,7 @@ function renderHistory(){
  $('historyFilterNotice').classList.toggle('hidden',!q);
  $('historyFilterNotice').textContent=q?`แสดงผลค้นหา “${$('search').value.trim()}” · ${entries.length} รายการ ยอดทุกส่วนคำนวณจากผลค้นหานี้`:'';
  $('clearHistorySearch').classList.toggle('hidden',!q);
- $('allEntries').innerHTML=groups.map(g=>`<section class="history-day" aria-labelledby="history-day-${g.key||'unknown'}"><header class="history-day-heading"><h3 id="history-day-${g.key||'unknown'}">${g.key?`<time datetime="${g.key}">${esc(History.dateLabel(g.key))}</time>`:'ไม่ระบุวันที่'}</h3><span class="count-badge">${g.count} รายการ</span><div class="history-totals">${historyTotals(g)}</div></header>${g.entries.map(e=>row(e)).join('')}</section>`).join('')||emptyBlock('search',q?'ไม่พบรายการที่ค้นหา':'ยังไม่มีรายการ',q?'ลองค้นด้วยชื่อรายการ หมวด หรือบัญชีอื่น':'จดรายการใหม่ หรือนำเข้าประวัติจาก Excel');
+ $('allEntries').innerHTML=groups.map(g=>`<section class="history-day" aria-labelledby="history-day-${g.key||'unknown'}"><header class="history-day-heading"><h3 id="history-day-${g.key||'unknown'}">${g.key?`<time datetime="${g.key}">${esc(History.dateLabel(g.key))}</time>`:'ไม่ระบุวันที่'}</h3><span class="count-badge">${g.count} รายการ</span>${g.key?`<button type="button" class="history-capture-date text-button" data-capture-date="${g.key}" aria-label="จดรายการวันที่ ${esc(History.dateLabel(g.key,new Date(),true))}">${icon('plus')} จดวันที่นี้</button>`:''}<div class="history-totals">${historyTotals(g)}</div></header>${g.entries.map(e=>row(e)).join('')}</section>`).join('')||emptyBlock('search',q?'ไม่พบรายการที่ค้นหา':'ยังไม่มีรายการ',q?'ลองค้นด้วยชื่อรายการ หมวด หรือบัญชีอื่น':'จดรายการใหม่ หรือนำเข้าประวัติจาก Excel');
  $('historyListView').classList.toggle('hidden',historyView!=='list');
  $('calendarView').classList.toggle('hidden',historyView!=='calendar');
  document.querySelectorAll('[data-history-view]').forEach(b=>{const selected=b.dataset.historyView===historyView;b.classList.toggle('selected',selected);b.setAttribute('aria-pressed',String(selected))});
@@ -103,6 +113,8 @@ function renderHistory(){
  $('calendarMonthSummary').innerHTML=`<div class="section-heading"><h3>สรุป ${esc(History.monthLabel(calendarMonth))}</h3><span class="count-badge">${monthSummary.count} รายการ</span></div>${q?'<p class="history-filter-caption">ยอดจากผลการค้นหา</p>':''}<div class="history-totals">${historyTotals(monthSummary)}</div>`;
  const day=byDay.get(calendarSelected)||{entries:[],...History.summary([])};
  $('calendarDayTitle').textContent=History.dateLabel(calendarSelected,new Date(),true)+(calendarSelected===today?' · วันนี้':'');
+ $('calendarCaptureDate').dataset.captureDate=calendarSelected;
+ $('calendarCaptureDate').setAttribute('aria-label','จดรายการวันที่ '+History.dateLabel(calendarSelected,new Date(),true));
  $('calendarDaySummary').innerHTML=`${q?'<p class="history-filter-caption">ยอดจากผลการค้นหา</p>':''}<div class="history-totals">${historyTotals(day)}</div>${historyNetNote(day)}`;
  $('calendarDayEntries').innerHTML=day.entries.map(e=>row(e)).join('')||emptyBlock('list','ยังไม่มีรายการในวันนี้',q?'ไม่มีรายการตรงกับคำค้นในวันที่เลือก':'รายการที่จดในวันนี้จะแสดงที่นี่');
 }
@@ -113,6 +125,7 @@ $('calendarCurrent').onclick=()=>changeCalendarMonth(History.today().slice(0,7))
 $('clearHistorySearch').onclick=()=>{$('search').value='';renderHistory();$('search').focus()};
 function tab(name){if($('quickDialog').open)$('quickDialog').close();document.querySelectorAll('.view').forEach(v=>v.classList.toggle('hidden',v.id!==name));document.querySelectorAll('.nav').forEach(v=>{const active=v.dataset.tab===name;v.classList.toggle('active',active);if(active)v.setAttribute('aria-current','page');else v.removeAttribute('aria-current')});$('pageTitle').textContent={home:'วันนี้ ใช้ได้อีกเท่าไหร่',history:'รายการทั้งหมด',settings:'บัญชีและงบของคุณ'}[name];$('pageEyebrow').textContent={home:'ภาพรวมการเงิน',history:'ประวัติการเงิน',settings:'จัดการเงินของคุณ'}[name];window.scrollTo({top:0,behavior:'smooth'});updateCaptureButton()}
 document.addEventListener('click',e=>{
+ const captureDate=e.target.closest('[data-capture-date]');if(captureDate){openCapture(captureDate.dataset.captureDate);return}
  const historyMode=e.target.closest('[data-history-view]');if(historyMode){historyView=historyMode.dataset.historyView;renderHistory();updateCaptureButton()}
  const calendarDay=e.target.closest('[data-calendar-day]');if(calendarDay){calendarSelected=calendarDay.dataset.calendarDay;renderHistory();document.querySelector(`[data-calendar-day="${calendarSelected}"]`)?.focus({preventScroll:true})}
  const nav=e.target.closest('[data-tab],[data-go]');if(nav)tab(nav.dataset.tab||nav.dataset.go);
@@ -125,9 +138,9 @@ document.addEventListener('click',e=>{
  const restore=e.target.closest('[data-restore-account]');if(restore){if(!saveSettings())return;state.accounts.find(a=>a.id===restore.dataset.restoreAccount).archived=false;persist();render();toast('นำบัญชีกลับมาใช้แล้ว')}
  const ed=e.target.closest('[data-edit]');if(ed){returnToAccount=$('accountDialog').open?detailAccount:null;if($('accountDialog').open)$('accountDialog').close();openEdit(ed.dataset.edit)}
 });
-function suggest(){const parsed=Money.parse($('quick').value);if(!manualCategory){$('category').value=parsed?Money.suggestCategory(state,parsed.note,type):'รอจัดหมวด';$('suggestion').textContent=$('category').value==='รอจัดหมวด'?'ยังไม่แน่ใจ เก็บไว้จัดทีหลังได้':'เสนอจากคำในรายการ · เปลี่ยนได้'}$('categorySummary').textContent=$('category').value;}
+function suggest(){const parsed=Money.parse($('quick').value);if(!manualCategory){const suggestion=parsed?Money.categorySuggestion(state,parsed.note,type):{category:'รอจัดหมวด',source:'pending'};$('category').value=suggestion.category;$('suggestion').textContent=suggestion.source==='learned'?'จำจากหมวดที่คุณเลือกบ่อย · เปลี่ยนได้':suggestion.source==='rule'?'เสนอจากคำในรายการ · เปลี่ยนได้':'ยังไม่แน่ใจ เก็บไว้จัดทีหลังได้'}$('categorySummary').textContent=$('category').value;}
 $('quick').addEventListener('input',()=>{manualCategory=false;suggest();$('formError').textContent=''});$('category').addEventListener('change',()=>{manualCategory=true;$('suggestion').textContent='คุณเลือกหมวดนี้เอง';$('categorySummary').textContent=$('category').value});
-$('entryForm').addEventListener('submit',e=>{e.preventDefault();if(type==='transfer'){openTransfer();return}const p=Money.parse($('quick').value);if(!Money.wallets(state).some(a=>a.id===account)){$('formError').textContent='เพิ่มหรือเลือกบัญชีก่อนบันทึก';return}if(!p){$('formError').textContent='ใส่ชื่อรายการกับยอดเงิน เช่น ข้าว 50';return}const date=History.moveDate(new Date().toISOString(),$('entryDate').value);if(!date){$('formError').textContent='กรุณาเลือกวันที่รายการให้ถูกต้อง';return}state.entries.push({id:crypto.randomUUID(),...p,account,type,category:$('category').value,date});const saved=persist();render();$('quick').value='';resetCaptureDate();manualCategory=false;suggest();if($('quickDialog').open)$('quickDialog').close();if(saved){rememberCaptureAccount(account);toast('บันทึกแล้ว · '+p.note+' '+fmt(p.amount))}});
+$('entryForm').addEventListener('submit',e=>{e.preventDefault();if(type==='transfer'){openTransfer();return}const p=Money.parse($('quick').value);if(!Money.wallets(state).some(a=>a.id===account)){$('formError').textContent='เพิ่มหรือเลือกบัญชีก่อนบันทึก';return}if(!p){$('formError').textContent='ใส่ชื่อรายการกับยอดเงิน เช่น ข้าว 50';return}const date=History.moveDate(new Date().toISOString(),$('entryDate').value);if(!date){$('formError').textContent='กรุณาเลือกวันที่รายการให้ถูกต้อง';return}state.entries.push({id:crypto.randomUUID(),...p,account,type,category:$('category').value,date,...(manualCategory?{categoryChoice:'user',categoryChoiceAt:new Date().toISOString()}:{})});const saved=persist();alignHistoryCaptureDate(date);render();$('quick').value='';resetCaptureDate();manualCategory=false;suggest();if($('quickDialog').open)$('quickDialog').close();if(saved){rememberCaptureAccount(account);toast('บันทึกแล้ว · '+p.note+' '+fmt(p.amount))}});
 $('search').addEventListener('input',renderHistory);
 function saveSettings(){
  const b=Number($('budget').value);if(!Number.isFinite(b)||b<0||!$('settingsForm').reportValidity())return false;
@@ -150,10 +163,11 @@ $('closeAccountDetail').onclick=()=>$('accountDialog').close();
 $('showAccountEdit').onclick=()=>{const a=state.accounts.find(x=>x.id===detailAccount);if(!a)return;if(a.archived){a.archived=false;persist();render();openAccountDetail(a.id);toast('นำบัญชีกลับมาใช้แล้ว');return}$('accountEditForm').classList.toggle('hidden');};
 $('accountEditForm').addEventListener('submit',e=>{e.preventDefault();const a=state.accounts.find(x=>x.id===detailAccount),opening=Number($('detailAccountOpening').value),name=$('detailAccountName').value.trim();if(!a||!name||!Number.isFinite(opening))return;a.opening=opening;a.name=name;a.group=$('detailAccountGroup').value;const saved=persist();render();openAccountDetail(a.id);if(saved)toast('บันทึกบัญชีแล้ว')});
 $('detailRemoveAccount').onclick=()=>{if(!detailAccount)return;$('accountDialog').close();removeAccount(detailAccount)};
-function openEdit(id){editing=id;const e=state.entries.find(x=>x.id===id);$('editNote').value=e.note;$('editDate').value=History.dayKey(e.date)||'';$('editAmount').value=e.amount;$('editCategory').innerHTML=options(e.category,e.type==='adjustment'?(e.direction==='increase'?'income':'expense'):e.type);$('editAccount').innerHTML=accountOptions(e.type==='transfer'?state.accounts.filter(a=>(!a.archived&&!a.deleted)||a.id===e.account||a.id===e.toAccount):state.accounts.filter(a=>a.kind===(e.type==='adjustment'?'borrower':'wallet')&&((!a.archived&&!a.deleted)||a.id===e.account)),e.account);$('editTransferFields').classList.toggle('hidden',e.type!=='transfer');$('editCategoryFields').classList.toggle('hidden',e.type==='transfer');$('editToAccount').innerHTML=accountOptions(state.accounts.filter(a=>(!a.archived&&!a.deleted)||a.id===e.toAccount),e.toAccount);$('editError').textContent='';$('backToAccountDetail').classList.toggle('hidden',!returnToAccount);$('editDialog').showModal()}
+function openEdit(id){editing=id;editCategoryTouched=false;const e=state.entries.find(x=>x.id===id);$('editNote').value=e.note;$('editDate').value=History.dayKey(e.date)||'';$('editAmount').value=e.amount;$('editCategory').innerHTML=options(e.category,e.type==='adjustment'?(e.direction==='increase'?'income':'expense'):e.type);$('editAccount').innerHTML=accountOptions(e.type==='transfer'?state.accounts.filter(a=>(!a.archived&&!a.deleted)||a.id===e.account||a.id===e.toAccount):state.accounts.filter(a=>a.kind===(e.type==='adjustment'?'borrower':'wallet')&&((!a.archived&&!a.deleted)||a.id===e.account)),e.account);$('editTransferFields').classList.toggle('hidden',e.type!=='transfer');$('editCategoryFields').classList.toggle('hidden',e.type==='transfer');$('editToAccount').innerHTML=accountOptions(state.accounts.filter(a=>(!a.archived&&!a.deleted)||a.id===e.toAccount),e.toAccount);$('editError').textContent='';$('backToAccountDetail').classList.toggle('hidden',!returnToAccount);$('editDialog').showModal()}
 $('closeEdit').onclick=()=>$('editDialog').close();
+$('editCategory').addEventListener('change',()=>{editCategoryTouched=true});
 $('backToAccountDetail').onclick=()=>{const id=returnToAccount;$('editDialog').close();if(id)openAccountDetail(id)};
-$('editForm').addEventListener('submit',ev=>{ev.preventDefault();const e=state.entries.find(x=>x.id===editing),n=Number($('editAmount').value);if(n<=0||!Number.isFinite(n)||!$('editNote').value.trim())return;const date=History.moveDate(e.date,$('editDate').value);if(!date){$('editError').textContent='กรุณาเลือกวันที่รายการให้ถูกต้อง';return}const next={...e,date,note:$('editNote').value.trim(),amount:n,category:e.type==='transfer'?'โอน':$('editCategory').value,account:$('editAccount').value};if(e.type==='transfer')next.toAccount=$('editToAccount').value;const problem=e.type==='transfer'?Money.validateTransfer(state,next,e.id):'';if(problem){$('editError').textContent=problem;return}Object.assign(e,next);const saved=persist(),back=returnToAccount;render();$('editDialog').close();if(back)openAccountDetail(back);if(saved)toast('แก้ไขรายการแล้ว')});
+$('editForm').addEventListener('submit',ev=>{ev.preventDefault();const e=state.entries.find(x=>x.id===editing),n=Number($('editAmount').value);if(n<=0||!Number.isFinite(n)||!$('editNote').value.trim())return;const date=History.moveDate(e.date,$('editDate').value);if(!date){$('editError').textContent='กรุณาเลือกวันที่รายการให้ถูกต้อง';return}const next={...e,date,note:$('editNote').value.trim(),amount:n,category:e.type==='transfer'?'โอน':$('editCategory').value,account:$('editAccount').value};if(e.type==='transfer')next.toAccount=$('editToAccount').value;const problem=e.type==='transfer'?Money.validateTransfer(state,next,e.id):'';if(problem){$('editError').textContent=problem;return}if((e.type==='expense'||e.type==='income')&&(editCategoryTouched||next.category!==e.category)){next.categoryChoice='user';next.categoryChoiceAt=new Date().toISOString()}Object.assign(e,next);const saved=persist(),back=returnToAccount;render();$('editDialog').close();if(back)openAccountDetail(back);if(saved)toast('แก้ไขรายการแล้ว')});
 $('deleteEntry').onclick=()=>{const next={...state,entries:state.entries.filter(e=>e.id!==editing)};if(!confirm('ลบรายการนี้และคืนยอดบัญชีทั้งต้นทางและปลายทางตามรายการ?'))return;state.entries=next.entries;persist();render();$('editDialog').close();if(returnToAccount)openAccountDetail(returnToAccount);toast('ลบรายการแล้ว')};
 $('reset').onclick=()=>{if(!confirm('ล้างบัญชี รายการ และงบทั้งหมด แล้วเริ่มใหม่แบบว่างเปล่า?'))return;state=Money.migrate(initial());account=undefined;persist();render();toast('เริ่มใหม่แบบไม่มีข้อมูลแล้ว')};
 $('export').onclick=()=>{const cell=v=>'"'+String(v??'').replace(/^[=+@-]/,"'$&").replaceAll('"','""')+'"';const rows=[['วันที่','รายการ','ประเภท','จำนวนเงิน','บัญชีต้นทาง','บัญชีปลายทาง','หมวด','ทิศทางปรับยอดผู้ยืม','หมวดย่อย','บันทึกเพิ่มเติม','แถวต้นฉบับ'],...state.entries.map(e=>[e.date,e.note,labels[e.type],e.amount,state.accounts.find(a=>a.id===e.account)?.name,state.accounts.find(a=>a.id===e.toAccount)?.name,e.category,e.direction||'',e.subcategory||'',e.extraNote||'',e.sourceRows?.join(' / ')||''])];const url=URL.createObjectURL(new Blob(['\ufeff'+rows.map(r=>r.map(cell).join(',')).join('\r\n')],{type:'text/csv;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download='jot-money.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)};
@@ -174,7 +188,7 @@ $('transferDialog').addEventListener('close',()=>{
   button.setAttribute('aria-pressed',String(selected));
  });
 });
-$('transferForm').addEventListener('submit',ev=>{ev.preventDefault();const from=$('transferFrom').value,to=$('transferTo').value,amount=Number($('transferAmount').value),note=$('transferNote').value.trim()||'โอนเงิน';const date=History.moveDate(new Date().toISOString(),$('transferDate').value);if(!date){$('transferError').textContent='กรุณาเลือกวันที่โอนให้ถูกต้อง';return}const entry={id:crypto.randomUUID(),account:from,toAccount:to,type:'transfer',amount,note,category:'โอน',date};const problem=Money.validateTransfer(state,entry);if(problem){$('transferError').textContent=problem;return}state.entries.push(entry);const saved=persist();render();$('transferDialog').close();if($('quickDialog').open)$('quickDialog').close();$('quick').value='';resetCaptureDate();manualCategory=false;suggest();if(saved){const usedWallet=Money.wallets(state).find(a=>a.id===from)||Money.wallets(state).find(a=>a.id===to);if(usedWallet){account=usedWallet.id;rememberCaptureAccount(account);renderCaptureAccount()}toast('บันทึกการโอนแล้ว')}});
+$('transferForm').addEventListener('submit',ev=>{ev.preventDefault();const from=$('transferFrom').value,to=$('transferTo').value,amount=Number($('transferAmount').value),note=$('transferNote').value.trim()||'โอนเงิน';const date=History.moveDate(new Date().toISOString(),$('transferDate').value);if(!date){$('transferError').textContent='กรุณาเลือกวันที่โอนให้ถูกต้อง';return}const entry={id:crypto.randomUUID(),account:from,toAccount:to,type:'transfer',amount,note,category:'โอน',date};const problem=Money.validateTransfer(state,entry);if(problem){$('transferError').textContent=problem;return}state.entries.push(entry);const saved=persist();alignHistoryCaptureDate(date);render();$('transferDialog').close();if($('quickDialog').open)$('quickDialog').close();$('quick').value='';resetCaptureDate();manualCategory=false;suggest();if(saved){const usedWallet=Money.wallets(state).find(a=>a.id===from)||Money.wallets(state).find(a=>a.id===to);if(usedWallet){account=usedWallet.id;rememberCaptureAccount(account);renderCaptureAccount()}toast('บันทึกการโอนแล้ว')}});
 let groupEditing=null;
 function renderGroupManager(){
  $('groupList').innerHTML=Money.groups(state).map(group=>`<div class="category-manager-row"><span>${esc(group.label)} <small>${state.accounts.filter(a=>!a.deleted&&Money.accountGroup(a,state)===group.id).length} บัญชี</small></span>${group.id==='ungrouped'?'<small>กลุ่มระบบ</small>':`<span class="import-actions"><button type="button" class="text-button" data-edit-group="${esc(group.id)}">แก้ชื่อ</button><button type="button" class="text-button danger-text" data-delete-group="${esc(group.id)}">ลบกลุ่ม</button></span>`}</div>`).join('');
@@ -229,15 +243,25 @@ function updateCaptureButton(){
  const visible=homeVisible&&r.top<window.innerHeight-80&&r.bottom>100;
  $('floatingCapture').classList.toggle('hidden',visible||$('quickDialog').open||$('editDialog').open);
 }
-$('floatingCapture').addEventListener('click',()=>{
- resetCaptureDate();
+function openCapture(key=null){
+ const date=key===null?History.today():History.dayKey(key);if(!date)return;
+ historyCaptureDate=key===null?null:date;
+ $('entryDate').value=date;updateCaptureDate();$('formError').textContent='';
  $('quickSlot').appendChild($('quickCard'));
  $('quickDialog').showModal();updateCaptureButton();
  $('quick').focus({preventScroll:true});
-});
+}
+function alignHistoryCaptureDate(date){
+ if(!historyCaptureDate)return;
+ historyCaptureDate=History.dayKey(date);
+ if(historyView==='calendar'){calendarSelected=historyCaptureDate;calendarMonth=historyCaptureDate.slice(0,7)}
+}
+$('floatingCapture').addEventListener('click',()=>openCapture());
 $('closeQuick').addEventListener('click',()=>$('quickDialog').close());
 $('quickDialog').addEventListener('close',()=>{
  $('quickAnchor').after($('quickCard'));updateCaptureButton();
+ if(historyCaptureDate){const target=historyView==='calendar'?$('calendarCaptureDate'):document.querySelector(`[data-capture-date="${historyCaptureDate}"]`);target?.focus({preventScroll:true})}
+ historyCaptureDate=null;
 });
 $('editDialog').addEventListener('close',updateCaptureButton);
 window.addEventListener('scroll',updateCaptureButton,{passive:true});

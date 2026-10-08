@@ -54,7 +54,7 @@ assert.deepEqual(M.migrate(migrated),migrated);
 assert.equal(M.wallets(migrated).length,2);
 console.log('Passed: transfers, per-borrower debt, repayment/edit guards, destination history, migration and idempotence');
 const appSource=require('node:fs').readFileSync(require('node:path').join(__dirname,'dist/app.js'),'utf8');
-const freshState=require('node:vm').runInNewContext('('+appSource.match(/const initial=\(\)=>\((.*)\);/)[1]+')');
+const freshState=require('node:vm').runInNewContext('('+appSource.match(/const initial=\(\)=>(.*);/)[1]+')',{Money:M});
 assert.equal(freshState.accounts.length,0);assert.equal(freshState.entries.length,0);assert.equal(freshState.budget,0);
 assert.equal(M.total(M.migrate(freshState)),0);
 const closeHandler=appSource.match(/\$\('transferDialog'\)\.addEventListener\('close',\(\)=>\{([\s\S]*?)\n\}\);/);

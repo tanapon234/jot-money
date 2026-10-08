@@ -3,15 +3,18 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#17253e">
+  <meta name="theme-color" content="#24313e">
   <meta name="description" content="จดไว — จดเงินง่าย เห็นทุกบัญชี และรู้ว่าใช้ได้อีกเท่าไหร่">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="apple-touch-icon" href="icon.png">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <title>จดไว — พื้นที่เล็ก ๆ ของเงินคุณ</title>
+  <title>จดไว · UI2 — พื้นที่เล็ก ๆ ของเงินคุณ</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="ui2.css">
+  <link rel="stylesheet" href="ui-preview.css">
+  <script src="ui-preview.js" defer></script>
 </head>
-<body>
+<body class="ui2-theme">
   <a class="skip-link" href="#home">ข้ามไปเนื้อหา</a>
   <!-- Lucide 0.468.0, ISC/MIT. License: vendor/Lucide-LICENSE.txt -->
   <svg class="svg-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -25,6 +28,7 @@
     <symbol id="i-upload" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /> <polyline points="17 8 12 3 7 8" /> <line x1="12" x2="12" y1="3" y2="15" /></symbol>
     <symbol id="i-chevron-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6" /></symbol>
     <symbol id="i-plus" viewBox="0 0 24 24"><path d="M5 12h14" /> <path d="M12 5v14" /></symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24"><path d="M8 2v4M16 2v4"/><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18"/></symbol>
     <symbol id="i-transfer" viewBox="0 0 24 24"><path d="M8 3 4 7l4 4" /> <path d="M4 7h16" /> <path d="m16 21 4-4-4-4" /> <path d="M20 17H4" /></symbol>
     <symbol id="i-banknote" viewBox="0 0 24 24"><rect width="20" height="12" x="2" y="6" rx="2" /> <circle cx="12" cy="12" r="2" /> <path d="M6 12h.01M18 12h.01" /></symbol>
     <symbol id="i-trash-2" viewBox="0 0 24 24"><path d="M3 6h18" /> <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" /> <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" /> <line x1="10" x2="10" y1="11" y2="17" /> <line x1="14" x2="14" y1="11" y2="17" /></symbol>
@@ -61,7 +65,7 @@
     <div class="sidebar-bottom"><div class="side-note"><span class="side-note-icon"><svg class="icon" aria-hidden="true"><use href="#i-shield"/></svg></span><h3>จดนิดเดียว<br>เห็นเงินชัดขึ้น</h3><p>บัญชี รายการ และงบ<br>อยู่ด้วยกันในที่เดียว</p></div><div class="side-foot"><span class="status-dot"></span> เก็บข้อมูลในเบราว์เซอร์นี้ <span class="demo">DEMO</span></div></div>
   </aside>
   <main>
-    <header class="page-header"><div><span class="eyebrow" id="pageEyebrow">ภาพรวมการเงิน</span><h1 id="pageTitle">วันนี้ ใช้ได้อีกเท่าไหร่</h1><p id="today"></p></div><div class="header-right"><span class="demo">DEMO</span><div class="avatar" aria-hidden="true"><svg class="icon" aria-hidden="true"><use href="#i-wallet"/></svg></div></div></header>
+    <header class="page-header"><div><span class="eyebrow" id="pageEyebrow">ภาพรวมการเงิน</span><h1 id="pageTitle">วันนี้ ใช้ได้อีกเท่าไหร่</h1><p id="today"></p></div><div class="header-right"><div class="design-switch" aria-label="เปรียบเทียบหน้าตาแอป"><span class="design-version">UI 2</span><button type="button" id="previewThemeToggle" class="design-compare" aria-label="สลับไปดู UI1 เดิม">เทียบ UI1 <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button></div><div class="avatar" aria-hidden="true"><svg class="icon" aria-hidden="true"><use href="#i-wallet"/></svg></div></div></header>
     <section id="home" class="view" tabindex="-1">
       <div class="hero-grid">
         <section class="balance-card" aria-label="สรุปเงินที่ใช้ได้">
@@ -74,10 +78,9 @@
         <section class="reserve-card"><div class="section-heading"><span class="eyebrow">งบที่กันไว้</span><span class="round-icon"><svg class="icon" aria-hidden="true"><use href="#i-shield"/></svg></span></div><h2>กันเงินไว้<br>ให้เรื่องสำคัญ</h2><div class="reserve-line"><span>งบค่าน้ำมันคงเหลือ</span><b id="fuel"></b></div><div class="reserve-foot"><small>ปรับงบคงเหลือเมื่อจ่ายค่าน้ำมัน</small><button class="icon-button" data-go="settings" aria-label="จัดการงบค่าน้ำมัน"><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button></div></section>
       </div>
       <div class="content-grid">
-        <div class="capture-column"><div id="quickAnchor" hidden></div><section class="quick-card" id="quickCard"><div class="section-heading"><div><span class="eyebrow">บันทึกประจำวัน</span><h2>จดรายการ</h2></div><span class="round-icon"><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></span></div><p class="section-description">พิมพ์ชื่อรายการและจำนวนเงิน แล้วบันทึกได้เลย</p><div id="accounts" class="capture-onboarding hidden"></div>
+        <div class="capture-column"><div id="quickAnchor" hidden></div><section class="quick-card" id="quickCard"><div class="section-heading capture-heading"><div><span class="eyebrow">บันทึกประจำวัน</span><h2>จดรายการ</h2></div><div class="capture-date-field"><label for="entryDate" class="sr-only">วันที่รายการ</label><div class="capture-date-control"><span class="capture-date-display" aria-hidden="true"><svg class="icon"><use href="#i-calendar"/></svg><span id="captureDateLabel"></span><svg class="icon"><use href="#i-chevron-down"/></svg></span><input id="entryDate" form="entryForm" type="date" min="0001-01-01" max="9999-12-31" aria-describedby="captureDateStatus" required></div><span id="captureDateStatus" class="capture-date-status" role="status"></span></div></div><p class="section-description">พิมพ์ชื่อรายการและจำนวนเงิน แล้วบันทึกได้เลย</p><div id="accounts" class="capture-onboarding hidden"></div>
           <form id="entryForm"><div class="segments" id="types" role="group" aria-label="ประเภทรายการ"><button type="button" data-type="expense" class="selected" aria-pressed="true"><svg class="icon" aria-hidden="true"><use href="#i-up"/></svg>รายจ่าย</button><button type="button" data-type="income" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-down"/></svg>รายรับ</button><button type="button" data-type="transfer" aria-pressed="false"><svg class="icon" aria-hidden="true"><use href="#i-transfer"/></svg>โอน</button></div>
           <label for="quick">จ่ายหรือรับอะไร เท่าไหร่?</label><input id="quick" autocomplete="off" placeholder="เช่น กาแฟ 65" required maxlength="160"><div class="examples"><span>ลองจด</span><button type="button" data-example="ข้าว 50">ข้าว 50</button><button type="button" data-example="เครื่องมือช่าง 180">เครื่องมือช่าง 180</button></div>
-          <div class="capture-date-field"><label for="entryDate">วันที่รายการ</label><input id="entryDate" type="date" min="0001-01-01" max="9999-12-31" required></div>
           <div class="label-line"><span class="field-label" id="accountLabel">บันทึกจากบัญชี</span></div><button id="chooseCaptureAccount" type="button" class="capture-account-trigger" aria-haspopup="dialog" aria-controls="captureAccountDialog"><span class="capture-account-icon" aria-hidden="true"><svg class="icon"><use href="#i-wallet"/></svg></span><span class="capture-account-copy"><span id="captureAccountName">เลือกบัญชี</span><span id="captureAccountHint">เงินสดหรือบัญชีธนาคาร</span></span><svg class="icon capture-account-chevron" aria-hidden="true"><use href="#i-chevron-down"/></svg></button>
           <details class="category-details"><summary><span>หมวด <b id="categorySummary">รอจัดหมวด</b></span><span class="muted">เปลี่ยนหมวด <svg class="icon" aria-hidden="true"><use href="#i-chevron-down"/></svg></span></summary><div class="category-heading"><label for="category">หมวดรายการ</label><button type="button" class="text-button" data-manage-categories>จัดการหมวด</button></div><select id="category"></select><p id="suggestion" class="form-foot">เลือกเอง หรือเก็บไว้จัดทีหลัง</p></details>
           <p id="formError" class="error" role="alert"></p><button class="save" type="submit">บันทึกรายการ <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button><p class="form-foot">จดให้ทัน แล้วค่อยจัดหมวดก็ได้</p></form>
@@ -103,12 +106,12 @@
           <p class="calendar-legend">จ่าย = รายจ่าย · สุทธิ = รับ − จ่าย<br>K = พัน · M = ล้าน · B = พันล้าน · ดูจำนวนเงินเต็มในรายละเอียดวันที่เลือก</p>
           <p id="calendarInvalidDates" class="history-filter-notice hidden"></p>
           <section id="calendarMonthSummary" class="calendar-summary" aria-label="สรุปเดือน"></section>
-          <section class="calendar-detail" aria-labelledby="calendarDayTitle"><div class="section-heading"><div><span class="eyebrow">วันที่เลือก</span><h3 id="calendarDayTitle"></h3></div></div><div id="calendarDaySummary"></div><div id="calendarDayEntries"></div></section>
+          <section class="calendar-detail" aria-labelledby="calendarDayTitle"><div class="section-heading"><div><span class="eyebrow">วันที่เลือก</span><h3 id="calendarDayTitle"></h3></div><button id="calendarCaptureDate" type="button" class="history-capture-date outline" data-capture-date=""><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg> จดวันที่นี้</button></div><div id="calendarDaySummary"></div><div id="calendarDayEntries"></div></section>
         </div>
       </div>
     </section>
     <section id="settings" class="view hidden"><div class="account-overview"><div><span class="eyebrow">จัดการเงินของคุณ</span><h2>ทุกบัญชี ในที่เดียว</h2><p id="accountCount" class="section-description"></p></div><div class="account-overview-total"><span>ยอดรวมทุกบัญชี</span><strong id="settingsTotal"></strong></div></div><div class="panel"><div class="section-heading"><h2>บัญชีของฉัน</h2><div class="import-actions"><button id="openGroupManager" type="button" class="outline"><svg class="icon" aria-hidden="true"><use href="#i-layers"/></svg> จัดการกลุ่ม</button><button type="button" class="primary-small" data-add-account><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg> เพิ่มบัญชี</button></div></div><p class="section-description">เลือกบัญชีเพื่อดูรายการเงินเข้า–ออกและจัดการรายละเอียด</p><form id="settingsForm"><div id="settingsList" class="settings-list"></div></form><details class="borrower-trash"><summary><svg class="icon" aria-hidden="true"><use href="#i-trash-2"/></svg> ถังขยะบัญชี <svg class="icon" aria-hidden="true"><use href="#i-chevron-down"/></svg></summary><p class="form-foot">บัญชีที่ลบจะไม่รวมในยอดหนี้ที่ติดตาม ประวัติและยอดเงินในบัญชีของคุณไม่ถูกลบ นำกลับได้ที่นี่</p><div id="borrowerTrash"></div></details></div><div class="panel secondary"><span class="round-icon"><svg class="icon" aria-hidden="true"><use href="#i-shield"/></svg></span><div><h2>พื้นที่ทดลองของคุณ</h2><p>ข้อมูลอยู่ในเบราว์เซอร์นี้ ยังไม่เชื่อมธนาคารหรือซิงก์ข้ามเครื่อง หากล้างข้อมูลเบราว์เซอร์ รายการอาจหายได้</p><button id="reset" class="text-button danger-text">เริ่มใหม่แบบไม่มีข้อมูล</button></div></div></section>
-    <footer><span class="footer-brand">จดไว<span>เงินชัด ชีวิตเบา</span></span><span>รุ่น 0.1.0-demo.18</span></footer>
+    <footer><span class="footer-brand">จดไว<span>เงินชัด ชีวิตเบา</span></span><span>รุ่น 0.1.0-demo.19</span></footer>
   </main>
   <div id="toast" role="status" aria-live="polite"></div>
   <button id="floatingCapture" class="floating-capture hidden" type="button" aria-haspopup="dialog"><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg> จดรายการ</button>

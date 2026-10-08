@@ -1,0 +1,102 @@
+# ส่งต่องานให้ Codex
+
+## งาน local ล่าสุด — 2026-10-08
+
+- Money.createInitialState สร้าง empty ledger + categoryPreset:'general-v1' พร้อม generalExpenseCategories 9 / generalIncomeCategories 6 และ categoryTypes แยก; app initial เรียก factory เฉพาะไม่มี valid storage หรือ explicit reset ผู้ใช้ยืนยัน Existing valid ledgerแม้ว่างยัง migrate แบบ legacy ไม่มี marker
+- categories/generalSuggest เข้า branch เฉพาะ general-v1; defaultCategories/incomeCategories legacy ไม่เปลี่ยน, aliases general rename รองรับและ categorylearningยังใช้ explicit-only เหมือนเดิม ไม่เปลี่ยน schemaVersion2 หรือ jot-money-v1
+- ผู้ช่วย new_category_tests ตั้งค่า GPT-6.1 Sol/Medium owner new-user-category-check.cjs; reviewer แยก Sol/Medium read-only ตรวจ old migrationเทียบHEAD, aliases, totals/debt/budget, import append/replace/undo invariance ผ่าน ไม่ใช้ Astra
+- ผ่านชุดตรวจเดิม+category/new-user/capture และ Chrome truefresh isolated storage: preset zero-state, 10 expense / 7 income optionsรวมรอจัดหมวด, สร้างบัญชี/save/reload/learning, categorydialog320pxไม่ล้น; ดูภาพจริงแล้ว ไม่ใช่ iPhone จริง ไม่มี commit/push/deploy
+
+- categorySuggestion ใน core เลือกหมวด frequency ของ exact normalized note แยก income/expense จาก entries.categoryChoice==='user' เท่านั้น tie latest categoryChoiceAt แล้ว insertion index; fallback rule/aliases เดิม ไม่ใช้ legacy/import/auto/transfer/adjustment หรือรอจัดหมวดเป็นหลักฐาน
+- app เพิ่ม optional entry metadata categoryChoice/categoryChoiceAt เมื่อ manualCategory save หรือ explicit category edit (editCategoryTouched/different category); แก้เพียงยอด/วันไม่สร้างหลักฐานใหม่ ไม่เปลี่ยน schemaVersion 2, localStorage key, รายการเก่า, ยอดบัญชี/งบ ไม่เพิ่ม dependency/backend
+- หลักฐานมาจากรายการปัจจุบัน ลบรายการแล้ว vote หาย แก้/เปลี่ยนชื่อหมวดตาม ledger ไม่มี cache แยก คง backup/import undo; เริ่มเรียนหลังอัปเดตนี้ ไม่เดาว่าผู้ใช้เลือกหมวดเก่าเอง
+- ผ่าน category-check, capture-ui-check, history/core, synthetic import ทั้งสองชุด และ Chrome จริง manual/auto/reload/type split; reviewer ตั้งค่า GPT-6.1 Sol/Medium ตรวจ read-only + frozen-state probe ผ่าน ไม่มีการยกระดับ Astra
+
+- เพิ่ม data-capture-date ที่หัวกลุ่มวัน + calendarCaptureDate ในรายละเอียดวัน (รวมวันว่าง) เรียก openCapture(key) ด้วย quickCard/input เดิม ไม่สร้างสำเนาฟอร์มหรือ ledger
+- historyCaptureDate เป็น transient context; alignHistoryCaptureDate(date) ก่อน render หลัง save รับ/จ่าย/โอน ทำให้ปฏิทินตามวันที่/เดือนจริง คง search/notice; close ล้าง context และคืน focus ปุ่มประวัติ เปิดจดทั่วไปยังใช้วันนี้
+- ผ่าน synthetic capture/history/core tests และ Chrome จริง: Enter เปิดปุ่มวัน, native submit รับ/จ่าย/โอน, วันที่ว่าง, ข้ามปี, คืน focus หลัง native close event, layout 320/375/430/1280; reviewer Sol/Medium ตรวจ read-only ผ่าน ไม่เปลี่ยนสูตร/schema ข้อมูลเดิมหรือ promo-video
+
+- ผู้ใช้อนุมัติย้ายวันที่เข้าหัวข้อจดรายการ เฉพาะ local; ห้าม push/deploy จนมีคำสั่งใหม่ การอนุมัติเผยแพร่วันที่ 7 ต.ค. เป็นงานที่เสร็จแล้ว
+- entryDate อยู่ใน capture-heading ใช้ form="entryForm" รักษา native required validation; ใช้ input เดียวทั้งหน้าแรกและ quickDialog
+- วันที่ไทยแบบย่อแสดงเป็นข้อความพร้อมไอคอน ไม่มีกรอบเด่น จัดแนวเดียวกับ h2 ด้วย grid; ป้ายแสดงเฉพาะย้อนหลัง/ล่วงหน้า ไม่แสดงวันนี้ซ้ำ; <=370px จัดใต้หัวข้อ Native date input แสดงเมื่อ focus ใช้คีย์บอร์ดได้ ไม่เปลี่ยน date/storage/balance rules
+- ผ่าน check, history-check, history-ui-check, capture-ui-check, synthetic import ทั้งสองชุด, app syntax และ Chrome 320/375/430/1280; ตรวจภาพจริงที่ 320/375 ไม่ใช่ iPhone จริง
+- คง VERSION demo.18 และบันทึกใน CHANGELOG Unreleased ไม่แก้ released ZIP ไม่มี commit/push/deploy หรือปิดเครื่องในงานนี้
+
+## งานล่าสุด: demo.18
+
+- หน้าแรก capture-first: ไม่มีลิสต์บัญชี, สรุปเงินกระชับ, ทางลัดไปหน้าบัญชี; chooser dialog ค้นหาชื่อ/กลุ่ม ใช้ Money.wallets เพื่อรักษากฎบัญชีซ่อน/ถังขยะ/ผู้ยืม
+- `jot-money-v1-last-account` เก็บเฉพาะ id บัญชีล่าสุด ไม่เปลี่ยน schema/ledger; validated fallback เมื่อ id ใช้ไม่ได้ และ preference failure ไม่กระทบการบันทึกรายการ
+- `capture-ui-check.cjs` และ Chrome ผ่าน many-account layout 320/375/430/1280, picker, nested quickDialog, draft/category preservation, account save, reload preference และ ledger invariance; ผู้ตรวจแยก Sol/Medium ไม่พบปัญหาข้อมูล
+- เพิ่มรายการแบ่งรายวันและปฏิทินรายเดือนในหน้า “รายการทั้งหมด”; search ใช้ชุดข้อมูลเดียวกันกับยอดวันและเดือน
+- ช่องปฏิทินแสดงยอด “รับ” เฉพาะวันที่มีรายรับ (ใช้ข้อมูลหลังค้นหา); รายการโอนไม่ทำให้เกิดยอดรับ
+- ปฏิทินมือถือ <=640px เป็น compact day picker: แสดงสุทธิหนึ่งตัวเลขต่อวัน (+ เขียว / − แดงสุภาพ / 0 กลาง), ย่อ K/M/B, โอน/adjustment เท่านั้นใช้ SVG, ไม่มีรายการเว้นว่าง ยอดเต็มอยู่ในรายละเอียด/สรุปเดือนและ aria-label; เดสก์ท็อปคงเดิม ไม่เปลี่ยนสูตรหรือข้อมูล และห้ามเรียกสุทธิว่าเงินเหลือใช้
+- `dist/history.js` เป็น helper บริสุทธิ์: วันกรุงเทพฯสำหรับ timestamp, วันล้วน/naive รักษาวันเดิม, รวมเงินเป็นหน่วยสตางค์, income/expense เท่านั้น
+- `dist/app.js` เก็บสถานะมุมมอง/เดือน/วันเฉพาะในหน่วยความจำ ไม่แตะ ledger schema และ localStorage key `jot-money-v1`
+- หน้าต่างแก้ไขมีวันที่; `moveDate` คืน timestamp เดิมเมื่อวันไม่เปลี่ยน
+- ไม่แก้กฎบัญชีซ่อน ถังขยะ หนี้ และงบ; ไม่แก้ promo-video
+- ผู้ใช้ยืนยัน “อัพเดททั้งคู่ครับ” วันที่ 7 ตุลาคม 2026 อนุมัติอัปเดตในเครื่องและเว็บเดโมผ่าน GitHub/Cloudflare Pages; ไม่เปลี่ยน main
+- ช่อง entryDate/transferDate แก้วันได้: ใช้ History.moveDate กับเวลา ณ บันทึก, เริ่มวันนี้เวลาไทย และ reset วันที่เมื่อเปิดแผงจด/หลังบันทึก ทดสอบ deterministic clock ใกล้เที่ยงคืนไทยแล้ว
+- ตรวจ Excel ด้วย `node import-check.cjs --synthetic` และ `node import-ui-check.cjs --synthetic` เท่านั้น ไม่อ่านไฟล์การเงินจริง
+- เครื่องมือควบคุม Windows ผ่าน native pipe ใช้งานไม่ได้ในรอบนี้; ตรวจ browser แบบ headless แยก profile ไม่ถือเป็นการตรวจบน iPhone จริง
+- ผ่าน `check.cjs`, `history-check.cjs`, `history-ui-check.cjs`, synthetic import ทั้งสองชุด, syntax และ DOM smoke เดิม
+- โมดูล/UI และผู้ตรวจแยกตั้งค่า GPT-6.1 Sol / Medium; fixture/Chrome ตั้งค่า GPT-6 Luna / Low ไม่มีการยกระดับ Astra
+- Browser QA และ screenshot เป็นข้อมูลสังเคราะห์ใน `../.qa/` เท่านั้น ไม่แก้ข้อมูลใน profile ผู้ใช้
+- Chrome ผ่าน 320/375/430/1280 พิกเซล รวม document/day-cell overflow, ยอดยาว, last-row clearance, Enter เปลี่ยนเดือน และ focus; ภาพปฏิทิน/รายการ 8 ภาพ ตรวจรูปลักษณ์หลักที่ 320/375/1280 แล้ว
+
+## เป้าหมาย
+
+รับช่วงเดโมบัญชี “จดไว” และพัฒนาต่อบนคอมของผู้ใช้ เริ่มจากอ่าน README.md และโค้ด เปิดเดโมให้ลอง พร้อมรายงานจุดที่ตรวจพบ อย่าเปลี่ยนฟีเจอร์หรือออกแบบใหม่โดยยังไม่มีคำขอเพิ่มเติม และอย่าเผยแพร่หรือเปลี่ยนเว็บไซต์เดิมจากชุดไฟล์นี้
+
+## ปัญหาและพฤติกรรมผู้ใช้
+
+ผู้ใช้ใช้ Money Manager แต่จดเงินสดไม่ทัน เพราะต้องกรอกหลายขั้นตอนและไม่แน่ใจว่าจะเลือกหมวดไหน เมื่อจดย้อนหลังจึงลืมรายละเอียด การดูยอดที่ไม่ครบทำให้คิดว่าเหลือเงินพอใช้และต้องดึงเงินเก็บมาเติมน้ำมัน ผู้ใช้กันค่าน้ำมันประมาณ 300 บาท/สัปดาห์
+
+ผู้ใช้ชอบแตะเลือกบัญชีและหมวดที่ตั้งไว้ ไม่อยากพิมพ์ชื่อบัญชีทุกครั้ง ยอมพิมพ์สั้น ๆ เช่น “ข้าว 50” ตอนออกจากร้านหรือถึงรถ ต้องการยอดแยกบัญชี ประวัติ และเงินให้ยืม ยอมเปลี่ยนแอปถ้าสะดวกกว่า แต่ไม่ต้องการกรอกซ้ำในสองแอป
+
+## ข้อกำหนดล่าสุดที่ยอมรับให้ทดลอง
+
+1. เงินที่ใช้ได้หลังกันงบแสดงเป็นสิ่งแรกบนหน้าแรก
+2. ช่องจดแบบย่ออยู่ถัดมา เข้าถึงง่ายบนมือถือ
+3. เลือกรายจ่าย/รายรับ/โอน; โอนเปิดหน้าต่างเลือกบัญชีต้นทาง ปลายทาง จำนวนเงิน และหมายเหตุ
+4. แตะเลือกบัญชี; หมวดใช้คำในรายการเสนอให้ และเก็บเป็น “รอจัดหมวด” ได้
+5. เมื่อเลื่อนพ้นช่องจดหรืออยู่หน้าอื่น ปุ่ม “+ จดรายการ” เปิดแผงจดจากล่าง โดยใช้ฟอร์มเดิม ไม่ทำสำเนาข้อมูลหรือฟอร์ม
+6. เพิ่มและแก้ชื่อบัญชีได้ บัญชีว่างยอดศูนย์ลบได้ บัญชีมีประวัติหรือยอดเงินให้ซ่อนและคืนกลับได้ ยอดบัญชีที่ซ่อนยังรวมในภาพรวม ต้องเหลือบัญชีใช้งานอย่างน้อยหนึ่งบัญชี
+7. แก้ไข/ลบรายการ ค้นประวัติ ส่งออก CSV และปรับงบค่าน้ำมันได้
+
+## สถานะทางเทคนิค
+
+- demo.17 ใช้ UI กรมท่า–น้ำเงิน และ Lucide SVG inline symbols จาก 0.468.0 (ใบอนุญาตใน dist/vendor) ห้ามเพิ่ม emoji ในส่วน UI; ข้อมูลที่ผู้ใช้พิมพ์ยังเก็บตามเดิม
+- ทดสอบ logic, Excel และ DOM smoke ผ่าน; browser visual QA ของ demo.17 ยังไม่ผ่านการตรวจภาพ เนื่องจาก browser connector โหลด request-header policy ไม่สำเร็จ ต้องตรวจ desktop/mobile ในรอบที่เชื่อมต่อได้
+
+- HTML/CSS/JavaScript แบบไม่มี framework หรือขั้นตอน build
+- ข้อมูลเก็บ localStorage key `jot-money-v1`; อย่าเปลี่ยน key จนข้อมูลหายโดยไม่มี migration
+- รุ่น demo.16 เริ่ม accounts/entries ว่างและ budget 0; โหลด state ที่ไม่มีบัญชีได้ ไม่ล้างข้อมูลที่ผู้ใช้จดไว้เดิม
+- state.accountGroups เก็บกลุ่มบัญชีแยกจาก kind; เพิ่ม/แก้ชื่อ/ลบกลุ่มได้ account.group อ้างด้วย ID คงที่ ลบแล้วบัญชีจะไป ungrouped (กลุ่มระบบ) ไม่ย้อนยอด ไม่ลบประวัติ กลุ่มลูกหนี้ก็แก้ชื่อ/ลบได้ กลุ่มแบบผสมแสดงเงินและหนี้แยกกัน
+- borrower deleted=true เป็นถังขยะ แยกจาก archived; ไม่แสดงหน้าแรก/รายการบัญชี/ตัวเลือกจดใหม่ และไม่รวม Money.debt/owed แต่เก็บตัวบัญชีและประวัติการโอน จึงไม่ย้อนเงินสด Restore จะนำบัญชีและยอดหนี้กลับ
+- `Money.parse` ต้องมีชื่อรายการและยอดบวกหนึ่งจำนวน ไม่รองรับข้อความที่มีตัวเลขหลายจำนวน
+- หมวดเสนอด้วยกฎคำ ไม่ได้เรียก AI ภายนอก
+- Money.categories(state,type) กรองรายรับ/รายจ่ายตาม categoryTypes และประวัติ; เพิ่มหมวดผูกประเภทปัจจุบัน เปลี่ยนชื่อรักษาประเภทและ aliases หมวดรอจัดหมวด/อื่น ๆ ใช้ร่วมกัน
+- เพิ่ม/แก้ชื่อหมวดผ่าน “จัดการหมวด” ข้างช่องเลือกหมวด; state.categories เก็บชื่อและ categoryAliases รักษากฎเสนอหมวดหลังเปลี่ยนชื่อ อัปเดตหมวดในรายการเก่าตามด้วย หมวดรอจัดหมวดเป็นระบบและโอนสงวนไว้
+- ค่าน้ำมันเป็นงบคงเหลือที่แก้ด้วยมือ ไม่ตัดงบหรือรีเซ็ตรายสัปดาห์อัตโนมัติ
+- บัญชีมีชนิด wallet / borrower; borrower เป็นยอดสุทธิ: บวกเขาติดเรา ลบเราติดเขา จึงอนุญาตยอดติดลบ การโอนสองทิศทางใช้ให้ยืม/รับคืน/เรายืมเขา/เราคืนเขาได้ ยอด borrower ไม่รวมในเงินสดที่ใช้ได้ Money.debt รวมเฉพาะยอดบวก และ Money.owed รวมขนาดยอดลบ
+- โอน wallet → wallet ไม่เปลี่ยนเงินรวม; ประวัติแสดงทั้งต้นทางและปลายทาง และ CSV ส่งออกทั้งสองบัญชี
+- schemaVersion 2 ย้าย lend/repay เดิมเป็น transfer ผ่านบัญชี “ผู้ยืมเดิม (ยังไม่ระบุคน)” โดยคง ID ประวัติและยอดเดิม ไม่เดาว่าเป็นใคร
+- นำเข้า Money Manager .xlsx ผ่าน dist/excel-import.js และ import-ui.js; จับคู่โอนสองแถว เก็บหมวดย่อย/extraNote/sourceRows/importKey เลือก mapping และ append/replace ก่อนยืนยัน โดย replace คง budget และเริ่มบัญชีที่ 0 ส่วน append คง opening ของบัญชีเดิม
+- รายรับ/รายจ่ายเก่าบน borrower นำเข้าเป็น type adjustment + direction increase/decrease เพื่อคงยอดสุทธิโดยไม่ปนสถิติรายจ่ายเงินสด
+- สำรอง state ก่อนนำเข้าล่าสุดใน localStorage jot-money-v1-before-import; ปุ่มคืนข้อมูลก่อนนำเข้าจะคืนทั้ง state รวมงบ ต้องเตือนผู้ใช้เรื่องรายการที่เพิ่มหลังนำเข้า
+- ยังไม่มีการจับคู่คืนเงินกับรายการยืมรายครั้ง สำรอง/กู้คืน JSON แบบไฟล์, service worker หรือ backend
+- แผงจดใช้ HTML dialog และย้าย DOM ของ quickCard เข้า quickSlot; คืนตำแหน่งที่ quickAnchor เมื่อปิด
+- ไม่ใส่ credential หรือข้อมูลการเผยแพร่ในชุดนี้ เว็บเดิมยังอยู่แยกต่างหาก
+
+## ตรวจแล้ว / ยังไม่ตรวจ
+
+ผ่านการตรวจ syntax และ logic: อ่านยอดเงิน เสนอหมวด ยอดบัญชี เงินให้ยืม ลบรายการ ลบ/ซ่อนบัญชี เก็บประวัติและยอด กันลบบัญชีสุดท้าย และนำกลับมาใช้
+ตรวจ HTML แล้วว่า ID ไม่ซ้ำ ไม่มี form ซ้อน และยอดเงินอยู่ก่อนฟอร์ม
+ยังไม่ได้ทดสอบ browser interaction หรือหน้าจอบน iPhone จริง ต้องตรวจการเปิด/ปิดแผงจด การพิมพ์ด้วยคีย์บอร์ด การแตะปุ่มลอย และพื้นที่ safe area โดยใช้เครื่องมือที่มีในคอม
+
+## ลำดับเริ่มงาน
+
+1. อ่านไฟล์และยืนยันว่าเปิดจากโฟลเดอร์ที่แตก ZIP แล้ว
+2. รันทดสอบที่มีอยู่และเปิด local server
+3. ให้ผู้ใช้ลองเวอร์ชันนี้ก่อน ปรับจากข้อเสนอแนะของเขา
+4. รักษาข้อมูลและหน้าที่หลัก อย่าเพิ่ม AI, subscription หรือเชื่อมธนาคารเอง

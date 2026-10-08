@@ -1,0 +1,3 @@
+# Immutable UI1 archives retain their recorded bytes across Windows/Linux clones.
+dist/ui1/** -text
+ui-versions/ui1/** -text
