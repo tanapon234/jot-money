@@ -1,5 +1,12 @@
 # ส่งต่องานให้ Codex
 
+## demo.21 — ช่องวันที่โอนบน iPhone
+
+- ผู้ใช้ส่ง IMG_2844.PNG แสดงช่องวันที่โอนกว้างเกิน input/select อื่นและข้อความอยู่กลาง แก้เฉพาะ dist/ui2.css: transfer fields width/min-width/max-width + fixed 52px height; transferDate appearance none และ WebKit value text-align left คง native date picker/validation ไม่แก้ JS หรือข้อมูล
+- ผู้ใช้อนุมัติอัปเดตเว็บแล้ว เตรียม demo.21 บน release/demo-21 ตรวจ preview ก่อน fast-forward demo; ยังต้องให้ผู้ใช้ยืนยันบน iPhone 13 จริง เครื่องนี้มี Chrome แต่ไม่มี Safari/WebKit runner ไม่เปลี่ยน main หรือ UI1 snapshots
+- ผ่าน capture-ui-check และ isolated Chrome regression; เพิ่มตรวจ bounding boxes ช่องโอนทั้ง 5 ให้ left/width/height ตรงกันและ date text-align left ที่ 320/375/390/430/1280 ดูภาพ transferDialog-390 แล้ว ไม่มีแนวนอนล้น ไม่ถือเป็นการยืนยันบน iPhone/Safari จริง
+- การเผยแพร่ demo.21 ติดขัด: Git HTTPS ไป github.com:443 เชื่อมต่อไม่สำเร็จสองครั้งแม้ใช้สิทธิ์ network; GitHub connector อ่าน demo.20 ได้ แต่ create_tree ถูกปฏิเสธ HTTP 403 Resource not accessible by integration ไม่ได้แก้ remote branch หรือ deploy ใด ๆ เก็บงานบน release/demo-21 และ ZIP ไว้พร้อมทำต่อ เมื่อเชื่อมต่อ GitHub ได้ให้ push branch นี้ ตรวจ preview แล้ว fast-forward demo ห้าม force push
+
 ## demo.20 — ใช้ UI2 ถาวร
 
 - ผู้ใช้ขอเอาตัวเปรียบเทียบออกและใช้ UI2 แทน ต่อเนื่องจากการอัปเดตเว็บ demo.19 อนุมัติอัปเดตเว็บเดโมรอบนี้

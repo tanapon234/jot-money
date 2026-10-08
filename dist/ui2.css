@@ -204,6 +204,12 @@ body.ui2-theme{
 .ui2-theme .delete:hover{background:var(--expense-soft)}
 .ui2-theme .transfer-hint{background:var(--surface-soft);border-color:var(--line);color:var(--secondary);border-radius:12px;font-size:12px;padding:16px}
 .ui2-theme .transfer-direction{color:var(--muted);margin:17px 0 0}
+/* iOS date controls have an intrinsic minimum width and a centred value.
+   Keep the native picker, but give every transfer field the same outer box. */
+.ui2-theme #transferForm>input,.ui2-theme #transferForm>select{display:block;box-sizing:border-box;width:100%;min-width:0;max-width:100%;height:52px;min-height:52px}
+.ui2-theme #transferDate{-webkit-appearance:none;appearance:none;text-align:left}
+.ui2-theme #transferDate::-webkit-date-and-time-value{min-width:0;text-align:left}
+.ui2-theme #transferDate::-webkit-datetime-edit{padding:0}
 .ui2-theme .category-manager-list{margin-block:20px;border-color:var(--line);max-height:38vh}
 .ui2-theme .category-manager-row{padding:12px 4px;border-color:var(--line);gap:12px;font-size:13px}
 .ui2-theme .category-manager-row button{background:var(--surface);border:1px solid var(--surface-soft);border-radius:9px;font-size:11px;color:var(--secondary);min-height:44px}
