@@ -1,11 +1,11 @@
 /* UI3 / Midnight Journal. UI2 remains the functional layout foundation.
    Shared tokens, surfaces and motion; no data rules live in this stylesheet. */
 body.ui3-theme{
- --ink:#263b3d;--muted:#7d897e;--secondary:#63756a;
+ --ink:#263b3d;--muted:#586b5f;--secondary:#526659;
  --accent:#253f4d;--accent-hover:#355764;--brass:#b39b71;
  --paper:#f0f1e9;--surface:#fffef9;--surface-soft:#f2f4eb;--surface-hover:#e9eee2;
  --line:#e0e4d8;--line-strong:#c5d0bc;
- --income:#477965;--income-soft:#edf4eb;--expense:#ab706c;--expense-soft:#f8eeea;
+ --income:#376b54;--income-soft:#edf4eb;--expense:#97544e;--expense-soft:#f8eeea;
  --income-on-dark:#b2d8bf;--expense-on-dark:#edbcb1;
  --green:var(--accent);--dark:var(--accent);--red:var(--expense);
  --shadow:0 3px 5px #233f3602,0 12px 28px #233f3604;
@@ -185,3 +185,78 @@ body.ui3-theme{
 .ui3-theme .quick-dialog #quickCard .capture-date-control:focus-within{outline-color:#718c62}
 .ui3-theme .quick-dialog #quickCard .capture-date-status{color:#68805d;background:#edf3e5}
 @media(max-width:600px){.ui3-theme #quickCard .capture-date-control{width:128px}.ui3-theme #quickCard .capture-date-display,.ui3-theme .quick-dialog #quickCard .capture-date-display{font-size:10px}.ui3-theme #quickCard .capture-heading h2{align-self:center}}
+
+/* Capture comes first in both reading order and the mobile layout. */
+.ui3-theme #home{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);grid-template-areas:"capture hero" "recent recent" "spending spending" "storage storage";gap:24px;align-items:start}
+.ui3-theme #home .content-grid{display:contents}
+.ui3-theme #home .capture-column{grid-area:capture;min-width:0}
+.ui3-theme #home .hero-grid{grid-area:hero;display:flex;flex-direction:column;gap:20px;margin:0;min-width:0}
+.ui3-theme #home .balance-card{display:block}
+.ui3-theme #home .balance-bottom{border-left:0;border-top:1px solid #ffffff24;padding:17px 0 0;margin-top:17px;gap:20px;flex-wrap:wrap}
+.ui3-theme #home .balance-bottom>div{flex:1 1 130px}
+.ui3-theme #home .balance-bottom b{overflow-wrap:normal;white-space:nowrap}
+.ui3-theme #home .recent-card{grid-area:recent;min-width:0}
+.ui3-theme #home .spending-card{grid-area:spending;margin:0;min-width:0}
+.ui3-theme #home .sample-banner{grid-area:storage;margin:0;align-items:flex-start;flex-wrap:wrap;gap:12px;font-size:13px;line-height:1.8;color:var(--secondary)}
+.ui3-theme .sample-banner p{flex:1 1 240px;margin:0}
+.ui3-theme .sample-banner .text-button{flex:none;min-height:44px;white-space:nowrap}
+.ui3-theme .capture-onboarding .empty-state{padding:16px;gap:12px;align-items:flex-start;flex-wrap:wrap;text-align:left;background:var(--surface-soft);border-radius:12px}
+.ui3-theme .capture-onboarding .empty-state p{margin:4px 0 0;color:var(--secondary);font-size:13px;line-height:1.8}
+.ui3-theme .capture-onboarding .empty-state strong{font-size:15px}
+.ui3-theme .capture-onboarding .outline{font-size:13px}
+.ui3-theme .section-description,.ui3-theme #quickCard .section-description,.ui3-theme .form-foot,.ui3-theme .page-header p,.ui3-theme .entry-meta,.ui3-theme #captureAccountHint,.ui3-theme .examples,.ui3-theme .examples button,.ui3-theme .debt-line small,.ui3-theme .bar-row,.ui3-theme .category-details summary b,.ui3-theme .count-badge,.ui3-theme .period-badge{color:var(--secondary)}
+.ui3-theme input::placeholder,.ui3-theme #quick::placeholder{color:#63745e;opacity:1}
+.ui3-theme .segments button{color:#52634d}
+.ui3-theme #types [data-type=expense].selected{color:var(--expense)}
+.ui3-theme #types [data-type=income].selected{color:var(--income)}
+.ui3-theme .entry-amount.transfer-amount{color:var(--secondary)}
+.ui3-theme .text-button,.ui3-theme .outline{font-size:13px;min-height:44px}
+.ui3-theme .close-button{width:44px;height:44px;min-height:44px}
+.ui3-theme :is(button,summary,a):focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.ui3-theme input:focus-visible,.ui3-theme select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.ui3-theme #history .history-search-slot{flex:0 0 86px;width:86px;min-width:44px}
+.ui3-theme #toggleHistoryTools{display:flex;align-items:center;justify-content:center;gap:7px;width:auto;padding:8px 12px;font-size:13px}
+.ui3-theme #history .history-toolbar{flex-wrap:wrap}
+.ui3-theme #history .history-switch{flex:1 1 240px}
+.ui3-theme #history .history-switch button{font-size:12px;min-height:44px;padding-inline:8px}
+.ui3-theme #quickCard .capture-heading .eyebrow{display:none}
+.ui3-theme #history .calendar-weekdays,.ui3-theme #history .history-net-note,.ui3-theme .weekly-help{color:var(--secondary);font-size:12px}
+.ui3-theme .page-header .eyebrow{color:var(--secondary)}
+.ui3-theme #history .calendar-summary .history-filter-caption{color:#d4dfcc;font-size:12px}
+.ui3-theme #history .calendar-income,.ui3-theme #history .calendar-income b,.ui3-theme #history .calendar-mobile-net.positive{color:var(--income)}
+.ui3-theme #history .calendar-expense,.ui3-theme #history .calendar-expense b,.ui3-theme #history .calendar-mobile-net.negative{color:var(--expense)}
+.ui3-theme #history .is-selected .calendar-income,.ui3-theme #history .is-selected .calendar-income b,.ui3-theme #history .is-selected .calendar-mobile-net.positive{color:var(--income-on-dark)}
+.ui3-theme #history .is-selected .calendar-expense,.ui3-theme #history .is-selected .calendar-expense b,.ui3-theme #history .is-selected .calendar-mobile-net.negative{color:var(--expense-on-dark)}
+@media(max-width:900px){
+ .ui3-theme #home{grid-template-columns:minmax(0,1fr);grid-template-areas:"capture" "hero" "recent" "spending" "storage";gap:18px}
+ .ui3-theme #home .hero-grid{margin:0;gap:18px}
+ .ui3-theme .nav{font-size:12px}
+ .ui3-theme .section-description,.ui3-theme #quickCard .section-description,.ui3-theme .form-foot,.ui3-theme .page-header p,.ui3-theme .entry-meta,.ui3-theme #captureAccountHint,.ui3-theme .debt-line small,.ui3-theme .capture-date-display,.ui3-theme #quickCard .capture-date-display,.ui3-theme .quick-dialog #quickCard .capture-date-display{font-size:12px}
+ .ui3-theme label,.ui3-theme .field-label,.ui3-theme .category-details summary{font-size:14px}
+ .ui3-theme .entry-title{font-size:14px}
+ .ui3-theme .examples,.ui3-theme .examples button{font-size:12px}
+ .ui3-theme .examples button{min-height:44px}
+ .ui3-theme .save,.ui3-theme #captureAccountName{font-size:15px}
+ .ui3-theme input,.ui3-theme select{font-size:16px}
+ .ui3-theme #quickCard .capture-date-control{width:148px;min-height:44px}
+ .ui3-theme .count-badge,.ui3-theme .period-badge{font-size:12px}
+ .ui3-theme #home .balance-top .card-label,.ui3-theme .balance-bottom span:not(.balance-art),.ui3-theme .balance-accounts-link{font-size:12px}
+ .ui3-theme .balance-caption{font-size:13px}
+ .ui3-theme .reserve-line,.ui3-theme .reserve-foot small,.ui3-theme .debt-line,.ui3-theme .bar-row{font-size:13px}
+ .ui3-theme #history .history-toolbar{row-gap:8px}
+ .ui3-theme #history .history-toolbar{flex-wrap:nowrap}
+ .ui3-theme #history .history-switch{flex:1 1 0;min-width:0;width:auto}
+ .ui3-theme #history .history-switch button{font-size:11px;padding-inline:4px;white-space:nowrap}
+ .ui3-theme #history .history-switch button:first-child{flex:1.5}
+ .ui3-theme #history .history-switch button .icon{display:none}
+ .ui3-theme #history .history-search-slot{flex:0 0 44px;width:44px;min-height:52px}
+ .ui3-theme #toggleHistoryTools{width:44px;padding:4px 2px;min-height:52px;flex-direction:column;gap:1px;font-size:11px}
+ .ui3-theme #history .calendar-summary .history-totals>span,.ui3-theme #history .calendar-summary .count-badge,.ui3-theme #history .calendar-summary h3{font-size:12px}
+ .ui3-theme #history .calendar-summary .count-badge{color:#d4dfcc}
+}
+@media(max-width:360px){
+ .ui3-theme #quickCard>.capture-heading,.ui3-theme .quick-dialog #quickCard>.capture-heading{flex-wrap:nowrap;padding-inline:12px;gap:6px}
+ .ui3-theme #quickCard .capture-heading h2{font-size:20px;white-space:nowrap}
+ .ui3-theme #quickCard .capture-date-control{width:128px}
+ .ui3-theme #quickCard .capture-date-display{font-size:11px}
+}

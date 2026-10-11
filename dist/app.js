@@ -67,7 +67,7 @@ function render(){
  $('homeAccountCount').textContent=state.accounts.filter(a=>!a.deleted).length;
  $('accountCount').textContent=`${Money.activeAccounts(state).length} บัญชีใช้งาน${state.accounts.some(a=>a.archived)?' · '+state.accounts.filter(a=>a.archived).length+' บัญชีซ่อนไว้':''}`;
  $('settingsTotal').textContent=fmt(Money.total(state));
- $('accounts').innerHTML=Money.wallets(state).length?'':'<div class="empty-state"><span class="empty-symbol">'+icon('wallet')+'</span><div><strong>เริ่มต้นที่บัญชีของคุณ</strong><p>เพิ่มเงินสดหรือบัญชีธนาคาร แล้วเริ่มจดรายการแรก</p></div><button type="button" class="outline" data-go="settings">ตั้งค่าบัญชี '+icon('arrow')+'</button></div>';
+ $('accounts').innerHTML=Money.wallets(state).length?'':'<div class="empty-state"><div><strong>จดครั้งแรก เริ่มด้วยบัญชีของคุณ</strong><p>ตั้งชื่อบัญชีและยอดตั้งต้น แล้วกลับมาจดต่อได้ทันที</p></div><button type="button" class="outline" data-add-account data-first-account>เพิ่มบัญชีแรก '+icon('plus')+'</button></div>';
  $('accounts').classList.toggle('hidden',Money.wallets(state).length>0);
  renderCaptureAccount();
  const entries=[...state.entries].reverse();$('recent').innerHTML=entries.slice(0,4).map(e=>row(e)).join('')||emptyBlock('list','ยังไม่มีรายการ','เมื่อจดแล้ว รายการล่าสุดจะแสดงที่นี่');renderHistory();
@@ -159,6 +159,7 @@ function renderWeekly(){
  $('weeklyWeeks').innerHTML=report.weeks.map((w,index)=>'<section class="weekly-week'+(Math.max(w.income,w.expense,Math.abs(w.net))>=100000?' has-long-totals':'')+'"><div class="section-heading"><div><span class="eyebrow">สัปดาห์ที่ '+(index+1)+'</span><h3>'+esc(w.start===w.end?History.dateLabel(w.end,new Date(),true):Number(w.start.slice(8))+'–'+History.dateLabel(w.end,new Date(),true))+'</h3></div><span class="count-badge">'+w.count+' รายการ</span></div><div class="report-totals">'+historyTotals(w)+'</div></section>').join('');
 }
 function renderHistory(){
+ $('history').dataset.view=historyView;
  const q=$('search').value.trim().toLowerCase();
  $('history').classList.add('calendar-compact');
  $('clearHistoryFilter').classList.toggle('hidden',!q);
@@ -216,7 +217,7 @@ document.addEventListener('click',e=>{
  const historyMode=e.target.closest('[data-history-view]');if(historyMode){historyView=historyMode.dataset.historyView;if(historyView==='summary'){weeklyYear=Number(calendarMonth.slice(0,4));weeklyMonth=Number(calendarMonth.slice(5,7))}renderHistory();updateCaptureButton()}
  const calendarDay=e.target.closest('[data-calendar-day]');if(calendarDay){calendarSelected=calendarDay.dataset.calendarDay;renderHistory();$('calendarDayDialog').showModal();updateCaptureButton();return}
  const nav=e.target.closest('[data-tab],[data-go]');if(nav)tab(nav.dataset.tab||nav.dataset.go);
- const addAccount=e.target.closest('[data-add-account]');if(addAccount){$('addAccountForm').reset();$('newAccountOpening').value=0;updateNewAccountKind();$('addAccountDialog').showModal();}
+ const addAccount=e.target.closest('[data-add-account]');if(addAccount){$('addAccountForm').reset();$('addAccountDialog').dataset.fromCapture=String(addAccount.hasAttribute('data-first-account'));$('newAccountKind').value='wallet';$('newAccountOpening').value=0;updateNewAccountKind();$('addAccountDialog').showModal();$('newAccountName').focus();}
  const accountDetail=e.target.closest('[data-account-detail]');if(accountDetail)openAccountDetail(accountDetail.dataset.accountDetail);
  const captureChoice=e.target.closest('[data-capture-account]');if(captureChoice&&Money.wallets(state).some(a=>a.id===captureChoice.dataset.captureAccount)){account=captureChoice.dataset.captureAccount;rememberCaptureAccount(account);renderCaptureAccount();$('captureAccountDialog').close();$('quick').focus({preventScroll:true})}
  const typ=e.target.closest('[data-type]');if(typ){type=typ.dataset.type;document.querySelectorAll('[data-type]').forEach(b=>{b.classList.toggle('selected',b===typ);b.setAttribute('aria-pressed',String(b===typ))});if(type==='transfer')openTransfer();else{manualCategory=false;$('category').innerHTML=options('รอจัดหมวด');suggest();}}
@@ -235,7 +236,8 @@ function saveSettings(){
 }
 $('settingsForm').addEventListener('submit',e=>{e.preventDefault();if(!saveSettings())return;const saved=persist();render();if(saved)toast('บันทึกงบแล้ว')});
 $('closeAddAccount').onclick=()=>$('addAccountDialog').close();
-$('addAccountForm').addEventListener('submit',e=>{e.preventDefault();const name=$('newAccountName').value.trim(),opening=Number($('newAccountOpening').value),kind=$('newAccountKind').value;if(!name||!Number.isFinite(opening)||!saveSettings())return;const a={id:crypto.randomUUID(),name,opening,kind,group:$('newAccountGroup').value};state.accounts.push(a);if(kind!=='borrower')account=a.id;const saved=persist();render();$('addAccountDialog').close();$('addAccountForm').reset();if(saved){if(kind!=='borrower')rememberCaptureAccount(account);toast('เพิ่มบัญชี '+name+' แล้ว')}});
+$('addAccountForm').addEventListener('submit',e=>{e.preventDefault();const name=$('newAccountName').value.trim(),opening=Number($('newAccountOpening').value),kind=$('newAccountKind').value;if(!name||!Number.isFinite(opening)||!saveSettings())return;const fromCapture=$('addAccountDialog').dataset.fromCapture==='true';const a={id:crypto.randomUUID(),name,opening,kind,group:$('newAccountGroup').value};state.accounts.push(a);if(kind!=='borrower')account=a.id;const saved=persist();render();$('addAccountDialog').close();$('addAccountForm').reset();if(saved){if(kind!=='borrower'){rememberCaptureAccount(account);if(fromCapture){$('formError').textContent='';$('quick').focus({preventScroll:true})}}toast('เพิ่มบัญชี '+name+' แล้ว')}});
+$('openDataManagement').onclick=()=>{historyView='summary';weeklyYear=Number(calendarMonth.slice(0,4));weeklyMonth=Number(calendarMonth.slice(5,7));renderHistory();tab('history');const tools=document.querySelector('.data-management');tools.open=true;tools.scrollIntoView({block:'start',behavior:'smooth'});tools.querySelector('summary').focus({preventScroll:true})};
 function removeAccount(id){
  if(state.accounts.find(a=>a.id===id)?.kind!=='borrower'&&Money.wallets(state).length<=1){toast('ต้องมีบัญชีใช้งานอย่างน้อยหนึ่งบัญชี');return}
  const a=state.accounts.find(a=>a.id===id);const hasHistory=state.entries.some(e=>e.account===id||e.toAccount===id);
