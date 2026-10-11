@@ -74,6 +74,7 @@ const Money = {
     else state.categoryTypes[name]=[type];
     if(previous){
       state.entries.forEach(e=>{if(e.type!=='transfer'&&e.category===previous)e.category=name});
+      if(Array.isArray(state.quickTemplates))state.quickTemplates.forEach(t=>{if(t.category===previous)t.category=name});
       state.categoryAliases=state.categoryAliases||{};
       [...this.defaultCategories,...this.incomeCategories,...this.generalExpenseCategories,...this.generalIncomeCategories].forEach(c=>{if((state.categoryAliases[c]||c)===previous)state.categoryAliases[c]=name});
     }

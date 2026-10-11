@@ -1,0 +1,588 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-12T12:00:00+07:00",
+  "title": "Design System: จดไว — Glass Ledger",
+  "extensions": {
+    "colorMeta": {
+      "mint": {
+        "role": "primary",
+        "displayName": "Mint",
+        "tonalRamp": [
+          "oklch(15% 0.1154 169.97)",
+          "oklch(26% 0.1154 169.97)",
+          "oklch(38% 0.1154 169.97)",
+          "oklch(49% 0.1154 169.97)",
+          "oklch(61% 0.1154 169.97)",
+          "oklch(72% 0.1154 169.97)",
+          "oklch(84% 0.1154 169.97)",
+          "oklch(95% 0.1154 169.97)"
+        ]
+      },
+      "mint-hover": {
+        "role": "primary",
+        "displayName": "Mint Hover",
+        "tonalRamp": [
+          "oklch(15% 0.0924 170.56)",
+          "oklch(26% 0.0924 170.56)",
+          "oklch(38% 0.0924 170.56)",
+          "oklch(49% 0.0924 170.56)",
+          "oklch(61% 0.0924 170.56)",
+          "oklch(72% 0.0924 170.56)",
+          "oklch(84% 0.0924 170.56)",
+          "oklch(95% 0.0924 170.56)"
+        ]
+      },
+      "mint-ink": {
+        "role": "primary",
+        "displayName": "Mint Ink",
+        "tonalRamp": [
+          "oklch(15% 0.0366 171.66)",
+          "oklch(26% 0.0366 171.66)",
+          "oklch(38% 0.0366 171.66)",
+          "oklch(49% 0.0366 171.66)",
+          "oklch(61% 0.0366 171.66)",
+          "oklch(72% 0.0366 171.66)",
+          "oklch(84% 0.0366 171.66)",
+          "oklch(95% 0.0366 171.66)"
+        ]
+      },
+      "capture-mint": {
+        "role": "primary",
+        "displayName": "Capture Mint",
+        "tonalRamp": [
+          "oklch(15% 0.0821 171.55)",
+          "oklch(26% 0.0821 171.55)",
+          "oklch(38% 0.0821 171.55)",
+          "oklch(49% 0.0821 171.55)",
+          "oklch(61% 0.0821 171.55)",
+          "oklch(72% 0.0821 171.55)",
+          "oklch(84% 0.0821 171.55)",
+          "oklch(95% 0.0821 171.55)"
+        ]
+      },
+      "capture-hover": {
+        "role": "primary",
+        "displayName": "Capture Hover",
+        "tonalRamp": [
+          "oklch(15% 0.0698 171.27)",
+          "oklch(26% 0.0698 171.27)",
+          "oklch(38% 0.0698 171.27)",
+          "oklch(49% 0.0698 171.27)",
+          "oklch(61% 0.0698 171.27)",
+          "oklch(72% 0.0698 171.27)",
+          "oklch(84% 0.0698 171.27)",
+          "oklch(95% 0.0698 171.27)"
+        ]
+      },
+      "capture-ink": {
+        "role": "primary",
+        "displayName": "Capture Ink",
+        "tonalRamp": [
+          "oklch(15% 0.0323 171.97)",
+          "oklch(26% 0.0323 171.97)",
+          "oklch(38% 0.0323 171.97)",
+          "oklch(49% 0.0323 171.97)",
+          "oklch(61% 0.0323 171.97)",
+          "oklch(72% 0.0323 171.97)",
+          "oklch(84% 0.0323 171.97)",
+          "oklch(95% 0.0323 171.97)"
+        ]
+      },
+      "income": {
+        "role": "primary",
+        "displayName": "Income",
+        "tonalRamp": [
+          "oklch(15% 0.1039 168.26)",
+          "oklch(26% 0.1039 168.26)",
+          "oklch(38% 0.1039 168.26)",
+          "oklch(49% 0.1039 168.26)",
+          "oklch(61% 0.1039 168.26)",
+          "oklch(72% 0.1039 168.26)",
+          "oklch(84% 0.1039 168.26)",
+          "oklch(95% 0.1039 168.26)"
+        ]
+      },
+      "income-soft": {
+        "role": "primary",
+        "displayName": "Income Soft",
+        "tonalRamp": [
+          "oklch(15% 0.0319 176.73)",
+          "oklch(26% 0.0319 176.73)",
+          "oklch(38% 0.0319 176.73)",
+          "oklch(49% 0.0319 176.73)",
+          "oklch(61% 0.0319 176.73)",
+          "oklch(72% 0.0319 176.73)",
+          "oklch(84% 0.0319 176.73)",
+          "oklch(95% 0.0319 176.73)"
+        ]
+      },
+      "expense": {
+        "role": "secondary",
+        "displayName": "Expense",
+        "tonalRamp": [
+          "oklch(15% 0.0734 24.89)",
+          "oklch(26% 0.0734 24.89)",
+          "oklch(38% 0.0734 24.89)",
+          "oklch(49% 0.0734 24.89)",
+          "oklch(61% 0.0734 24.89)",
+          "oklch(72% 0.0734 24.89)",
+          "oklch(84% 0.0734 24.89)",
+          "oklch(95% 0.0734 24.89)"
+        ]
+      },
+      "expense-soft": {
+        "role": "secondary",
+        "displayName": "Expense Soft",
+        "tonalRamp": [
+          "oklch(15% 0.0359 336.18)",
+          "oklch(26% 0.0359 336.18)",
+          "oklch(38% 0.0359 336.18)",
+          "oklch(49% 0.0359 336.18)",
+          "oklch(61% 0.0359 336.18)",
+          "oklch(72% 0.0359 336.18)",
+          "oklch(84% 0.0359 336.18)",
+          "oklch(95% 0.0359 336.18)"
+        ]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "Paper",
+        "tonalRamp": [
+          "oklch(15% 0.0311 295.10)",
+          "oklch(26% 0.0311 295.10)",
+          "oklch(38% 0.0311 295.10)",
+          "oklch(49% 0.0311 295.10)",
+          "oklch(61% 0.0311 295.10)",
+          "oklch(72% 0.0311 295.10)",
+          "oklch(84% 0.0311 295.10)",
+          "oklch(95% 0.0311 295.10)"
+        ]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Surface",
+        "tonalRamp": [
+          "oklch(15% 0.0401 296.39)",
+          "oklch(26% 0.0401 296.39)",
+          "oklch(38% 0.0401 296.39)",
+          "oklch(49% 0.0401 296.39)",
+          "oklch(61% 0.0401 296.39)",
+          "oklch(72% 0.0401 296.39)",
+          "oklch(84% 0.0401 296.39)",
+          "oklch(95% 0.0401 296.39)"
+        ]
+      },
+      "surface-soft": {
+        "role": "neutral",
+        "displayName": "Surface Soft",
+        "tonalRamp": [
+          "oklch(15% 0.0408 298.34)",
+          "oklch(26% 0.0408 298.34)",
+          "oklch(38% 0.0408 298.34)",
+          "oklch(49% 0.0408 298.34)",
+          "oklch(61% 0.0408 298.34)",
+          "oklch(72% 0.0408 298.34)",
+          "oklch(84% 0.0408 298.34)",
+          "oklch(95% 0.0408 298.34)"
+        ]
+      },
+      "surface-hover": {
+        "role": "neutral",
+        "displayName": "Surface Hover",
+        "tonalRamp": [
+          "oklch(15% 0.0449 298.51)",
+          "oklch(26% 0.0449 298.51)",
+          "oklch(38% 0.0449 298.51)",
+          "oklch(49% 0.0449 298.51)",
+          "oklch(61% 0.0449 298.51)",
+          "oklch(72% 0.0449 298.51)",
+          "oklch(84% 0.0449 298.51)",
+          "oklch(95% 0.0449 298.51)"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "tonalRamp": [
+          "oklch(15% 0.0152 302.56)",
+          "oklch(26% 0.0152 302.56)",
+          "oklch(38% 0.0152 302.56)",
+          "oklch(49% 0.0152 302.56)",
+          "oklch(61% 0.0152 302.56)",
+          "oklch(72% 0.0152 302.56)",
+          "oklch(84% 0.0152 302.56)",
+          "oklch(95% 0.0152 302.56)"
+        ]
+      },
+      "secondary": {
+        "role": "neutral",
+        "displayName": "Secondary",
+        "tonalRamp": [
+          "oklch(15% 0.0347 302.64)",
+          "oklch(26% 0.0347 302.64)",
+          "oklch(38% 0.0347 302.64)",
+          "oklch(49% 0.0347 302.64)",
+          "oklch(61% 0.0347 302.64)",
+          "oklch(72% 0.0347 302.64)",
+          "oklch(84% 0.0347 302.64)",
+          "oklch(95% 0.0347 302.64)"
+        ]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Line",
+        "tonalRamp": [
+          "oklch(15% 0.0000 89.88)",
+          "oklch(26% 0.0000 89.88)",
+          "oklch(38% 0.0000 89.88)",
+          "oklch(49% 0.0000 89.88)",
+          "oklch(61% 0.0000 89.88)",
+          "oklch(72% 0.0000 89.88)",
+          "oklch(84% 0.0000 89.88)",
+          "oklch(95% 0.0000 89.88)"
+        ]
+      },
+      "line-strong": {
+        "role": "neutral",
+        "displayName": "Line Strong",
+        "tonalRamp": [
+          "oklch(15% 0.0671 305.04)",
+          "oklch(26% 0.0671 305.04)",
+          "oklch(38% 0.0671 305.04)",
+          "oklch(49% 0.0671 305.04)",
+          "oklch(61% 0.0671 305.04)",
+          "oklch(72% 0.0671 305.04)",
+          "oklch(84% 0.0671 305.04)",
+          "oklch(95% 0.0671 305.04)"
+        ]
+      },
+      "glass-bg": {
+        "role": "neutral",
+        "displayName": "Glass Bg",
+        "tonalRamp": [
+          "oklch(15% 0.0416 298.02)",
+          "oklch(26% 0.0416 298.02)",
+          "oklch(38% 0.0416 298.02)",
+          "oklch(49% 0.0416 298.02)",
+          "oklch(61% 0.0416 298.02)",
+          "oklch(72% 0.0416 298.02)",
+          "oklch(84% 0.0416 298.02)",
+          "oklch(95% 0.0416 298.02)"
+        ]
+      },
+      "glass-sheet": {
+        "role": "neutral",
+        "displayName": "Glass Sheet",
+        "tonalRamp": [
+          "oklch(15% 0.0377 299.91)",
+          "oklch(26% 0.0377 299.91)",
+          "oklch(38% 0.0377 299.91)",
+          "oklch(49% 0.0377 299.91)",
+          "oklch(61% 0.0377 299.91)",
+          "oklch(72% 0.0377 299.91)",
+          "oklch(84% 0.0377 299.91)",
+          "oklch(95% 0.0377 299.91)"
+        ]
+      },
+      "glass-nav": {
+        "role": "neutral",
+        "displayName": "Glass Nav",
+        "tonalRamp": [
+          "oklch(15% 0.0415 298.08)",
+          "oklch(26% 0.0415 298.08)",
+          "oklch(38% 0.0415 298.08)",
+          "oklch(49% 0.0415 298.08)",
+          "oklch(61% 0.0415 298.08)",
+          "oklch(72% 0.0415 298.08)",
+          "oklch(84% 0.0415 298.08)",
+          "oklch(95% 0.0415 298.08)"
+        ]
+      },
+      "glass-border": {
+        "role": "neutral",
+        "displayName": "Glass Border",
+        "tonalRamp": [
+          "oklch(15% 0.0327 307.17)",
+          "oklch(26% 0.0327 307.17)",
+          "oklch(38% 0.0327 307.17)",
+          "oklch(49% 0.0327 307.17)",
+          "oklch(61% 0.0327 307.17)",
+          "oklch(72% 0.0327 307.17)",
+          "oklch(84% 0.0327 307.17)",
+          "oklch(95% 0.0327 307.17)"
+        ]
+      },
+      "field": {
+        "role": "neutral",
+        "displayName": "Field",
+        "tonalRamp": [
+          "oklch(15% 0.0344 296.49)",
+          "oklch(26% 0.0344 296.49)",
+          "oklch(38% 0.0344 296.49)",
+          "oklch(49% 0.0344 296.49)",
+          "oklch(61% 0.0344 296.49)",
+          "oklch(72% 0.0344 296.49)",
+          "oklch(84% 0.0344 296.49)",
+          "oklch(95% 0.0344 296.49)"
+        ]
+      },
+      "field-border": {
+        "role": "neutral",
+        "displayName": "Field Border",
+        "tonalRamp": [
+          "oklch(15% 0.0527 308.16)",
+          "oklch(26% 0.0527 308.16)",
+          "oklch(38% 0.0527 308.16)",
+          "oklch(49% 0.0527 308.16)",
+          "oklch(61% 0.0527 308.16)",
+          "oklch(72% 0.0527 308.16)",
+          "oklch(84% 0.0527 308.16)",
+          "oklch(95% 0.0527 308.16)"
+        ]
+      },
+      "annotation": {
+        "role": "neutral",
+        "displayName": "Annotation",
+        "tonalRamp": [
+          "oklch(15% 0.0000 89.88)",
+          "oklch(26% 0.0000 89.88)",
+          "oklch(38% 0.0000 89.88)",
+          "oklch(49% 0.0000 89.88)",
+          "oklch(61% 0.0000 89.88)",
+          "oklch(72% 0.0000 89.88)",
+          "oklch(84% 0.0000 89.88)",
+          "oklch(95% 0.0000 89.88)"
+        ]
+      },
+      "text-action": {
+        "role": "secondary",
+        "displayName": "Text Action",
+        "tonalRamp": [
+          "oklch(15% 0.0841 171.22)",
+          "oklch(26% 0.0841 171.22)",
+          "oklch(38% 0.0841 171.22)",
+          "oklch(49% 0.0841 171.22)",
+          "oklch(61% 0.0841 171.22)",
+          "oklch(72% 0.0841 171.22)",
+          "oklch(84% 0.0841 171.22)",
+          "oklch(95% 0.0841 171.22)"
+        ]
+      },
+      "timeline": {
+        "role": "secondary",
+        "displayName": "Timeline",
+        "tonalRamp": [
+          "oklch(15% 0.0787 173.68)",
+          "oklch(26% 0.0787 173.68)",
+          "oklch(38% 0.0787 173.68)",
+          "oklch(49% 0.0787 173.68)",
+          "oklch(61% 0.0787 173.68)",
+          "oklch(72% 0.0787 173.68)",
+          "oklch(84% 0.0787 173.68)",
+          "oklch(95% 0.0787 173.68)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Current balance",
+        "purpose": "48px desktop / 38px mobile; actual text measurement reduces long amounts to fit without breaking digits, minimum 16px."
+      },
+      "headline": {
+        "displayName": "Page heading",
+        "purpose": "25px desktop / 24px mobile destination title."
+      },
+      "title": {
+        "displayName": "Panel heading",
+        "purpose": "Shared panel section headings."
+      },
+      "body": {
+        "displayName": "Thai body",
+        "purpose": "Readable Thai ledger content and explanatory prose."
+      },
+      "label": {
+        "displayName": "Form label",
+        "purpose": "Short secondary field labels."
+      }
+    },
+    "shadows": [
+      {
+        "name": "dialog",
+        "value": "0 24px 80px #0008",
+        "purpose": "Structural sheet separation."
+      },
+      {
+        "name": "mobile-dock",
+        "value": "0 10px 32px #0006",
+        "purpose": "Fixed glass navigation."
+      },
+      {
+        "name": "record",
+        "value": "0 8px 24px #0004",
+        "purpose": "Persistent recording action."
+      },
+      {
+        "name": "chart-tooltip",
+        "value": "0 8px 20px #0003",
+        "purpose": "Selected amount and date."
+      },
+      {
+        "name": "toast",
+        "value": "0 8px 28px #0005",
+        "purpose": "Transient saved-state feedback."
+      }
+    ],
+    "motion": [
+      {
+        "name": "button",
+        "value": "160ms",
+        "purpose": "Background, border, and text color changes."
+      },
+      {
+        "name": "balance-update",
+        "value": "320ms cubic-bezier(.16,1,.3,1)",
+        "purpose": "Brief balance acknowledgement; reduced motion disables it."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "single-column",
+        "value": "900px"
+      },
+      {
+        "name": "compact-details",
+        "value": "600px"
+      },
+      {
+        "name": "narrow-history",
+        "value": "360px"
+      }
+    ],
+    "material": {
+      "blur": "blur(22px) saturate(125%)",
+      "supportedColors": {
+        "glass-bg": "#2b233cba",
+        "glass-sheet": "#292235eb",
+        "glass-nav": "#261e35c9"
+      },
+      "supportQuery": "((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px)))",
+      "reducedTransparency": "Opaque frontmatter glass colors; disable all backdrop filters.",
+      "summaryGradient": "linear-gradient(145deg,#332b4ad9,#242237b8 45%,#1b473cc4)",
+      "summaryOpaqueGradient": "linear-gradient(145deg,#332b4a,#242237 45%,#1b473c)",
+      "summaryBlur": "blur(16px)",
+      "nestedRegions": "Transparent with no backdrop filter or shadow."
+    }
+  },
+  "components": [
+    {
+      "name": "Save",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Explicit save action inside the existing sheet.",
+      "html": "<button class=\"ds-save\">บันทึกรายการ</button>",
+      "css": ".ds-save{font-family:var(--font,\"Jotwai Thai\",\"Leelawadee UI\",Tahoma,sans-serif);font-size:15px;font-weight:600;min-height:52px;width:100%;padding:12px 17px;border:1px solid transparent;border-radius:16px;background:var(--accent,#74e3bf);color:#102b23;cursor:pointer;transition:background-color 160ms}.ds-save:hover{background:var(--accent-hover,#9aefd2)}.ds-save:active{transform:none}.ds-save:disabled{opacity:.5;cursor:not-allowed}.ds-save:focus-visible{outline:2px solid var(--accent,#74e3bf);outline-offset:3px}@media(prefers-reduced-motion:reduce){.ds-save{transition:none;animation:none;transform:none}}"
+    },
+    {
+      "name": "Record",
+      "kind": "button",
+      "refersTo": "button-capture",
+      "description": "The single labelled floating action opens the existing dialog and focuses quick capture synchronously. Preview shows the button without fixed positioning.",
+      "html": "<button class=\"ds-record\" aria-haspopup=\"dialog\"><svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" aria-hidden=\"true\"><path d=\"M12 5v14M5 12h14\"/></svg>จดรายการ</button>",
+      "css": ".ds-record{font-family:var(--font,\"Jotwai Thai\",\"Leelawadee UI\",Tahoma,sans-serif);display:inline-flex;align-items:center;justify-content:center;gap:8px;min-width:150px;min-height:54px;padding:12px 22px;border:1px solid #c5ffeb45;border-radius:16px;background:#a5f0d7;color:#132a23;box-shadow:0 8px 24px #0004;font-size:16px;font-weight:600;cursor:pointer;transition:background-color 160ms}.ds-record:hover{background:#c0ffe9;transform:translateY(-1px)}.ds-record:active{transform:translateY(0)}.ds-record:focus-visible{outline:2px solid var(--accent,#74e3bf);outline-offset:3px}@media(max-width:900px){.ds-record{min-width:145px;min-height:52px;padding:12px 18px}}@media(prefers-reduced-motion:reduce){.ds-record{transition:none;animation:none;transform:none}}"
+    },
+    {
+      "name": "Secondary action",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Supporting action on a faint white fill.",
+      "html": "<button class=\"ds-secondary\">เลือกบัญชี</button>",
+      "css": ".ds-secondary{font-family:var(--font,\"Jotwai Thai\",\"Leelawadee UI\",Tahoma,sans-serif);min-height:44px;padding:9px 14px;font-size:13px;background:#ffffff09;color:var(--ink,#f5f1fc);border:1px solid var(--line-strong,#b9a5d25c);border-radius:16px;cursor:pointer;transition:background-color 160ms,border-color 160ms}.ds-secondary:hover{background:#ffffff13;border-color:#c4b5d88c}.ds-secondary:active{transform:none}.ds-secondary:disabled{opacity:.5}.ds-secondary:focus-visible{outline:2px solid var(--accent,#74e3bf);outline-offset:3px}@media(prefers-reduced-motion:reduce){.ds-secondary{transition:none;animation:none;transform:none}}"
+    },
+    {
+      "name": "Text action",
+      "kind": "button",
+      "refersTo": "button-text",
+      "description": "Light mint supporting action.",
+      "html": "<button class=\"ds-text\">ดูรายการ</button>",
+      "css": ".ds-text{font-family:var(--font,\"Jotwai Thai\",\"Leelawadee UI\",Tahoma,sans-serif);min-height:44px;padding:4px 0;border:0;background:transparent;color:#a6f3d9;font-size:13px;cursor:pointer}.ds-text:hover{text-decoration:underline}.ds-text:active{transform:none}.ds-text:focus-visible{outline:2px solid var(--accent,#74e3bf);outline-offset:3px}"
+    },
+    {
+      "name": "Sheet field",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Steady mostly opaque fields; quick capture uses the larger sheet variant.",
+      "html": "<label class=\"ds-label\" for=\"ds-field\">จดรายการ</label><input id=\"ds-field\" class=\"ds-field\" placeholder=\"ข้าว 50\">",
+      "css": ".ds-label{font-family:var(--font,\"Jotwai Thai\",\"Leelawadee UI\",Tahoma,sans-serif);display:block;margin-bottom:8px;color:var(--secondary,#c6bdd5);font-size:13px}.ds-field{font-family:var(--font,\"Jotwai Thai\",\"Leelawadee UI\",Tahoma,sans-serif);min-height:50px;padding:12px 14px;background:#211c2e;color:var(--ink,#f5f1fc);border:1px solid #8d7c9d69;border-radius:16px;font-size:16px;caret-color:var(--accent,#74e3bf)}.ds-field::placeholder{color:#bbafca;opacity:1;font-size:16px}.ds-field:hover{border-color:var(--line-strong,#b9a5d25c)}.ds-field:focus{border-color:var(--accent,#74e3bf)}.ds-field:focus-visible{outline:2px solid var(--accent,#74e3bf);outline-offset:3px}"
+    },
+    {
+      "name": "Navigation dock",
+      "kind": "nav",
+      "refersTo": "navigation",
+      "description": "Shared tinted purple material with a faint mint active state and opaque fallback.",
+      "html": "<nav class=\"ds-nav\" aria-label=\"เมนูหลัก\"><button aria-current=\"page\">จดรายการ</button><button>ประวัติ</button><button>บัญชี</button><button>ตั้งค่า</button></nav>",
+      "css": ".ds-nav{font-family:var(--font,\"Jotwai Thai\",\"Leelawadee UI\",Tahoma,sans-serif);display:flex;gap:3px;padding:5px;border:1px solid var(--glass-border,#f3e8ff29);border-radius:16px;background:var(--glass-nav,#261f35);box-shadow:0 10px 32px #0006}.ds-nav button{font:inherit;flex:1;min-height:54px;padding:8px 5px;border:1px solid transparent;border-radius:12px;background:transparent;color:var(--secondary,#c6bdd5);font-size:12px;cursor:pointer;transition:background-color 160ms}.ds-nav button:hover{background:#ffffff09;color:var(--ink,#f5f1fc)}.ds-nav button[aria-current]{background:#74e3bf18;color:#a6f3d9}.ds-nav button:focus-visible{outline:2px solid var(--accent,#74e3bf);outline-offset:3px}@supports((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.ds-nav{background:var(--glass-nav,#261e35c9);backdrop-filter:blur(22px) saturate(125%);-webkit-backdrop-filter:blur(22px) saturate(125%)}}@media(prefers-reduced-transparency:reduce){.ds-nav{background:#261f35;backdrop-filter:none;-webkit-backdrop-filter:none}}@media(prefers-reduced-motion:reduce){.ds-nav button{transition:none;animation:none;transform:none}}"
+    },
+    {
+      "name": "Count badge",
+      "kind": "chip",
+      "refersTo": "badge",
+      "description": "Quiet noninteractive annotation.",
+      "html": "<span class=\"ds-badge\">3 รายการ</span>",
+      "css": ".ds-badge{font-family:var(--font,\"Jotwai Thai\",\"Leelawadee UI\",Tahoma,sans-serif);display:inline-flex;padding:2px 8px;background:#ffffff09;color:var(--secondary,#c6bdd5);border:1px solid var(--line,#ffffff20);border-radius:7px;font-size:12px;line-height:1.6}"
+    },
+    {
+      "name": "Glass panel",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "One outer material layer; inner rows remain transparent.",
+      "html": "<section class=\"ds-panel\"><h2>รายการล่าสุด</h2><p>รายการที่บันทึกไว้ของคุณ</p><div class=\"ds-panel-row\">ข้าว <span>−฿50.00</span></div></section>",
+      "css": ".ds-panel{font-family:var(--font,\"Jotwai Thai\",\"Leelawadee UI\",Tahoma,sans-serif);padding:22px;border:1px solid var(--glass-border,#f3e8ff29);border-radius:16px;background:var(--glass-bg,#251e34);color:var(--ink,#f5f1fc);box-shadow:none}.ds-panel h2{margin:0;font-size:21px;font-weight:500;letter-spacing:-.02em}.ds-panel p{margin:8px 0;color:var(--secondary,#c6bdd5);font-size:13px;line-height:1.85}.ds-panel-row{display:flex;justify-content:space-between;gap:12px;padding:16px 4px;border-bottom:1px solid var(--line,#ffffff20);font-size:15px;background:transparent}.ds-panel-row span{color:var(--expense,#ffc0ba);font-variant-numeric:tabular-nums}.ds-panel-row:hover{background:#ffffff08}@supports((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.ds-panel{background:var(--glass-bg,#2b233cba);backdrop-filter:blur(22px) saturate(125%);-webkit-backdrop-filter:blur(22px) saturate(125%)}}@media(max-width:900px){.ds-panel{padding:18px}}@media(prefers-reduced-transparency:reduce){.ds-panel{background:#251e34;backdrop-filter:none;-webkit-backdrop-filter:none}}"
+    },
+    {
+      "name": "Integrated cash timeline",
+      "kind": "custom",
+      "description": "Static sample of the shared summary. The app supplies real data, month default, measured tooltip clamping, pointer and keyboard selection, daily history, and adaptive numeric fit.",
+      "html": "<section class=\"ds-timeline\"><h2>เงินรวมตอนนี้</h2><strong class=\"ds-balance\">฿12,500.00</strong><small>ไม่รวมยอดลูกหนี้ / เจ้าหนี้</small><p class=\"ds-change\">เพิ่มขึ้น ฿500.00 จากวันที่ 1 ต.ค. 2569</p><div class=\"ds-ranges\" aria-label=\"ช่วงเวลากราฟ\"><button aria-pressed=\"false\">สัปดาห์</button><button aria-pressed=\"true\">เดือน</button><button aria-pressed=\"false\">ปี</button></div><div class=\"ds-plot\"><svg viewBox=\"0 0 300 130\" role=\"img\" aria-label=\"ตัวอย่างเส้นยอดเงิน\"><defs><linearGradient id=\"ds-area\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop offset=\"0\" stop-color=\"#55d6b1\" stop-opacity=\".24\"/><stop offset=\"1\" stop-color=\"#55d6b1\" stop-opacity=\"0\"/></linearGradient></defs><path d=\"M10 90H290M10 115H290\" stroke=\"#e1f5ee\" stroke-opacity=\".07\"/><path d=\"M10 100L80 80L150 95L220 70L290 75V115H10Z\" fill=\"url(#ds-area)\"/><path d=\"M10 100L80 80L150 95L220 70L290 75\" fill=\"none\" stroke=\"#a6efd9\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><circle cx=\"220\" cy=\"70\" r=\"3.5\" fill=\"#a6efd9\"/></svg><div class=\"ds-tooltip\"><strong>฿12,500.00</strong><span>12 ต.ค. 2569</span></div></div><input class=\"ds-cursor\" type=\"range\" min=\"0\" max=\"4\" value=\"3\" aria-label=\"เลือกวันที่บนกราฟ\"><button class=\"ds-day\">ดูรายการวันนี้</button><details class=\"ds-help\"><summary>เกี่ยวกับยอดย้อนหลัง</summary><p>อิงประวัติที่บันทึก ยอดเก่าอาจคลาดเคลื่อนเมื่อจดไม่ครบ</p></details></section>",
+      "css": ".ds-timeline{font-family:var(--font,\"Jotwai Thai\",\"Leelawadee UI\",Tahoma,sans-serif);padding:24px 24px 14px;color:var(--ink,#f5f1fc);background:linear-gradient(145deg,#332b4a,#242237 45%,#1b473c);border:1px solid #c5d6ed24;border-radius:16px;overflow:hidden}.ds-timeline h2{margin:0;font-size:15px;font-weight:500;color:#d4d1e5}.ds-balance{display:block;margin:12px 0 6px;font-size:48px;font-weight:500;line-height:1.2;letter-spacing:-1.4px;font-variant-numeric:tabular-nums;white-space:nowrap;overflow-wrap:normal}.ds-timeline small{font-size:12px;color:#c4d6d0}.ds-change{font-size:12px;line-height:1.6;color:var(--income,#8beac7);margin-bottom:16px}.ds-ranges{display:flex;padding:3px;border:1px solid #e8e5ff1a;border-radius:10px;background:#0f162d35}.ds-ranges button{flex:1;min-height:44px;padding:4px 6px;border:0;border-radius:7px;background:transparent;color:var(--secondary,#c6bdd5);font:inherit;font-size:13px;cursor:pointer}.ds-ranges button:hover{background:#ffffff0b}.ds-ranges button[aria-pressed=true]{background:#d4f5e6;color:#17342d}.ds-plot{position:relative;margin-top:8px}.ds-plot svg{display:block;width:100%;height:auto}.ds-tooltip{position:absolute;left:70%;top:0;transform:translateX(-50%);width:max-content;max-width:100%;padding:8px 12px;background:#152b25f5;color:#f1fff8;border-radius:11px;box-shadow:0 8px 20px #0003;line-height:1.45;pointer-events:none}.ds-tooltip strong{display:block;font-size:17px;font-weight:500;font-variant-numeric:tabular-nums}.ds-tooltip span{display:block;margin-top:2px;font-size:12px;color:#c0dcd0}.ds-cursor{width:100%;min-height:44px;accent-color:#a6efd9}.ds-day{font-family:var(--font,\"Jotwai Thai\",\"Leelawadee UI\",Tahoma,sans-serif);min-height:44px;padding:4px 0;background:none;border:0;color:#a6f3d9;font-size:12px;cursor:pointer}.ds-day:hover{text-decoration:underline}.ds-help{font-size:12px;line-height:1.8;color:#c4d6d0}.ds-help summary{min-height:44px;align-content:center;cursor:pointer}.ds-timeline button:focus-visible{outline:2px solid var(--accent,#74e3bf);outline-offset:3px}.ds-timeline input:focus-visible{outline:2px solid var(--accent,#74e3bf);outline-offset:3px}.ds-timeline summary:focus-visible{outline:2px solid var(--accent,#74e3bf);outline-offset:3px}@supports(backdrop-filter:blur(1px)){.ds-timeline{background:linear-gradient(145deg,#332b4ad9,#242237b8 45%,#1b473cc4);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}}@media(max-width:900px){.ds-timeline{padding:20px 16px 8px}.ds-balance{font-size:38px;letter-spacing:-1px;margin:12px 0 8px}.ds-tooltip strong{font-size:15px}}@media(prefers-reduced-transparency:reduce){.ds-timeline{background:linear-gradient(145deg,#332b4a,#242237 45%,#1b473c);backdrop-filter:none;-webkit-backdrop-filter:none}}@media(prefers-reduced-motion:reduce){.ds-timeline button{transition:none;animation:none;transform:none}}"
+    }
+  ],
+  "narrative": {
+    "northStar": "Glass Ledger",
+    "overview": "An everyday Thai finance ledger on a purple-black ground, with stationary purple and green light visible through tinted glass. The integrated current balance and mint cash timeline remain the visual anchor. The user approved extending this material across every page and sheet, with recording one intentional tap away.\n\nThe web app uses HTML, CSS, and JavaScript. UI5 extends the existing implementation through `dist/ui5.css` and `dist/ui5-home.css`; those final overrides govern the visual system. Self-hosted Noto Sans Thai, registered as Jotwai Thai, and the existing Lucide line icons carry the identity. The iPhone-like material is a visual direction, not a native iOS or device-verification claim.",
+    "keyCharacteristics": [
+      "Purple-black ground with restrained tinted glass across pages, navigation, and sheets.",
+      "Mint actions and income, warm coral expenses, and a pale mint cash timeline.",
+      "Readable Thai labels, unbroken tabular balance amounts, and visible keyboard focus.",
+      "One labelled floating recording action, with the existing editor available on demand."
+    ],
+    "rules": [
+      {
+        "name": "The Financial Meaning Rule",
+        "body": "Preserve mint for incoming money and coral for outgoing money; accompany financial direction with words or signs. The cash timeline uses pale mint without changing the meaning of income or cash balance.",
+        "section": "colors"
+      },
+      {
+        "name": "The Whole Amount Rule",
+        "body": "Keep the current balance unbroken and adapt its size to the available width.",
+        "section": "typography"
+      },
+      {
+        "name": "The Single Material Rule",
+        "body": "Blur the outer surface once; inner rows, nested panels, and chart content borrow it without another backdrop filter.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do preserve Thai labels, tabular amounts, and visible mint keyboard focus.",
+      "Do share tinted glass across pages and sheets with opaque and reduced-transparency fallbacks.",
+      "Do keep the current balance unbroken and the mint timeline paired with a readable selected value, date, and daily-history action.",
+      "Do keep one labelled floating recording action that opens the existing sheet and focuses typing synchronously."
+    ],
+    "donts": [
+      "Don't add decorative rasters, emoji, or new UI dependencies.",
+      "Don't turn income, expense, cash balance, available money, and debt into interchangeable labels.",
+      "Don't stack backdrop blur on nested rows or restore the permanent inline capture form.",
+      "Don't describe this web material as native iPhone support or as verified Safari behavior."
+    ]
+  }
+}

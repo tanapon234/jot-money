@@ -187,6 +187,42 @@ body.ui3-theme{
 @media(max-width:600px){.ui3-theme #quickCard .capture-date-control{width:128px}.ui3-theme #quickCard .capture-date-display,.ui3-theme .quick-dialog #quickCard .capture-date-display{font-size:10px}.ui3-theme #quickCard .capture-heading h2{align-self:center}}
 
 /* Capture comes first in both reading order and the mobile layout. */
+.ui3-theme #preferences{max-width:900px}
+.ui3-theme .quick-templates{margin-top:22px}
+.ui3-theme .quick-templates h3{margin:0;font-size:16px}
+.ui3-theme .quick-templates>.section-heading{margin-bottom:4px}
+.ui3-theme .quick-templates>.section-description,.ui3-theme .template-empty{font-size:12px;color:var(--secondary);line-height:1.8;margin:4px 0 12px}
+.ui3-theme #quickTemplates{display:grid;gap:8px}
+.ui3-theme .quick-template{display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:left;width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink);min-height:64px}
+.ui3-theme .quick-template:hover:not(:disabled){background:var(--surface-soft)}
+.ui3-theme .quick-template:active:not(:disabled){transform:translateY(1px)}
+.ui3-theme .quick-template:disabled{opacity:.65;cursor:not-allowed}
+.ui3-theme .template-copy{min-width:0;flex:1;overflow-wrap:anywhere}
+.ui3-theme .template-copy b{display:block;font-size:14px}
+.ui3-theme .template-copy small,.ui3-theme .template-value small{display:block;font-size:12px;color:var(--secondary);line-height:1.7}
+.ui3-theme .template-value{text-align:right;flex-shrink:0;font-variant-numeric:tabular-nums;max-width:55%;overflow-wrap:anywhere}
+.ui3-theme .template-value b{font-size:15px}
+.ui3-theme .expense .template-value b{color:var(--expense)}
+.ui3-theme .income .template-value b{color:var(--income)}
+.ui3-theme .template-receipt{margin-top:12px;padding:12px 14px;border-radius:12px;background:var(--surface-soft)}
+.ui3-theme .template-receipt p{margin:0;font-size:13px;overflow-wrap:anywhere}
+.ui3-theme .template-receipt>div{display:flex;flex-wrap:wrap;gap:8px}
+.ui3-theme .template-settings{margin-top:20px}
+.ui3-theme .template-settings h2{margin:0;font-size:20px}
+.ui3-theme .template-manager-row{display:flex;gap:8px;align-items:center;border-bottom:1px solid var(--line);padding:12px 0}
+.ui3-theme #templateEditor{margin-top:16px}
+.ui3-theme #templateEditor>summary{min-height:44px;align-content:center;cursor:pointer;font-size:14px;font-weight:600}
+.ui3-theme #templateForm{padding-top:12px}
+.ui3-theme .template-fields{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ui3-theme .template-fields>div{min-width:0}
+.ui3-theme .preferences-panel h2{margin:0 0 8px}
+.ui3-theme .preferences-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.ui3-theme .preferences-actions button{display:inline-flex;align-items:center;gap:8px;min-height:48px;padding:10px 16px}
+.ui3-theme #preferences .data-management{margin-top:20px}
+.ui3-theme #preferences .secondary{margin-top:20px}
+.ui3-theme #preferences .secondary p{color:var(--secondary);font-size:14px;line-height:1.8}
+.ui3-theme #preferences .data-management>summary{font-size:16px;min-height:44px;align-content:center}
+@media(max-width:900px){.ui3-theme .sidebar nav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}.ui3-theme .sidebar .nav{min-width:0;font-size:11px}.ui3-theme #preferences .import-actions{gap:10px;flex-wrap:wrap}}
 .ui3-theme #home{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);grid-template-areas:"capture hero" "recent recent" "spending spending" "storage storage";gap:24px;align-items:start}
 .ui3-theme #home .content-grid{display:contents}
 .ui3-theme #home .capture-column{grid-area:capture;min-width:0}

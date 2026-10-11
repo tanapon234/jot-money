@@ -1,0 +1,291 @@
+/* UI5 / Glass Ledger. Shared material and controls; home composition lives in ui5-home.css. */
+body.ui5-theme {
+  color-scheme: dark;
+  --paper: #100c1b;
+  --ink: #f5f1fc;
+  --muted: #c6bdd5;
+  --secondary: #c6bdd5;
+  --accent: #74e3bf;
+  --accent-hover: #9aefd2;
+  --income: #8beac7;
+  --expense: #ffc0ba;
+  --income-on-dark: var(--income);
+  --expense-on-dark: var(--expense);
+  --income-soft: #243c36;
+  --expense-soft: #412e3c;
+  --surface: #211b30;
+  --surface-soft: #2b243a;
+  --surface-hover: #352d46;
+  --line: #ffffff20;
+  --line-strong: #b9a5d25c;
+  --glass-bg: #251e34;
+  --glass-sheet: #282135;
+  --glass-nav: #261f35;
+  --glass-border: #f3e8ff29;
+  --glass-blur: blur(22px) saturate(125%);
+  --glass-radius: 16px;
+  --green: var(--accent);
+  --dark: var(--surface);
+  --red: var(--expense);
+  --shadow: none;
+  background-color: var(--paper);
+  background-image: radial-gradient(ellipse at 8% 5%, #68458b55 0, transparent 52%), radial-gradient(ellipse at 98% 82%, #24645043 0, transparent 48%), linear-gradient(140deg, #161020, #100e1c 60%, #10221f);
+  background-attachment: fixed;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  -webkit-tap-highlight-color: #74e3bf22;
+  accent-color: var(--accent);
+  scrollbar-color: #84728e #1e182b;
+  scrollbar-width: thin;
+}
+body.ui5-theme ::selection { background: #426e60; color: #fff; }
+body.ui5-theme .transfer-dialog .transfer-hint,body.ui5-theme .transfer-dialog .transfer-footnote{font-size:12px;line-height:1.8}
+body.ui5-theme .calendar-day-dialog #calendarModalEntries .day-entry .entry-meta{font-size:12px;line-height:1.8}
+body.ui5-theme #history.calendar-compact .calendar-summary .history-totals>span,body.ui5-theme #history.calendar-compact .calendar-summary h3{font-size:12px}
+body.ui5-theme #history .calendar-day .calendar-mobile-net{font-size:12px}
+body.ui5-theme :is(h1,h2,h3) { color: var(--ink); text-wrap: balance; }
+body.ui5-theme :is(input,select,textarea) { caret-color: var(--accent); }
+body.ui5-theme :is(button,input,select,textarea,summary,a):focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+body.ui5-theme :is(button,summary,a) { touch-action: manipulation; }
+body.ui5-theme :is(button,summary) { min-height: 44px; }
+body.ui5-theme button { transition: background-color 160ms, border-color 160ms, color 160ms; }
+body.ui5-theme button:active:not(:disabled) { transform: none; }
+body.ui5-theme button:disabled { opacity: .5; cursor: not-allowed; }
+body.ui5-theme .ui3-touch-glow { display: none; }
+
+/* A stationary light field remains visible through a single material layer. */
+body.ui5-theme :is(.recent-card,.spending-card,.panel,.account-overview) {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--glass-radius);
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+body.ui5-theme :is(.recent-card,.spending-card,.panel) { padding: 22px; }
+body.ui5-theme .sidebar { background: var(--glass-nav); border-color: var(--glass-border); }
+body.ui5-theme .brand { color: var(--ink); letter-spacing: -.03em; }
+body.ui5-theme .brand-mark { color: var(--accent); background: #ffffff0a; border: 1px solid var(--glass-border); border-radius: 16px; box-shadow: none; }
+body.ui5-theme .nav { color: var(--secondary); border-radius: 16px; min-height: 52px; font-size: 14px; }
+body.ui5-theme .nav:hover { background: #ffffff09; color: var(--ink); }
+body.ui5-theme .nav.active { background: #74e3bf18; color: #a6f3d9; border-color: #74e3bf21; box-shadow: none; }
+body.ui5-theme .side-foot { font-size: 11px; color: var(--secondary); }
+body.ui5-theme .side-foot .demo { color: var(--secondary); background: #ffffff08; border-color: var(--line); }
+body.ui5-theme .page-header { border-color: var(--line); margin-bottom: 24px; padding-bottom: 16px; }
+body.ui5-theme .page-header h1 { font-size: 27px; line-height: 1.5; letter-spacing: -.025em; }
+body.ui5-theme .page-header p { color: var(--secondary); font-size: 13px; line-height: 1.8; }
+body.ui5-theme :is(.section-description,.form-foot,.report-footnote,.sample-banner,.history-explanation,.calendar-legend,.calendar-mobile-legend,.weekly-help,.history-filter-notice,.history-net-note,.day-edit-hint) { color: var(--secondary); font-size: 13px; line-height: 1.85; }
+body.ui5-theme :is(.recent-card,.spending-card)>.section-heading { padding-bottom: 14px; margin-bottom: 8px; border-color: var(--line); }
+body.ui5-theme :is(.recent-card,.spending-card,.panel) h2 { font-size: 21px; letter-spacing: -.02em; }
+body.ui5-theme :is(.count-badge,.period-badge,.day-list-count) { background: #ffffff09; color: var(--secondary); border-color: var(--line); font-size: 12px; border-radius: 7px; }
+body.ui5-theme :is(label,.field-label) { color: var(--secondary); font-size: 13px; }
+
+/* Solid fields keep text steady over translucent sheets and avoid iOS zoom. */
+body.ui5-theme :is(input,select,textarea),body.ui5-theme #quick {
+  background: #211c2e;
+  border: 1px solid #8d7c9d69;
+  border-radius: 16px;
+  color: var(--ink);
+  font-size: 16px;
+  min-height: 50px;
+  box-shadow: none;
+}
+body.ui5-theme :is(input,textarea)::placeholder,body.ui5-theme #quick::placeholder { color: #bbafca; opacity: 1; font-size: 16px; }
+body.ui5-theme :is(input,select,textarea):focus { border-color: var(--accent); box-shadow: none; }
+body.ui5-theme input[type=checkbox] { min-height: 20px; width: 20px; height: 20px; border-radius: 5px; accent-color: var(--accent); }
+body.ui5-theme input[type=range] { min-height: 44px; background: transparent; border: 0; }
+body.ui5-theme input[type=file] { font-size: 16px; padding: 7px; }
+body.ui5-theme input[type=file]::file-selector-button { min-height: 44px; padding: 8px 12px; font: inherit; background: #3b314b; color: var(--ink); border: 1px solid var(--line-strong); border-radius: 12px; cursor: pointer; }
+body.ui5-theme :is(.save,.primary-small,.calendar-modal-add) { background: var(--accent); color: #102b23; border: 1px solid transparent; border-radius: 16px; min-height: 48px; box-shadow: none; font-size: 14px; font-weight: 600; }
+body.ui5-theme .save { min-height: 52px; font-size: 15px; }
+body.ui5-theme :is(.save,.primary-small,.calendar-modal-add):hover:not(:disabled) { background: var(--accent-hover); box-shadow: none; }
+body.ui5-theme :is(.outline,.icon-button,.close-button,.analytics-trigger,.category-manager-row button) { background: #ffffff09; color: var(--ink); border: 1px solid var(--line-strong); border-radius: 16px; min-height: 44px; font-size: 13px; box-shadow: none; }
+body.ui5-theme :is(.outline,.icon-button,.close-button,.analytics-trigger,.category-manager-row button):hover:not(:disabled) { background: #ffffff13; border-color: #c4b5d88c; }
+body.ui5-theme .text-button { min-height: 44px; font-size: 13px; color: #a6f3d9; }
+body.ui5-theme .delete { min-height: 48px; background: #492d3c; color: var(--expense); border: 1px solid #ffc0ba38; border-radius: 16px; font-size: 14px; }
+body.ui5-theme .delete:hover { background: #573347; }
+body.ui5-theme :is(.error,.danger-text) { color: var(--expense); }
+body.ui5-theme :is(.segments,.analytics-tabs),body.ui5-theme #history .history-switch { background: #100c1b66; border: 1px solid var(--line); border-radius: 16px; padding: 4px; }
+body.ui5-theme .segments button,body.ui5-theme .analytics-tabs button { color: var(--secondary); min-height: 44px; border-radius: 12px; font-size: 13px; box-shadow: none; }
+body.ui5-theme .segments button.selected,body.ui5-theme #types [data-type].selected,body.ui5-theme #history .history-switch .selected,body.ui5-theme .analytics-tabs button[aria-pressed=true] { background: #3c5a50; color: #c0ffe7; box-shadow: none; }
+body.ui5-theme #types [data-type=expense].selected { background: #523744; color: #ffd6d0; }
+
+/* Rows live on the parent glass; only selection and hover add a quiet fill. */
+body.ui5-theme :is(.entry,.settings-list-row,.category-manager-row,.weekly-week,.template-manager-row) { border: 0; border-bottom: 1px solid var(--line); border-radius: 0; background: transparent; box-shadow: none; margin-top: 0; }
+body.ui5-theme .entry { padding: 16px 4px; gap: 12px; }
+body.ui5-theme :is(.entry,.settings-list-row):hover { background: #ffffff07; border-color: var(--line); box-shadow: none; }
+body.ui5-theme :is(.entry-title,.settings-list-copy b) { color: var(--ink); font-size: 14px; font-weight: 500; }
+body.ui5-theme :is(.entry-meta,.settings-list-copy small,.settings-list-value small,.category-manager-row small,.debt-line small) { color: var(--secondary); font-size: 12px; line-height: 1.8; }
+body.ui5-theme .entry-amount { color: var(--expense); font-size: 16px; letter-spacing: -.02em; }
+body.ui5-theme .entry-amount.plus { color: var(--income); }
+body.ui5-theme .entry-amount.transfer-amount { color: var(--secondary); }
+body.ui5-theme .entry-icon { background: var(--expense-soft); color: var(--expense); border: 0; border-radius: 12px; }
+body.ui5-theme .entry-icon.incoming { background: var(--income-soft); color: var(--income); }
+body.ui5-theme .entry-icon.transfer-icon,body.ui5-theme .entry-icon.pending { background: #ffffff09; color: var(--secondary); }
+body.ui5-theme :is(.settings-list-icon,.account-icon,.round-icon,.capture-account-icon) { background: #ffffff09; border: 1px solid var(--line); border-radius: 12px; color: #a6f3d9; }
+body.ui5-theme :is(.debt-line,.transfer-hint,.secondary,.data-management,.template-receipt) { background: #ffffff06; border-color: var(--line); color: var(--secondary); border-radius: 16px; box-shadow: none; }
+body.ui5-theme :is(.debt-line b,.settings-list-value,.account-group-heading h3,.weekly-week h3,.bar-row b,.secondary h2) { color: var(--ink); }
+body.ui5-theme .bar-row { color: var(--secondary); font-size: 13px; }
+body.ui5-theme .bar-track { background: #ffffff0d; }
+body.ui5-theme .bar-fill { background: var(--accent); }
+body.ui5-theme :is(.empty-state,.capture-onboarding .empty-state) { background: #ffffff05; border: 1px dashed var(--line-strong); border-radius: 16px; }
+body.ui5-theme .empty-state p,body.ui5-theme .empty-state .icon { color: var(--secondary); font-size: 13px; }
+body.ui5-theme :is(.account-overview .section-description,.account-overview-total span) { color: var(--secondary); font-size: 13px; }
+body.ui5-theme .account-overview { padding: 26px; }
+body.ui5-theme .account-overview-total strong { color: var(--ink); font-size: 36px; }
+body.ui5-theme .account-group-heading { background: transparent; border: 0; border-bottom: 1px solid var(--line); border-radius: 0; padding: 12px 0; }
+body.ui5-theme .account-group-heading>span { color: var(--secondary); font-size: 12px; }
+body.ui5-theme .settings-list-row { padding: 16px 0; }
+body.ui5-theme .borrower-trash { color: var(--secondary); border-color: var(--line); font-size: 13px; }
+body.ui5-theme .weekly-week { padding: 18px 0; margin-bottom: 0; }
+body.ui5-theme .weekly-week h3 { font-size: 15px; }
+
+/* Keep calendar geometry independent of the global control minimum width. */
+body.ui5-theme #history .history-panel { padding: 22px; }
+body.ui5-theme #history .calendar-summary { background: #ffffff07; border: 1px solid var(--line); border-radius: 16px; }
+body.ui5-theme #history .calendar-summary :is(h3,.history-totals>span,.history-filter-caption),body.ui5-theme #history.calendar-compact .calendar-summary>.section-heading h3,body.ui5-theme #history.calendar-compact .calendar-summary .history-totals>span { color: var(--secondary); font-size: 12px; }
+body.ui5-theme #history .calendar-summary .history-totals b { color: var(--ink); }
+body.ui5-theme #history .calendar-summary b.history-income { color: var(--income); }
+body.ui5-theme #history .calendar-summary b.history-expense { color: var(--expense); }
+body.ui5-theme #history.calendar-compact .calendar-summary .history-totals>span+span { border-color: var(--line); }
+body.ui5-theme #history :is(.calendar-grid,.calendar-weekdays) { grid-template-columns: repeat(7,minmax(0,1fr)); }
+body.ui5-theme #history .calendar-weekdays { color: var(--secondary); font-size: 12px; }
+body.ui5-theme #history .calendar-day,body.ui5-theme #history .calendar-day.has-entries { min-width: 0; background: #ffffff03; border-color: #ffffff18; color: var(--ink); box-shadow: none; border-radius: 12px; }
+body.ui5-theme #history .calendar-day:hover,body.ui5-theme #history .calendar-day.is-selected { background: #325246; border-color: #8beac77a; color: var(--ink); box-shadow: none; }
+body.ui5-theme #history .calendar-day.is-today:not(.is-selected) { background: #ffffff0a; border-color: #c6b5de99; }
+body.ui5-theme #history .calendar-day.is-today .calendar-day-top b { outline-color: #c6b5de; }
+body.ui5-theme #history :is(.calendar-income,.calendar-income b,.calendar-mobile-net.positive) { color: var(--income); }
+body.ui5-theme #history :is(.calendar-expense,.calendar-expense b,.calendar-mobile-net.negative) { color: var(--expense); }
+body.ui5-theme #history .history-day { background: transparent; border-color: var(--line); border-radius: 16px; }
+body.ui5-theme #history .history-day-heading { background: #ffffff06; border-color: var(--line); }
+body.ui5-theme #history .history-date-trigger { color: var(--ink); }
+body.ui5-theme #history .history-date-plus { min-width: 44px; min-height: 44px; background: #ffffff09; border-color: var(--line); color: var(--accent); border-radius: 12px; }
+body.ui5-theme #history .history-day>.entry { background: transparent; }
+body.ui5-theme #history .calendar-navigation h3 { color: var(--ink); }
+
+/* Every native sheet shares one material, including capture, import and edit. */
+body.ui5-theme dialog {
+  background: var(--glass-sheet);
+  color: var(--ink);
+  border: 1px solid transparent;
+  border-radius: 16px;
+  box-shadow: 0 24px 80px #0008;
+  animation: none;
+  overscroll-behavior: contain;
+  scrollbar-color: #84728e transparent;
+}
+body.ui5-theme dialog[open] { animation: none; }
+body.ui5-theme dialog::backdrop { background: #08050e9e; -webkit-backdrop-filter: none; backdrop-filter: none; }
+body.ui5-theme dialog:not(.calendar-day-dialog):not(.analytics-dialog):not(.quick-dialog)>.section-heading:first-child,
+body.ui5-theme dialog>form>.section-heading,
+body.ui5-theme .quick-dialog .sheet-heading,
+body.ui5-theme .day-dialog-hero,
+body.ui5-theme .analytics-header { background: transparent; color: var(--ink); border: 0; border-bottom: 1px solid var(--line); border-radius: 0; box-shadow: none; }
+body.ui5-theme dialog:not(.calendar-day-dialog):not(.analytics-dialog):not(.quick-dialog)>.section-heading:first-child,
+body.ui5-theme dialog>form>.section-heading { padding: 0 0 16px; margin-bottom: 18px; align-items: center; }
+body.ui5-theme dialog:not(.calendar-day-dialog):not(.analytics-dialog):not(.quick-dialog)>.section-heading:first-child h2,
+body.ui5-theme dialog>form>.section-heading h2,
+body.ui5-theme .day-dialog-hero h2 { color: var(--ink); font-size: 22px; font-weight: 500; letter-spacing: -.02em; }
+body.ui5-theme dialog .close-button,
+body.ui5-theme dialog>form>.section-heading .close-button,
+body.ui5-theme dialog:not(.calendar-day-dialog):not(.analytics-dialog):not(.quick-dialog)>.section-heading:first-child .close-button,
+body.ui5-theme .day-dialog-hero .close-button { width: 44px; height: 44px; min-height: 44px; flex: 0 0 44px; color: var(--ink); background: #ffffff0b; border: 1px solid var(--line-strong); border-radius: 16px; }
+body.ui5-theme .day-dialog-hero { padding: 0 0 18px; }
+body.ui5-theme .day-dialog-hero::before,body.ui5-theme .day-dialog-hero::after { display: none; }
+body.ui5-theme .day-dialog-hero p,body.ui5-theme .day-hero-label { color: var(--secondary); font-size: 12px; }
+body.ui5-theme .day-list-toolbar .calendar-modal-add { background: var(--accent); color: #102b23; border: 0; min-height: 44px; font-size: 13px; }
+body.ui5-theme #calendarModalSummary .history-totals>span:nth-child(n) { background: transparent; border: 0; border-right: 1px solid var(--line); color: var(--secondary); border-radius: 0; font-size: 12px; padding-inline: 10px; }
+body.ui5-theme #calendarModalSummary .history-totals>span:last-child { border-right: 0; }
+body.ui5-theme #calendarModalSummary .history-totals b { color: var(--ink); }
+body.ui5-theme #calendarModalSummary b.history-income { color: var(--income); }
+body.ui5-theme #calendarModalSummary b.history-expense { color: var(--expense); }
+body.ui5-theme #calendarModalEntries .day-entry { background: transparent; border: 0; border-bottom: 1px solid var(--line); border-radius: 0; box-shadow: none; }
+body.ui5-theme #calendarModalEntries .day-entry:hover { background: #ffffff08; border-color: var(--line); box-shadow: none; }
+body.ui5-theme #calendarModalEntries .entry-title { color: var(--ink); font-size: 14px; }
+body.ui5-theme #calendarModalEntries .entry-meta { color: var(--secondary); font-size: 12px; }
+body.ui5-theme #calendarModalSummary .history-net-note { color: var(--secondary); font-size: 12px; }
+body.ui5-theme .account-detail-summary { background: #ffffff06; border-color: var(--line); border-radius: 16px; }
+body.ui5-theme .account-detail-summary>b { color: var(--ink); overflow-wrap: anywhere; }
+body.ui5-theme .account-detail-summary>span,body.ui5-theme .account-detail-summary>small { color: var(--secondary); font-size: 12px; }
+body.ui5-theme #captureAccountList>button { background: transparent; border: 1px solid transparent; border-bottom-color: var(--line); border-radius: 12px; min-height: 64px; }
+body.ui5-theme #captureAccountList>button:hover { background: #ffffff08; }
+body.ui5-theme #captureAccountList>button[aria-pressed=true] { background: #355045; border-color: #8beac77a; box-shadow: none; }
+body.ui5-theme #captureAccountList .capture-account-value { color: var(--ink); }
+body.ui5-theme :is(#captureAccountHint,#captureReviewHint,.capture-review>small) { color: var(--secondary); font-size: 12px; }
+body.ui5-theme .capture-account-trigger { background: #211c2e; border-color: #8d7c9d69; border-radius: 16px; }
+body.ui5-theme .capture-account-trigger:hover { background: #2b243a; }
+body.ui5-theme .capture-review { border-color: var(--line); }
+body.ui5-theme .transfer-direction .icon { background: #ffffff09; border-color: var(--line); color: var(--secondary); }
+body.ui5-theme .import-dialog details,body.ui5-theme .import-account-map { background: #ffffff04; border-color: var(--line); border-radius: 16px; }
+body.ui5-theme .import-dialog summary { color: var(--ink); font-size: 14px; }
+body.ui5-theme .import-table th { background: #352c43; color: var(--ink); }
+body.ui5-theme .import-table tr:nth-child(even) td { background: #ffffff04; }
+body.ui5-theme .import-table td { color: var(--secondary); border-color: var(--line); font-size: 12px; }
+
+body.ui5-theme .analytics-dialog :is(.chart-selection,#analyticsCategories .chart-selection,.donut-total-pill,.chart-category.is-selected) { background: #ffffff08; border-color: var(--line); box-shadow: none; border-radius: 16px; }
+body.ui5-theme .analytics-dialog .chart-category:hover { background: #ffffff0b; }
+body.ui5-theme .analytics-dialog :is(.chart-hint,.chart-empty,.chart-category-copy small,.chart-data summary,.chart-subtitle,.chart-total-label,.chart-detail-totals span,.week-detail-heading>span,.donut-list-heading,.donut-list-heading span,.donut-center-content small,#donutPosition,#donutCenterName,.chart-net-explanation) { color: var(--secondary); font-size: 12px; }
+body.ui5-theme .analytics-dialog :is(.chart-category-copy>span:first-child,.chart-category b) { font-size: 13px; }
+body.ui5-theme .analytics-dialog :is(.donut-center,#donutCenterPercent,#donutCenterAmount) { color: var(--ink); fill: var(--ink); }
+body.ui5-theme .analytics-dialog .donut-stage::before { background: #ffffff04; box-shadow: none; }
+body.ui5-theme .analytics-dialog :is(.chart-axis,.chart-date-label,.donut-center-small) { fill: var(--secondary); }
+body.ui5-theme .analytics-dialog :is(.chart-gridline,.donut-guide,.donut-guide-inner) { stroke: var(--line); }
+body.ui5-theme .analytics-dialog .category-track { background: #ffffff12; }
+body.ui5-theme .analytics-dialog .chart-income-value { color: var(--income); }
+body.ui5-theme .analytics-dialog .chart-expense-value { color: var(--expense); }
+body.ui5-theme .analytics-dialog .chart-week:focus-visible .chart-hit-area { stroke: var(--accent); }
+body.ui5-theme .analytics-dialog button:focus-visible,body.ui5-theme .calendar-day-dialog button:focus-visible,body.ui5-theme .day-dialog-hero button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+body.ui5-theme .analytics-dialog .donut-category-nav button { min-width: 44px; width: 44px; height: 44px; min-height: 44px; background: #ffffff09; color: var(--accent); border-color: var(--line-strong); }
+body.ui5-theme .donut-orbit { animation: none; }
+body.ui5-theme #toast { background: #2b493e; color: #effff8; border-color: #8beac75c; border-radius: 16px; font-size: 13px; box-shadow: 0 8px 28px #0005; }
+body.ui5-theme footer,body.ui5-theme .footer-brand,body.ui5-theme .footer-brand span { color: var(--secondary); border-color: var(--line); font-size: 12px; }
+
+@supports ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  body.ui5-theme { --glass-bg: #2b233cba; --glass-sheet: #292235eb; --glass-nav: #261e35c9; }
+  body.ui5-theme :is(.recent-card,.spending-card,.panel,.account-overview,.sidebar,dialog) { -webkit-backdrop-filter: var(--glass-blur); backdrop-filter: var(--glass-blur); }
+}
+/* Nested regions borrow their outer material instead of blurring it again. */
+body.ui5-theme .panel .panel,body.ui5-theme dialog :is(.panel,.recent-card,.spending-card,.account-overview,.quick-card) { -webkit-backdrop-filter: none; backdrop-filter: none; background: transparent; box-shadow: none; }
+body.ui5-theme .panel .panel { border: 0; }
+
+@media (max-width:900px) {
+  body.ui5-theme .sidebar { background: transparent; -webkit-backdrop-filter: none; backdrop-filter: none; }
+  body.ui5-theme .sidebar nav { background: var(--glass-nav); border-color: var(--glass-border); border-radius: 16px; box-shadow: 0 10px 32px #0006; -webkit-backdrop-filter: var(--glass-blur); backdrop-filter: var(--glass-blur); padding: 5px; gap: 3px; }
+  body.ui5-theme .sidebar .nav { min-height: 54px; font-size: 12px; border-radius: 12px; }
+  body.ui5-theme .sidebar .nav.active { background: #74e3bf18; color: #a6f3d9; border-color: transparent; }
+  body.ui5-theme .page-header { margin-bottom: 18px; }
+  body.ui5-theme :is(.recent-card,.spending-card,.panel) { padding: 18px; }
+  body.ui5-theme #history .history-panel { padding: 14px; }
+  body.ui5-theme #history .history-switch button { font-size: 11px; min-height: 44px; }
+  body.ui5-theme .account-overview { padding: 22px; }
+}
+@media (max-width:600px) {
+  body.ui5-theme .page-header h1 { font-size: 24px; }
+  body.ui5-theme .page-header p { font-size: 12px; }
+  body.ui5-theme dialog { border-radius: 16px; }
+  body.ui5-theme #history .calendar-day { border-radius: 10px; }
+  body.ui5-theme #history .calendar-mobile-net { font-size: 11px; letter-spacing: -.02em; }
+  body.ui5-theme #history .calendar-summary .history-totals>span { font-size: 11px; }
+  body.ui5-theme .settings-list-copy b { font-size: 14px; }
+  body.ui5-theme .settings-list-value { font-size: 20px; }
+  body.ui5-theme .account-overview-total strong { font-size: 32px; }
+  body.ui5-theme #calendarModalEntries .day-entry { padding-inline: 0; }
+  body.ui5-theme #calendarModalEntries .entry-title { font-size: 13px; }
+  body.ui5-theme #calendarModalEntries .entry-meta { font-size: 11px; }
+  body.ui5-theme #calendarModalSummary .history-totals>span:nth-child(n) { font-size: 11px; padding-inline: 7px; }
+  body.ui5-theme .analytics-dialog .analytics-tabs button { font-size: 11px; }
+}
+@media (max-width:360px) {
+  body.ui5-theme #history .history-panel { padding: 10px; }
+  body.ui5-theme #history .calendar-grid,body.ui5-theme #history .calendar-weekdays { gap: 3px; }
+  body.ui5-theme #history .calendar-day { padding-inline: 0; }
+  body.ui5-theme .template-fields { grid-template-columns: minmax(0,1fr); }
+}
+@media (prefers-reduced-transparency:reduce) {
+  body.ui5-theme { --glass-bg: #251e34; --glass-sheet: #282135; --glass-nav: #261f35; }
+  body.ui5-theme :is(.recent-card,.spending-card,.panel,.account-overview,.sidebar,dialog,.sidebar nav) { -webkit-backdrop-filter: none; backdrop-filter: none; }
+  body.ui5-theme dialog::backdrop { background: #08050ed9; }
+}
+@media (prefers-reduced-motion:reduce) {
+  body.ui5-theme *,body.ui5-theme *::before,body.ui5-theme *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}

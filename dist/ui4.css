@@ -1,0 +1,267 @@
+/* UI4: quiet purple ground, mint actions, one cash timeline. */
+body.ui4-theme{color-scheme:dark;--ink:#f1edf8;--muted:#b9b0cb;--secondary:#b9b0cb;--accent:#55d6b1;--accent-hover:#81e4c7;--paper:#100c1b;--surface:#191423;--surface-soft:#211b2e;--surface-hover:#2b223b;--line:#352d45;--line-strong:#60516f;--income:#71dfb8;--expense:#f1aaa6;--income-soft:#1b3430;--expense-soft:#38242e;--income-on-dark:#71dfb8;--expense-on-dark:#f1aaa6;--green:#55d6b1;--dark:#191423;--red:#f1aaa6;--shadow:none;background:var(--paper);color:var(--ink);accent-color:var(--accent)}
+body.ui4-theme ::selection{background:#387461;color:#fff}
+body.ui4-theme input{caret-color:var(--accent)}
+body.ui4-theme .eyebrow,body.ui4-theme .nav-label,body.ui4-theme .avatar,body.ui4-theme .side-note{display:none}
+body.ui4-theme .page-header{border-color:var(--line);padding-bottom:14px;margin-bottom:22px}
+body.ui4-theme .page-header h1{font-size:27px;letter-spacing:-.5px;margin:0}
+body.ui4-theme .page-header p{color:var(--secondary);margin-top:5px;font-size:12px}
+body.ui4-theme .sidebar{background:#15101f;border-color:var(--line)}
+body.ui4-theme .brand,body.ui4-theme .brand small{color:var(--ink)}
+body.ui4-theme .brand-mark{background:var(--surface-soft);color:var(--accent);border:0;box-shadow:none}
+body.ui4-theme .nav{color:var(--secondary)}
+body.ui4-theme .nav.active{background:#55d6b112;color:var(--accent);border-color:transparent;box-shadow:none}
+body.ui4-theme .nav-dot,body.ui4-theme .status-dot{background:var(--accent);box-shadow:none}
+body.ui4-theme .side-foot,body.ui4-theme .side-foot .demo{color:var(--secondary)}
+body.ui4-theme :is(.quick-card,.recent-card,.spending-card,.panel){border-color:var(--line);border-radius:14px;box-shadow:none;background:var(--surface)}
+body.ui4-theme #quickCard{background:transparent;border:0;padding:0;box-shadow:none}
+body.ui4-theme #quickCard>.capture-heading,body.ui4-theme .quick-dialog #quickCard>.capture-heading{background:none;border:0;border-radius:0;padding:0;margin:0 0 14px;color:var(--ink)}
+body.ui4-theme .capture-heading h2,body.ui4-theme .quick-dialog .capture-heading h2{color:var(--ink);font-size:22px}
+body.ui4-theme #quickCard>.section-description,body.ui4-theme .examples,body.ui4-theme #entryForm>.form-foot{display:none}
+body.ui4-theme :is(label,.field-label){color:var(--secondary);font-size:13px}
+body.ui4-theme :is(input,select),body.ui4-theme #quick{background:var(--surface);color:var(--ink);border-color:var(--line);box-shadow:none;font-size:16px}
+body.ui4-theme #quick{min-height:56px;font-size:20px}
+body.ui4-theme input::placeholder,body.ui4-theme #quick::placeholder{color:#a99cbb;font-size:16px}
+body.ui4-theme :is(input,select):focus{border-color:var(--accent);box-shadow:none}
+body.ui4-theme :is(button,input,select,summary,a):focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+body.ui4-theme :is(.segments,.analytics-tabs){background:#17111f;border-color:var(--line)}
+body.ui4-theme .segments button{color:var(--secondary)}
+body.ui4-theme .segments button.selected,body.ui4-theme #types [data-type].selected{background:#2c453e;color:#8eefd0;box-shadow:none}
+body.ui4-theme :is(.save,.primary-small,.floating-capture){background:var(--accent);border-color:transparent;color:#11281f;box-shadow:none;font-weight:600}
+body.ui4-theme :is(.save,.primary-small,.floating-capture):hover{background:var(--accent-hover);box-shadow:none}
+body.ui4-theme :is(.outline,.icon-button,.close-button,.examples button){background:var(--surface-soft);border-color:var(--line);color:var(--ink)}
+body.ui4-theme :is(.outline,.icon-button,.close-button):hover{background:var(--surface-hover);border-color:var(--line-strong)}
+body.ui4-theme .text-button{color:var(--accent)}
+body.ui4-theme button:disabled{opacity:.45;cursor:not-allowed}
+body.ui4-theme .capture-account-trigger{background:var(--surface);border-color:var(--line);min-height:54px;padding:9px 12px}
+body.ui4-theme .capture-account-trigger:hover{background:var(--surface-soft);border-color:var(--line-strong)}
+body.ui4-theme :is(.capture-account-icon,.settings-list-icon,.account-icon,.round-icon){background:var(--surface-soft);color:var(--accent);border-color:var(--line)}
+body.ui4-theme .category-details{border-color:var(--line);margin-block:12px}
+body.ui4-theme .category-details summary b{background:var(--surface-soft);color:var(--secondary)}
+body.ui4-theme .capture-date-control,body.ui4-theme .quick-dialog .capture-date-control{background:none;color:var(--secondary);border:0}
+body.ui4-theme .capture-date-status,body.ui4-theme .quick-dialog .capture-date-status{background:var(--surface-soft);color:var(--accent)}
+body.ui4-theme .quick-templates{margin-top:22px;padding-top:14px;border-top:1px solid var(--line)}
+body.ui4-theme .quick-template{border:0;border-bottom:1px solid var(--line);border-radius:0;background:transparent;padding-inline:0}
+body.ui4-theme .quick-template:hover:not(:disabled){background:var(--surface)}
+body.ui4-theme .frequent-row{display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--line)}
+body.ui4-theme .frequent-row>.quick-template{flex:1;min-width:0;border:0}
+body.ui4-theme .frequent-row .template-value b{color:var(--expense)}
+body.ui4-theme .frequent-row.income .template-value b{color:var(--income)}
+body.ui4-theme .frequent-row>.icon-button{flex:0 0 44px}
+body.ui4-theme #frequentTitle+span{font-size:11px;color:var(--secondary)}
+body.ui4-theme #frequentDialog{width:min(460px,calc(100% - 24px))}
+body.ui4-theme #home{gap:28px;grid-template-columns:minmax(0,1fr) minmax(0,1.12fr);grid-template-areas:"overview overview" "capture hero" "recent recent" "spending spending" "storage storage"}
+body.ui4-theme .money-overview{grid-area:overview;min-width:0;background:#211a30;border:1px solid #4c3e61;border-radius:16px;padding:18px 22px}
+body.ui4-theme .money-overview-heading{display:flex;align-items:center;justify-content:space-between;gap:12px}
+body.ui4-theme .money-overview-heading h2{font-size:16px;font-weight:500;margin:0;color:var(--secondary)}
+body.ui4-theme .overview-quick{display:flex;align-items:center;gap:6px;min-height:44px;padding:6px 12px;border:1px solid #55d6b140;border-radius:11px;background:#55d6b115;color:var(--income);font-size:12px;white-space:nowrap}
+body.ui4-theme .overview-quick:hover{background:#55d6b128;border-color:var(--accent)}
+body.ui4-theme .overview-quick .icon{width:16px;height:16px}
+body.ui4-theme .money-current{font-size:42px;line-height:1.3;font-weight:500;letter-spacing:-1px;font-variant-numeric:tabular-nums;overflow-wrap:anywhere;margin:3px 0 10px}
+body.ui4-theme .money-overview-bottom{display:flex;justify-content:space-between;align-items:center;gap:16px}
+body.ui4-theme .money-overview-context{min-width:0}
+body.ui4-theme .money-change{font-size:13px;line-height:1.7;margin:0;overflow-wrap:anywhere}
+body.ui4-theme .money-change.positive{color:var(--income)}
+body.ui4-theme .money-change.negative{color:var(--expense)}
+body.ui4-theme #moneyScope{display:block;color:var(--secondary);font-size:11px;line-height:1.8;margin-top:4px;overflow-wrap:anywhere}
+body.ui4-theme .overview-graph{flex:0 0 100px;display:flex;flex-direction:column;align-items:flex-end;gap:4px;padding:0;border:0;background:transparent;color:var(--accent);min-height:44px;font-size:11px}
+body.ui4-theme .overview-graph>span:last-child{display:flex;align-items:center;gap:4px}
+body.ui4-theme .overview-graph .icon{width:13px;height:13px;transition:transform .2s}
+body.ui4-theme .overview-graph:hover .icon{transform:translateX(3px)}
+body.ui4-theme #moneyPreview{width:100%;height:42px}
+body.ui4-theme #moneyPreview svg{display:block;width:100%;height:100%;overflow:visible}
+body.ui4-theme #moneyPreview path{fill:none;stroke:#7be3ed;stroke-width:2;stroke-linejoin:round;stroke-linecap:round;stroke-dasharray:1;animation:money-trace .7s cubic-bezier(.16,1,.3,1)}
+body.ui4-theme #moneyPreview circle{fill:#7be3ed}
+body.ui4-theme .balance-trend{scroll-margin-top:18px}
+body.ui4-theme #quickCard{scroll-margin-top:18px}
+@keyframes money-trace{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+@media(prefers-reduced-motion:reduce){body.ui4-theme #moneyPreview path{animation:none}body.ui4-theme .overview-graph .icon{transition:none}}
+body.ui4-theme #home .hero-grid{gap:18px}
+body.ui4-theme #home .balance-card{background:var(--surface);border:0;border-radius:12px;padding:18px;box-shadow:none}
+body.ui4-theme #home .balance-card::after,body.ui4-theme .account-overview::after,body.ui4-theme #history .calendar-summary::after{display:none}
+body.ui4-theme #home .reserve-card,body.ui4-theme .balance-caption{display:none}
+body.ui4-theme #home .big-number{font-size:28px;color:var(--ink);margin:4px 0;letter-spacing:-.5px}
+body.ui4-theme .balance-top,body.ui4-theme .balance-top .icon,body.ui4-theme #home .balance-bottom span:not(.balance-art){color:var(--secondary)}
+body.ui4-theme #home .balance-bottom{border-color:var(--line);padding-top:12px;margin-top:10px;gap:14px}
+body.ui4-theme #home .balance-bottom b{color:var(--ink);font-size:18px}
+body.ui4-theme .balance-accounts-link{color:var(--accent);font-size:12px}
+body.ui4-theme :is(.entry,.settings-list-row,.category-manager-row,.weekly-week){background:transparent;border-color:var(--line);box-shadow:none}
+body.ui4-theme :is(.entry,.settings-list-row):hover{background:var(--surface-soft);border-color:var(--line-strong);box-shadow:none}
+body.ui4-theme :is(.entry-meta,.settings-list-copy small,.settings-list-value small,.category-manager-row small){color:var(--secondary)}
+body.ui4-theme .entry-icon{background:var(--expense-soft);color:var(--expense);border-color:transparent}
+body.ui4-theme .entry-icon.incoming{background:var(--income-soft);color:var(--income);border-color:transparent}
+body.ui4-theme .entry-icon.transfer-icon,body.ui4-theme .entry-icon.pending{background:var(--surface-soft);color:var(--secondary);border-color:transparent}
+body.ui4-theme :is(.debt-line,.transfer-hint,.budget-item,.account-group-heading,.secondary,.data-management,.count-badge,.period-badge){background:var(--surface-soft);border-color:var(--line);color:var(--secondary)}
+body.ui4-theme :is(.debt-line b,.settings-list-value,.bar-row b,.account-group-heading h3,.weekly-week h3,.secondary h2,.data-management>summary){color:var(--ink)}
+body.ui4-theme :is(.debt-line small,.account-group-heading>span,.secondary p){color:var(--secondary)}
+body.ui4-theme :is(.recent-card,.spending-card)>.section-heading{border-color:var(--line)}
+body.ui4-theme .bar-track{background:var(--surface-soft)}
+body.ui4-theme .bar-fill{background:var(--accent)}
+body.ui4-theme .account-overview{background:var(--surface);border-color:var(--line);color:var(--ink);border-radius:14px}
+body.ui4-theme :is(.account-overview .section-description,.account-overview-total span){color:var(--secondary)}
+body.ui4-theme .account-overview-total strong{color:var(--ink)}
+body.ui4-theme #history .history-switch{background:var(--surface-soft);border-color:var(--line)}
+body.ui4-theme #history .history-switch .selected{background:#2c453e;color:var(--income);box-shadow:none}
+body.ui4-theme #history .calendar-summary{background:var(--surface-soft);border-color:var(--line);border-radius:12px}
+body.ui4-theme #history .calendar-summary h3,body.ui4-theme #history.calendar-compact .calendar-summary>.section-heading h3,body.ui4-theme #history .calendar-summary .history-totals>span,body.ui4-theme #history.calendar-compact .calendar-summary .history-totals>span{color:var(--secondary)}
+body.ui4-theme #history .calendar-summary .history-totals b{color:var(--ink)}
+body.ui4-theme #history .calendar-summary b.history-income{color:var(--income)}
+body.ui4-theme #history .calendar-summary b.history-expense{color:var(--expense)}
+body.ui4-theme #history :is(.history-day,.history-day-heading,.calendar-day,.calendar-day.has-entries){background:var(--surface);border-color:var(--line)}
+body.ui4-theme #history :is(.history-date-trigger,.calendar-navigation h3){color:var(--ink)}
+body.ui4-theme #history .history-date-plus{background:var(--surface-soft);border-color:var(--line);color:var(--accent)}
+body.ui4-theme #history .calendar-day:hover,body.ui4-theme #history .calendar-day.is-selected{background:#2a3a36;border-color:var(--accent);color:var(--ink);box-shadow:none}
+body.ui4-theme #history .calendar-day.is-today:not(.is-selected){background:var(--surface-soft);border-color:#b1a3cd}
+body.ui4-theme #history .calendar-income,body.ui4-theme #history .calendar-income b,body.ui4-theme #history .calendar-mobile-net.positive{color:var(--income)}
+body.ui4-theme #history .calendar-expense,body.ui4-theme #history .calendar-expense b,body.ui4-theme #history .calendar-mobile-net.negative{color:var(--expense)}
+body.ui4-theme dialog{background:var(--surface);color:var(--ink);border-color:var(--line);box-shadow:0 20px 70px #0006;border-radius:16px}
+body.ui4-theme dialog::backdrop{background:#08050ed9;backdrop-filter:none}
+body.ui4-theme dialog>form>.section-heading,body.ui4-theme .quick-dialog .sheet-heading,body.ui4-theme .day-dialog-hero{background:var(--surface-soft);border-color:var(--line);color:var(--ink)}
+body.ui4-theme .account-detail-summary,body.ui4-theme #captureAccountList>button,body.ui4-theme .import-dialog details,body.ui4-theme .import-account-map{background:var(--surface-soft);border-color:var(--line);color:var(--ink)}
+body.ui4-theme .account-detail-summary>b,body.ui4-theme #captureAccountList .capture-account-value{color:var(--ink)}
+body.ui4-theme .account-detail-summary>span,body.ui4-theme .account-detail-summary>small,body.ui4-theme .import-dialog summary{color:var(--secondary)}
+body.ui4-theme #captureAccountList>button[aria-pressed=true]{background:#253b34;border-color:var(--accent);box-shadow:none}
+body.ui4-theme .capture-account-dialog{display:flex;flex-direction:column;overflow:hidden}
+body.ui4-theme .capture-account-dialog:not([open]){display:none}
+body.ui4-theme #captureAccountList{min-height:0;flex:1;overflow-y:auto;overscroll-behavior:contain;padding:3px;scroll-padding:5px}
+body.ui4-theme .capture-review{flex-shrink:0;border-top:1px solid var(--line);padding-top:14px;margin-top:12px}
+body.ui4-theme .capture-review>p:first-child{font-size:16px;margin:0 0 4px;overflow-wrap:anywhere;line-height:1.6;max-height:4.8em;overflow-y:auto}
+body.ui4-theme .capture-review>small,body.ui4-theme #captureReviewHint{color:var(--secondary);font-size:12px;line-height:1.8}
+body.ui4-theme #captureReviewHint{margin:8px 0}
+body.ui4-theme #captureReviewError:empty{display:none}
+body.ui4-theme #confirmCaptureAccount{margin-top:12px;overflow-wrap:anywhere;white-space:normal}
+body.ui4-theme .category-manager-row button{background:var(--surface-soft);color:var(--accent);border-color:var(--line)}
+body.ui4-theme .transfer-direction .icon{background:var(--surface-soft);border-color:var(--line);color:var(--secondary)}
+body.ui4-theme .delete{background:var(--expense-soft);border-color:var(--line);color:var(--expense)}
+body.ui4-theme .danger-text,body.ui4-theme .error{color:var(--expense)}
+body.ui4-theme .analytics-header,body.ui4-theme .calendar-day-dialog{background:var(--surface)}
+body.ui4-theme .analytics-tabs button[aria-pressed=true]{background:#2c453e;color:var(--income);box-shadow:none}
+body.ui4-theme .analytics-dialog .chart-selection,body.ui4-theme .analytics-dialog .chart-category.is-selected{background:var(--surface-soft);border-color:var(--line)}
+body.ui4-theme .import-table th,body.ui4-theme .import-table tr:nth-child(even) td{background:var(--surface-soft);color:var(--ink)}
+body.ui4-theme .import-table td{color:var(--secondary);border-color:var(--line)}
+body.ui4-theme .empty-state{background:var(--surface-soft);border-color:var(--line)}
+body.ui4-theme #calendarModalEntries :is(.day-entry,.empty-state),body.ui4-theme #calendarModalSummary .history-totals>span{background:var(--surface-soft);border-color:var(--line);color:var(--secondary)}
+body.ui4-theme #calendarModalSummary .history-totals>span:nth-child(n){background:var(--surface-soft);border-color:var(--line);color:var(--secondary)}
+body.ui4-theme #calendarModalEntries .day-entry:hover{background:var(--surface-hover);border-color:var(--line-strong);box-shadow:none}
+body.ui4-theme #calendarModalEntries .entry-title,body.ui4-theme .day-list-toolbar h3,body.ui4-theme #calendarModalSummary .history-totals b{color:var(--ink)}
+body.ui4-theme #calendarModalSummary b.history-income{color:var(--income)}
+body.ui4-theme #calendarModalSummary b.history-expense{color:var(--expense)}
+body.ui4-theme #calendarModalEntries .entry-meta,body.ui4-theme #calendarModalSummary .history-net-note,body.ui4-theme .day-edit-hint{color:var(--secondary)}
+body.ui4-theme .day-list-count{background:var(--surface-soft);color:var(--secondary)}
+body.ui4-theme .day-list-toolbar .calendar-modal-add{background:var(--accent);color:#11281f;border-color:transparent;box-shadow:none}
+body.ui4-theme .analytics-dialog :is(.chart-empty,.chart-hint,.chart-category-copy small,.chart-data summary,.report-footnote,.chart-net-explanation,.chart-detail-totals span,.week-detail-heading>span,.analytics-tabs button,.donut-list-heading,.donut-list-heading span,.donut-center-content small,#donutPosition,#donutCenterName){color:var(--secondary);border-color:var(--line)}
+body.ui4-theme .analytics-dialog :is(.chart-selection,#analyticsCategories .chart-selection,.donut-total-pill){background:var(--surface-soft);border-color:var(--line);color:var(--ink)}
+body.ui4-theme .analytics-dialog :is(#donutCenterPercent,#donutCenterAmount,.donut-total-pill strong){color:var(--ink)}
+body.ui4-theme .analytics-dialog .donut-stage::before{background:var(--surface-soft);box-shadow:none}
+body.ui4-theme .analytics-dialog .donut-category-nav button{background:var(--surface-soft);color:var(--accent);border-color:var(--line)}
+body.ui4-theme .analytics-dialog .chart-category:hover{background:var(--surface-hover)}
+body.ui4-theme .analytics-dialog .chart-income-value{color:var(--income)}
+body.ui4-theme .analytics-dialog .chart-expense-value{color:var(--expense)}
+body.ui4-theme .analytics-dialog :is(.chart-axis,.chart-date-label,.donut-center-small){fill:var(--secondary)}
+body.ui4-theme .analytics-dialog :is(.chart-gridline,.donut-guide,.donut-guide-inner){stroke:var(--line)}
+body.ui4-theme .analytics-dialog .category-track{background:var(--line)}
+body.ui4-theme .empty-state p,body.ui4-theme .empty-state .icon{color:var(--secondary)}
+body.ui4-theme #toast{background:#2b3f38;color:#d7f5e9;border-color:#4c6e60;box-shadow:0 8px 24px #0004}
+body.ui4-theme footer,body.ui4-theme .footer-brand,body.ui4-theme .footer-brand span{border-color:var(--line);color:var(--secondary)}
+body.ui4-theme .balance-trend{min-width:0;padding:22px;background:var(--surface);border:1px solid var(--line);border-radius:16px}
+body.ui4-theme .budget-item{display:none}
+body.ui4-theme .trend-heading{display:flex;align-items:center;justify-content:space-between;gap:12px}
+body.ui4-theme .trend-heading h2{font-size:17px;margin:0}
+body.ui4-theme .trend-heading>span{font-size:11px;color:var(--secondary)}
+body.ui4-theme .trend-accounts{font-size:12px;min-height:44px;white-space:nowrap;display:flex;align-items:center;gap:3px;padding:0}
+body.ui4-theme .trend-accounts .icon{width:14px;height:14px}
+body.ui4-theme .trend-current{font-size:44px;line-height:1.3;margin:4px 0;letter-spacing:-1px;overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
+body.ui4-theme .trend-caption,body.ui4-theme .trend-help{color:var(--secondary);font-size:12px;line-height:1.8;margin:8px 0}
+body.ui4-theme .trend-ranges{display:flex;margin:20px 0 8px}
+body.ui4-theme .trend-ranges button{flex:1}
+body.ui4-theme .trend-period{display:flex;align-items:center;justify-content:space-between;gap:8px}
+body.ui4-theme .trend-period b{font-size:12px;font-weight:400;text-align:center}
+body.ui4-theme .trend-period .icon-button{flex:0 0 44px;background:transparent;border-color:transparent}
+body.ui4-theme #trendPrev .icon{transform:rotate(180deg)}
+body.ui4-theme .trend-change{font-size:13px;line-height:1.8;min-height:24px;margin:10px 0 0;padding-top:10px;border-top:1px solid var(--line)}
+body.ui4-theme .trend-change.positive{color:var(--income)}
+body.ui4-theme .trend-change.negative{color:var(--expense)}
+body.ui4-theme #trendPlot svg{display:block;width:100%;height:auto;overflow:visible;touch-action:pan-y;cursor:crosshair}
+body.ui4-theme #trendPlot text{fill:var(--secondary);font-family:var(--font);font-size:12px}
+body.ui4-theme .trend-line{stroke:#7be3ed;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+body.ui4-theme .trend-grid{stroke:var(--line);stroke-width:1}
+body.ui4-theme .trend-selection{padding:12px 0;border-top:1px solid var(--line)}
+body.ui4-theme .trend-point-summary{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap}
+body.ui4-theme .trend-point-summary label{font-size:12px;max-width:100%}
+body.ui4-theme #trendPointValue{display:block;font-size:18px;font-weight:500;overflow-wrap:anywhere;max-width:100%}
+body.ui4-theme #trendOpenDay{font-size:12px;min-height:44px;padding:4px 0}
+body.ui4-theme #trendNotice{padding-top:12px;border-top:1px solid var(--line);font-size:11px;margin:0}
+body.ui4-theme .trend-help{margin:4px 0 0}
+body.ui4-theme #trendCursor{width:100%;min-height:44px;padding:0;background:transparent;border:0;box-shadow:none}
+body.ui4-theme .trend-help summary{min-height:44px;align-content:center;cursor:pointer}
+body.ui4-theme .trend-empty{padding:24px 16px;background:var(--surface);border-radius:12px;color:var(--secondary);font-size:13px;line-height:1.8}
+@media(max-width:900px){
+ body.ui4-theme main{padding:22px 18px 128px}
+ body.ui4-theme .sidebar{background:transparent}
+ body.ui4-theme .sidebar nav{background:#20192de8;border-color:#65557570;backdrop-filter:blur(16px);box-shadow:0 6px 24px #0004;border-radius:16px}
+ body.ui4-theme .sidebar .nav.active{background:#55d6b118;color:var(--accent);border-color:transparent}
+ body.ui4-theme .brand{color:var(--ink)}
+ body.ui4-theme #home{grid-template-columns:minmax(0,1fr);grid-template-areas:"overview" "capture" "hero" "recent" "spending" "storage";gap:22px}
+ body.ui4-theme .money-overview{padding:12px 18px 16px}
+ body.ui4-theme .money-current{font-size:34px;margin:0 0 8px}
+ body.ui4-theme .money-overview-heading h2{font-size:15px}
+ body.ui4-theme .money-change{font-size:12px}
+ body.ui4-theme .overview-graph{flex-basis:76px}
+ body.ui4-theme .money-overview-bottom{gap:12px}
+ body.ui4-theme .page-header{margin-bottom:16px;padding-bottom:12px}
+ body.ui4-theme .balance-trend{padding:18px}
+ body.ui4-theme .trend-current{font-size:36px}
+ body.ui4-theme :is(.recent-card,.spending-card,.panel){padding:18px}
+ body.ui4-theme #history .history-panel{padding:14px}
+ body.ui4-theme .floating-capture{bottom:calc(94px + env(safe-area-inset-bottom));min-height:44px}
+ body.ui4-theme .capture-account-trigger{min-height:54px}
+}
+@media(prefers-reduced-transparency:reduce){body.ui4-theme .sidebar nav{background:#20192d;backdrop-filter:none}}
+
+/* User reference: one balance canvas, generous line chart, anchored value. */
+body.ui4-theme #home{grid-template-columns:minmax(0,1.12fr) minmax(0,1fr);grid-template-areas:"overview capture" "recent recent" "spending spending" "storage storage";align-items:start}
+body.ui4-theme #home .hero-grid{display:none}
+body.ui4-theme .money-overview{padding:20px 22px 12px;background:linear-gradient(155deg,#292137 0%,#211b30 44%,#17342d 100%);border-color:#50405f;overflow:hidden}
+body.ui4-theme .money-current{font-size:44px;margin:8px 0 4px;letter-spacing:-1.2px}
+body.ui4-theme .money-overview-heading h2{color:#d4c9e3;font-size:14px}
+body.ui4-theme .overview-quick{background:#ffffff0a;color:#b2f2dd;border-color:#ffffff20}
+body.ui4-theme #moneyChange,body.ui4-theme #moneyPreview{display:none}
+body.ui4-theme #moneyScope{margin:0;font-size:11px;color:#c4d6d0}
+body.ui4-theme .overview-graph{flex-basis:auto;min-height:44px;justify-content:center;color:#b2f2dd;white-space:nowrap}
+body.ui4-theme #moneyOverview .balance-trend{padding:0;background:transparent;border:0;border-radius:0;margin-top:2px}
+body.ui4-theme #moneyOverview :is(.trend-heading,.trend-caption:not(#trendNotice)){display:none}
+body.ui4-theme #moneyOverview .trend-change{font-size:12px;margin:0 0 12px;padding:0;border:0;min-height:0}
+body.ui4-theme #moneyOverview .trend-ranges{display:inline-flex;width:57%;margin:0;border:1px solid #ffffff18;background:#ffffff08;border-radius:10px;padding:3px}
+body.ui4-theme #moneyOverview .trend-ranges button{font-size:12px;min-height:38px;padding:4px 6px;border-radius:7px}
+body.ui4-theme #moneyOverview .trend-ranges button.selected{background:#d4f5e6;color:#17342d}
+body.ui4-theme #moneyOverview .trend-period{float:right;width:41%;min-height:46px;gap:0}
+body.ui4-theme #moneyOverview .trend-period b{font-size:11px;color:#c4d6d0;min-width:0}
+body.ui4-theme #moneyOverview .trend-period .icon-button{flex-basis:32px;width:32px;min-width:32px;padding:5px;color:#c4d6d0}
+body.ui4-theme #trendPlot{position:relative;clear:both;margin-top:8px}
+body.ui4-theme #trendPlot text{fill:#bfd3cb;font-size:11px}
+body.ui4-theme .trend-grid{stroke:#e1f5ee;stroke-opacity:.07}
+body.ui4-theme .trend-line{stroke:#a6efd9;stroke-width:2;stroke-linejoin:round}
+body.ui4-theme .trend-tooltip{position:absolute;transform:translateX(-50%);width:max-content;max-width:100%;padding:8px 12px;background:#101b19;color:#edfff7;border-radius:11px;box-shadow:0 6px 15px #0003;pointer-events:none;text-align:left;line-height:1.45}
+body.ui4-theme .trend-tooltip strong{display:block;font-size:16px;font-weight:500;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+body.ui4-theme .trend-tooltip span{display:block;font-size:10px;color:#b7cec4;margin-top:2px}
+body.ui4-theme #moneyOverview .trend-selection{display:flex;align-items:center;gap:14px;padding:0;border-color:#ffffff15}
+body.ui4-theme #moneyOverview .trend-selection.hidden{display:none}
+body.ui4-theme #moneyOverview .trend-point-summary{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+body.ui4-theme #moneyOverview #trendCursor{flex:1;min-width:0;margin:0;accent-color:#a6efd9}
+body.ui4-theme #moneyOverview #trendOpenDay{flex:0 0 auto;color:#b2f2dd;font-size:11px}
+body.ui4-theme #moneyOverview .trend-help{font-size:11px;color:#c4d6d0;margin:0}
+body.ui4-theme #moneyOverview .trend-help summary{min-height:36px}
+body.ui4-theme #moneyOverview #trendNotice{border:0;color:#c4d6d0;padding:0;margin:8px 0}
+@media(max-width:900px){
+ body.ui4-theme #home{grid-template-columns:minmax(0,1fr);grid-template-areas:"overview" "capture" "recent" "spending" "storage"}
+ body.ui4-theme .money-overview{padding:16px 16px 8px}
+ body.ui4-theme .money-current{font-size:36px;letter-spacing:-.9px;margin:6px 0 0}
+ body.ui4-theme #moneyOverview .trend-ranges{width:100%;display:flex;margin:2px 0 4px}
+ body.ui4-theme #moneyOverview .trend-period{float:none;width:100%;min-height:36px}
+ body.ui4-theme #moneyOverview .trend-period .icon-button{min-height:36px;flex-basis:44px}
+ body.ui4-theme #moneyOverview .trend-period b{font-size:12px}
+ body.ui4-theme #trendPlot{margin-top:0}
+ body.ui4-theme .trend-tooltip{padding:7px 10px}
+ body.ui4-theme .trend-tooltip strong{font-size:14px}
+ body.ui4-theme #moneyOverview .trend-change{margin-bottom:8px;font-size:11px}
+}

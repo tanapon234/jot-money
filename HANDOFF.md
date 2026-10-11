@@ -1,5 +1,98 @@
 # ส่งต่องานให้ Codex
 
+## UI5 / demo.26 — ผู้ใช้อนุมัติเผยแพร่และปิดเครื่องเมื่อครบ (2026-10-12)
+
+- UI5_DIRECTION.md กำหนดสไตล์กราฟเดิม + glass ทั้งแอป; ui5.css ระบบร่วมทุกหน้า ui5-home.css ภาพรวม/FAB/แผงจด ui5.js visualViewport และซ่อน FAB เมื่อมี dialog เปิด ไม่มี storage writes
+- app.js ย้าย quickCard ไป quickSlot ตอนโหลด ไม่คืนไว้ที่ home เมื่อปิดแผง ใช้ openCapture เดิม focus quick synchronous เพื่อให้ Safari มีโอกาสเปิดคีย์บอร์ดจาก user gesture; ต้องตรวจเครื่องจริงก่อนยืนยันคีย์บอร์ด
+- ปุ่มจดหนึ่งปุ่มแบบ labelled คงรูปแบบทุกหน้า override ID compact-calendar จาก legacy CSS; แก้ capture-date ทั้ง resting/hover/nativeinput/status/focus ไม่เหลือ olive เดิม
+- money-overview.js เพิ่ม canvas วัดตัวเลขแล้ว fit display ตาม container รักษาจำนวนเต็ม/ทศนิยมไม่ขึ้นบรรทัดกลางตัวเลข; กฎบัญชี/กราฟ/โอน/ประวัติ/งบและ jot-money-v1 เดิมไม่เปลี่ยน
+- impeccable A/B แยก: design29/40 ก่อนแก้; แก้ P1label/date P2longnumber พร้อมเพิ่ม named secondary text12px; A verdict ship เฉพาะ correction scope คะแนน30/40 recognition+1 ที่เหลือ3/4 ไม่ใช่ใหม่เต็มชุด B detector50คำเตือนหลายรายการlegacy คง raw evidence ไม่อ้างclean
+- UI5 browser regression synthetic ผ่าน320/375/430/1280 และ320x568 empty/longmoney/focus/Enter/review/cancel/draft/rollback/duplicate/edit/retro/transfer/reducedmotion/transparency; import --synthetic ผ่าน ยังไม่ได้ Safari/iPhoneจริง/VoiceOver/200%zoom
+- รุ่นนี้รวม local features ที่ผู้ใช้อนุมัติไว้ก่อนหน้า: ตั้งค่า รายการประจำ จดบ่อย กราฟย้อนหลัง และเลือกบัญชีหลังพิมพ์ คงข้อมูลเดิม ผู้ใช้อนุมัติอัปเดตเว็บในคำขอรอบนี้แล้ว
+- ใช้ feature/demo26-glass-ui ตรวจ preview ก่อน fast-forward demo; dist/version.json ใช้ตรวจรุ่น public; deployment-ui5-check.cjs เทียบ assets ทั้งหมดกับ dist และ UI5 browser script รับ Pages URL เพื่อทดสอบ isolated profile ไม่ใช้ browser ข้อมูลจริง
+- ไม่แตะ promo-video, ไม่เผยแพร่ .agents/.codex หรือภาพ QA; UI4 backup เก็บ local. ปิดเครื่องหลังตรวจ production สำเร็จเท่านั้น ไม่ใช้ forced shutdown
+
+## Local ล่าสุด — กราฟตามภาพอ้างอิง 024014 / 024119 (2026-10-12)
+
+- User ขอการ์ดกราฟอ้างอิงภาพแนบ: ยอดใหญ่ด้านบน เส้นและพื้นที่ใต้กราฟ ป้ายยอดเมื่อแตะจุด คงม่วงดำ–มินต์ ไม่ออกแบบหน้าอื่นใหม่
+- money-overview.js ย้าย balanceTrend เดิมเข้า moneyOverview (ไม่สร้างกราฟหรือข้อมูลสำเนา) default month, desktop กราฟซ้าย/จดขวา mobile การ์ดก่อนจด มีจดเลย focus quick รักษาร่าง/วันที่
+- balance-trend-ui.js ใช้ SVG line แบบ linear จริง ไม่ smoothing ให้ข้อมูลดูเกินจริง tooltip วัดขนาดและ clamp ใน plot, ResizeObserver จัดตำแหน่งหลัง resize/ย้าย DOM, native range keyboard และ daily history เดิมครบ
+- ยอดใหญ่คงปัจจุบัน เปรียบเทียบใน trendChange ตามช่วงกราฟพร้อมวันฐานจริง ข้อจำกัดย้อนหลังและสูตรอยู่ใน disclosure กราฟ ไม่เปลี่ยน BalanceTrend/ledger/storage/schema หรือยอดบัญชี
+- Chrome synthetic QA ผ่าน 320/375/430/1280 ไม่ล้น ป้ายยอดอยู่ในกราฟ ปุ่มลัดรักษาร่างและไม่เขียนข้อมูล; balance/capture/templates regressions ผ่าน detect findings [] ไม่ใช่ iPhone/Safari จริง
+- คง demo.25 และ local เท่านั้น ไม่ commit/push/deploy; บันทึก layout ด้านล่างเป็นประวัติก่อนแก้รอบนี้
+
+## Local ล่าสุด — เงินรวมด้านบนและทางลัดจด (2026-10-12)
+
+- moneyOverview อยู่ก่อน quickCard ทุกขนาดจอ กราฟเต็มอยู่ใต้ช่องจดบนมือถือ/ขวาบน desktop ไม่แสดงยอดใหญ่ซ้ำในกราฟ แต่รักษา trendCurrent DOM สำหรับ compatibility
+- dist/money-overview.js เป็น presentation-only ใช้ BalanceTrend.build สัปดาห์ปัจจุบันเสมอ ไม่อิงช่วงกราฟที่เลือก ไม่เขียน storage แสดง baseline จริงและไม่แต่งเส้นเมื่อมีจุดเดียว
+- “จดเลย” focus quick โดยรักษาร่าง/วันที่ “ดูกราฟ” focus balanceTrend รองรับ keyboard และ prefers-reduced-motion; ขยับยอดเฉพาะเมื่อค่าเปลี่ยน ไม่ใช้ตัวเลขจำลอง
+- Chrome isolated synthetic QA ตรวจ 320/375/430/1280, ยอดอิสระจากเดือนกราฟ, ทางลัดไม่แก้ ledger/ร่าง/วันที่ และ refresh ยอดหลัง render; ไม่ใช่ iPhone/Safari จริง
+- คง VERSION demo.25 เพราะยังเป็นงาน local ไม่ commit/push/deploy; ส่วนรวมยอดกับกราฟกล่องเดียวด้านล่างเป็นบันทึกก่อนการแก้รอบนี้
+
+## Local ล่าสุด — เลือกบัญชีหลังพิมพ์ (2026-10-12)
+
+- User อนุมัติหลายwallet: entryForm submit/Enter -> captureAccountDialog review ไม่สร้างรายการ; กดrowเปลี่ยนaccountในviewอย่างเดียว -> confirmCaptureAccount ถึงpersist Single wallet=submitบันทึกทันที No wallet=เพิ่มบัญชีก่อน โอนใช้กลไกเดิม
+- suggestedCaptureAccount ใน app.js เรียนรู้ normalizednote/type จากประวัติ activewallet >=2ครั้ง ไม่รวมfuture/debt/hidden/deleted เลือกcountสูงสุด tie day/time/index ไม่เก็บสำเนาการเรียนรู้ ไม่แตะschema/key
+- fingerprint type/quick/date/category ป้องกันdraftเปลี่ยนระหว่างreview; saveCaptureEntry ตรวจข้อมูลซ้ำและใช้state clone คืนstateเมื่อpersistล้มเหลว ไม่ปิดdialog/ล้างdraftจนสำเร็จ duplicateconfirmไม่สร้างซ้ำ
+- ใช้ captureReviewTemplate clone เข้า pickerเดิมแล้วลบtemplate (รองรับ QA DOM); เลื่อนเฉพาะlist ภายในdialog พร้อมfooterยืนยัน ข้อความรายการยาวเลื่อนอ่านได้ในพื้นที่จำกัด ปุ่มEnterข้ามIMEcomposition ใช้requestSubmit
+- capture-ui-check stageแยกจากsubmit helperเดิมซึ่งยืนยันให้ regression; เพิ่ม tests cancel/nochooserwrites/prediction/onewallet/date/draftchanged/rollback/duplicate รันroot14ชุดผ่าน Chrome synthetic Enterจริง+ภาพ320/375/430/1280 และviewport320x568หลายบัญชี ยังไม่ใช่ Safari/iPhone จริง
+- ผู้ช่วยSolMedium1ตัวตรวจdata/cancel/rollbackแยก ไม่พบปัญหาบล็อก ไม่ใช้Astra คงdemo.25 ไม่commit/push/deploy
+
+## Local ล่าสุด — ยอดเงินและกราฟกล่องเดียว ซ่อนกันงบ (2026-10-12)
+
+- User อนุมัติซ่อนส่วนกันงบเพราะยังไม่ใช้ และต้องการยอดเงิน/กราฟสวยอ่านง่ายขึ้น: balanceTrend เป็นกล่องหลักเดียว ปุ่มดูบัญชี ยอดหลัก ตัวเลขเพิ่ม/ลด ช่วงเวลา กราฟ รายละเอียดจุดเรียงในกล่องเดียว
+- ซ่อน balance-card/reserve-card เดิมด้วย hidden และ class hidden; budget-item ซ่อน CSS เฉพาะ UI4 คง DOM/ID/input และ state.budget สำหรับ compatibility ไม่มี migration/ล้างค่า/แก้สูตรบัญชี กราฟยังอิงเงินรวมตามกฎเดิม ไม่หัก budget
+- เอาคำกันงบออกจากคำอธิบายยอดกราฟ เปลี่ยนชื่อหน้าบัญชีเป็นบัญชีของคุณ ใช้สี/ฟอนต์ UI4 เดิม จดบ่อย/รายการประจำ/โอน/แก้รายการยังอยู่
+- ตรวจ Chrome synthetic 320/375/430/1280 และ core/capture/balance-trend/quick-templates checks ผ่าน ไม่พบแนวนอน ยังไม่ใช่ Safari/iPhone จริง คง demo.25 ไม่ commit/push/deploy
+
+## Local ล่าสุด — จดบ่อยและกราฟย้อนหลัง (2026-10-12)
+
+- User อนุมัติเรียนรู้รายการซ้ำและ reconstruct graph จากข้อมูลเดิม แทนข้อจำกัด explicit tracking ในหัวข้อ UI4 เดิมด้านล่าง
+- dist/frequent-entries.js pure suggestions: normalized note+type, threshold 3 entries/2 days, active own wallets only, ไม่รวมอนาคต/โอน/adjustment/หนี้/ยอดไม่ถูกต้อง เลือกบัญชีที่ใช้บ่อยก่อน แล้วหมวด/ยอดของบัญชีนั้น tie ใช้วัน+เวลาที่ระบุ timezone แล้วลำดับใน ledger แสดง4รายการ เรียงcount/lastDay
+- dist/frequent-ui.js เปิด dialog ตรวจยอด/บัญชี/หมวดแล้วบันทึกวันนี้ ไม่แตะร่างจดหลัก ไม่สร้างรายการตอนโหลด ซ่อนด้วย optional frequentDismissed ใน jot-money-v1 เดิม คืนคำแนะนำทั้งหมดที่ตั้งค่า pinned quickTemplates ไม่เสนอซ้ำ ไม่เปลี่ยน schema
+- Commit save/hide/restore/undo rollback เมื่อ persist ล้มเหลว แก้ไขผ่าน openEdit เดิม undo ใช้ snapshot guard ไม่ยกเลิกรายการที่แก้แล้ว ฝึกหมวดเฉพาะผู้ใช้เปลี่ยนเอง
+- balance-trend.build ไม่อ่าน gate startDay/signature แล้ว แต่คง legacy metadata โดยไม่แก้ ใช้ currentBalance ย้อน deltas ใน cents earliestDate=วันแรกของรายการ own-wallet ที่เกี่ยวข้องถึงวันนี้ ไม่มีรายการใช้วันนี้หนึ่งจุด การแก้ opening คำนวณใหม่ทันที
+- กราฟไม่รวม future/borrower balance, hidden/deleted wallets รวมตาม Money.total, self transfer net0; first visible point เป็นฐานเมื่อไม่มีวันก่อนหน้าภายในขอบเขตข้อมูล ไม่แสดง%เมื่อฐาน<=0 มี caveat ยอดเก่าขึ้นกับประวัติครบและสมมติopeningมีตลอดช่วง ไม่ใช่ยอดจาก statement ที่ยืนยันแล้ว
+- เพิ่ม frequent-entries-check.cjs และ integration ใน quick-templates-check.cjs; ปรับ ../.qa/ui4-browser.cjs ให้ตรวจ reconstruct/คำแนะนำ/confirmation/rollback/undo/hide/restore และภาพ 320/375/430/1280 ด้วยข้อมูลสังเคราะห์
+- ยังคง VERSION demo.25 (รุ่นเว็บเดิม) ไม่ commit/push/deploy ไม่แก้ promo-video
+- ตรวจผ่าน root tests 14 ชุด + JS syntax/diff-check; Chrome isolated synthetic interaction/ภาพ 320/375/430/1280 ไม่มีล้นแนวนอน ตรวจ save failure rollback, editable confirmation, undo, hide/restore, edit refresh, legacy no-metadata graph และ navigation ไม่เปลี่ยน ledger Local HTTP8000=200 ยังไม่ใช่ Safari/iPhone จริง
+- ผู้ช่วย GPT-6.1 Sol Medium 2 ตัว: ทำ logic กราฟและตรวจสูตร/ข้อมูลแยก ผู้ตรวจพบ tie วันเดียวใช้ index แทนเวลา แก้ comparator และ regression แล้วผู้ตรวจยืนยันผ่าน ไม่ใช้ Astra
+
+## Local — UI4 และกราฟเงินรวม (2026-10-12, ยังไม่เผยแพร่)
+
+- User อนุมัติธีมเรียบขึ้น ม่วงดำ–มินต์–ฟ้าและกราฟแบบหุ้น แต่ใช้คำเงินเพิ่ม/ลด ไม่ใช่กำไร/ขาดทุนลงทุน คง capture-first บนมือถือและฟีเจอร์เดิม
+- dist/ui4.css overlay ธีมเดิม; index เพิ่มกราฟ; manifest ใช้สีพื้นเดียวกัน สำรองก่อนแก้ที่ ui-versions/ui3-before-ui4-2026-10-12/dist ไม่แก้ promo-video
+- dist/balance-trend.js คำนวณเงินในบัญชี kind ไม่ใช่ borrower (รวม hidden/deleted ตาม Money.total) เป็น cents, โอนตัวเองเป็นศูนย์, เงินเข้า/ออกจากลูกหนี้มีผลกับเงินสด แต่ไม่นับยอดบัญชีหนี้ซ้ำ
+- ไม่สร้างประวัติเดา: optional state.balanceTracking={startDay,signature} เริ่มจาก explicit click วันนี้; signature ผูก ID และ opening ของบัญชีเรา เปลี่ยนฐานต้องยืนยันเริ่มใหม่ ไม่มี write ตอนโหลด ไม่มีสำเนายอดรายวัน
+- รายการอนาคตไม่รวมกราฟ/currentBalance และมีคำอธิบาย ต่างจากยอด Money.total เดิมซึ่งไม่ได้เปลี่ยนกฎ การเปลี่ยนแปลงเทียบสิ้นวันก่อนช่วงเมื่อมีฐาน หรือจุดแรกที่ติดตาม; ไม่แสดงเปอร์เซ็นต์เมื่อฐาน <=0 หรือมีจุดเดียวในวันเริ่มต้น
+- dist/balance-trend-ui.js เลือกช่วง/วัน คีย์บอร์ด range เปิด calendarDayDialog ผ่าน changeCalendarMonth ก่อนเลือกวัน ป้องกัน renderHistory รีเซ็ตไปเดือนผิด การเปิดวันล้าง search เพื่อแสดงครบ
+- ledger-rendered refresh ทุกแก้/ลบ/นำเข้า/undo; Excel clone คง metadata ถ้าเปลี่ยนบัญชีแล้ว signature ไม่ตรงต้องเริ่มใหม่ Reset ล้าง metadata ตั้งใจ
+- ตรวจผ่าน root tests 13 ชุด, syntax และ diff-check; Chrome isolated synthetic browser ตรวจ start/rollback, ไม่เขียน storage ตอนดู, cross-month day, keyboard, edit refresh, transfer, state replacement และ basis-change; widths 320/375/430/1280 ไม่มี horizontal overflow ยังไม่ใช่ Safari/iPhone จริง
+- QA script/screenshots อยู่ ../.qa/ui4-browser.cjs และ ui4-*.png ใช้บัญชีสังเคราะห์เท่านั้น; VERSION คง demo.25 จนอนุมัติเผยแพร่ ไม่ commit/push/deploy
+- ผู้ตรวจภาพแยกพบสี summary 2/3 ใน day dialog ค้างจาก nth-child ของ UI2 แก้ specificity แล้วตรวจภาพซ้ำได้ resolved/ship เฉพาะขอบเขตภาพ; detector ui4.css ไม่พบรายการ ผู้ช่วยใช้ GPT-6.1 Sol Medium สำหรับ logic, review และเอกสาร ไม่ยกระดับ Astra
+- Local preview HTTP 8000 ตอบ 200 แต่ระบบไม่อนุญาตคำสั่งเปิดเบราว์เซอร์อัตโนมัติ ให้ผู้ใช้เปิด URL เอง
+
+## Local — รายการประจำแตะเดียว (2026-10-11, ยังไม่เผยแพร่)
+
+- ผู้ใช้อนุมัติเริ่มจากรายการประจำในเว็บตามข้อเสนอ เป็นขั้นเตรียมก่อน Widget iOS ไม่ได้สร้าง native extension รอบนี้
+- เพิ่ม/แก้ไข/ลบชุดรายการที่ตั้งค่า และแตะจากใต้ช่องจดในภาพรวม บันทึกวันนี้ตามกฎ History เดิม ไม่เปลี่ยนร่างที่กำลังพิมพ์ ไม่บันทึกตามเวลาอัตโนมัติ
+- เก็บ optional quickTemplates ใน ledger key jot-money-v1 เดิม schemaVersion 2; ข้อมูลเก่าไม่ต้อง migration ไม่เขียน storage ตอนโหลด ชุดใหม่เริ่มว่าง
+- ป้องกันกดซ้ำรายการเดียวภายใน 900ms; มีใบยืนยันพร้อมแก้ไขหรือยกเลิกรายการล่าสุด ยกเลิกไม่ได้หลังรายการนั้นถูกแก้ (ใช้แก้ไข/ลบเดิมแทน)
+- บัญชีซ่อน/ลบทำให้ปุ่มใช้ไม่ได้ ให้แก้บัญชีในตั้งค่า; rename หมวดอัปเดต template ด้วย ลบ template ไม่ลบประวัติ
+- Excel append/replace ใช้ clone state เดิมจึงคง templates; ถ้า replace บัญชีใหม่ต่าง ID ปุ่มใช้ไม่ได้จนเลือกบัญชีใหม่ คืนก่อนนำเข้าคืน snapshot ทั้งชุดตามเดิม Reset ตั้งใจล้าง templates ด้วย
+- ไฟล์ใหม่ dist/quick-templates.js และ quick-templates-check.cjs; app render ส่ง ledger-rendered ให้ส่วนนี้ refresh หลังแก้/ลบ/นำเข้า/คืนข้อมูล
+- storage failure rollback ทั้ง template CRUD, tap-save/undo และ edit/delete ของรายการ ไม่ปิด edit dialog เมื่อบันทึกไม่สำเร็จ
+- ตรวจด้วยข้อมูลสังเคราะห์: tests 7 ชุดเกี่ยวข้อง, syntax/diff-check, Chrome interaction/ภาพ 320/375/430/1280; reviewer GPT-6.1 Sol Medium ตรวจความเสี่ยงข้อมูลแยกและยืนยันสองจุดแก้ ผ่าน ยังไม่ตรวจ Safari/iPhone จริง
+- VERSION คง demo.25 จนอนุมัติออกรุ่น ไม่ commit/push/deploy ไม่แก้ promo-video
+
+## Local — แท็บตั้งค่า (2026-10-11, ยังไม่เผยแพร่)
+
+- เมนูหลัก 4 แท็บ: ภาพรวม / รายการ / บัญชี / ตั้งค่า; คง internal ID settings สำหรับบัญชี และใช้ preferences สำหรับตั้งค่า
+- รวมจัดการหมวดรายรับ–รายจ่าย, นำเข้า Excel, ส่งออก CSV, คืนข้อมูลก่อนนำเข้า และเริ่มใหม่ไว้ที่ตั้งค่า ใช้ปุ่ม/handler เดิม ไม่ทำสำเนาข้อมูล
+- ทางลัด CSV ใต้ภาพรวมเปิดตั้งค่าโดยตรง การจัดการหมวดแยกประเภทจากร่างจดรายการ ไม่เปลี่ยนประเภทหรือหมวดข้ามรายรับ–รายจ่าย
+- คง VERSION demo.25 จนกว่าจะอนุมัติออกรุ่น ไม่ commit/push/deploy และไม่แก้ promo-video
+- ตรวจ history/capture/import/category/core และ Chrome isolated profile ด้วยข้อมูลสังเคราะห์; ภาพและ interaction 320/375/430/1280 ไม่มีแนวนอน ยังไม่ได้ตรวจ Safari/iPhone จริง
+
 ## ออกรุ่น demo.25 (2026-10-11)
 
 - ผู้ใช้อนุมัติอัปเดตเว็บเดโม รวมการแก้ UX 5 ข้อด้านล่าง ข้อความ local-only เป็นสถานะก่อนอนุมัติ
