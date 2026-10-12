@@ -21,6 +21,9 @@ async function skipToMain(name){
  assert.equal(await ev("document.getElementById('appContent').getAttribute('tabindex')"),'-1',name+' main is programmatically focusable');
 }
 async function checkMobileHomeHeading(name){
+ const header=await ev("(()=>{const h=document.querySelector('.page-header').getBoundingClientRect(),b=document.querySelector('.afterglow-brand').getBoundingClientRect(),d=document.getElementById('today').getBoundingClientRect();return {rightGap:h.right-d.right,leftGap:b.left-h.left,overlap:b.right>d.left,aligned:Math.abs((b.top+b.height/2)-(d.top+d.height/2))<2}})()");
+ assert(Math.abs(header.rightGap)<2,name+' date aligns with the header content right edge');
+ assert(Math.abs(header.leftGap)<2&&!header.overlap&&header.aligned,name+' brand and date share one non-overlapping row');
  const h=await ev("(()=>{const e=document.querySelector('#pageTitle'),s=getComputedStyle(e),r=e.getBoundingClientRect();return {text:e.textContent.trim(),display:s.display,visibility:s.visibility,clip:s.clipPath,rect:e.getClientRects().length,width:r.width,height:r.height}})()");
  assert(h.text&&h.display!=='none'&&h.visibility!=='hidden'&&h.rect&&h.width>0&&h.height>0,name+' home heading remains accessible');
 }
@@ -58,6 +61,178 @@ async function main(){
  ws=new WebSocket(target.webSocketDebuggerUrl);await new Promise(r=>ws.addEventListener('open',r,{once:true}));ws.addEventListener('message',e=>{const m=JSON.parse(e.data);if(m.id){const p=pending.get(m.id);pending.delete(m.id);m.error?p.reject(Error(m.error.message)):p.resolve(m.result)}if(m.method==='Runtime.exceptionThrown')errors.push(m.params.exceptionDetails.text)});
  await call('Runtime.enable');await call('Page.enable');await until(()=>ev("typeof BalanceTrend!=='undefined'&&typeof openCapture==='function'&&document.readyState==='complete'"));await ev('document.fonts.ready');
  assert.equal(await ev("localStorage.getItem('jot-money-v1')"),null,'New user still empty');assert.equal(await ev("document.getElementById('quickCard').closest('dialog').id"),'quickDialog');
+ if(process.argv.includes('--trash-only')){
+  for(const width of [320,375,430,1280]){
+   await call('Emulation.setDeviceMetricsOverride',{width,height:812,deviceScaleFactor:1,mobile:width<600});
+   await ev("state=Money.migrate({budget:123,accounts:[{id:'cash',name:'บัญชีทดสอบ',kind:'wallet',opening:10000},{id:'old',name:'บัญชีที่ลบชื่อยาวสำหรับตรวจขอบและปุ่มนำกลับให้แสดงครบถ้วน',kind:'borrower',opening:9999999.99,deleted:true},{id:'negative',name:'บัญชีหนี้ติดลบทดสอบ',kind:'borrower',opening:-7654321.25,deleted:true}],entries:[]});render();tab('settings');document.querySelector('.borrower-trash').open=false");
+   const baseline=await ev('JSON.stringify({budget:state.budget,entries:state.entries,balances:state.accounts.map(a=>Money.balance(state,a.id))})');
+   await ev("document.querySelector('.borrower-trash summary').focus()");await call('Input.dispatchKeyEvent',{type:'keyDown',key:'Enter',code:'Enter',text:'\r',unmodifiedText:'\r',windowsVirtualKeyCode:13});await call('Input.dispatchKeyEvent',{type:'keyUp',key:'Enter',code:'Enter',windowsVirtualKeyCode:13});await ev('new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)))');
+   assert.equal(await ev("document.querySelector('.borrower-trash').open"),true,'Native summary opens via keyboard');
+   const frame=await ev("(()=>{const d=document.querySelector('.borrower-trash'),s=d.querySelector('summary'),r=d.getBoundingClientRect();return {border:parseFloat(getComputedStyle(d).borderTopWidth),radius:parseFloat(getComputedStyle(d).borderTopLeftRadius),summary:s.getBoundingClientRect().height,overflow:d.scrollWidth>d.clientWidth+1,rows:[...d.querySelectorAll('.trash-account-row')].map(e=>{const r=e.getBoundingClientRect(),b=e.querySelector('button').getBoundingClientRect();return {overflow:e.scrollWidth>e.clientWidth+1,fit:b.left>=r.left&&b.right<=r.right,height:b.height,width:b.width}})}})()");
+   assert(frame.border===1&&frame.radius>=12&&frame.summary>=44&&!frame.overflow&&frame.rows.length===2&&frame.rows.every(r=>!r.overflow&&r.fit&&r.height>=44&&r.width>=44),'Trash frame/long rows fit at '+width+': '+JSON.stringify(frame));
+   await noOverflow('trash '+width);if(width===375||width===1280)await shot('trash-'+width,true);
+   await ev("document.querySelector('[data-restore-borrower=old]').click()");assert.equal(await ev("Boolean(state.accounts.find(a=>a.id==='old').deleted)"),false,'Restore still works');
+   assert.equal(await ev('JSON.stringify({budget:state.budget,entries:state.entries,balances:state.accounts.map(a=>Money.balance(state,a.id))})'),baseline,'Restore preserves balance, entries and budget');
+   await ev("document.querySelector('[data-restore-borrower=negative]').click()");assert.equal(await ev("document.getElementById('borrowerTrash').textContent.includes('ไม่มีบัญชีในถังขยะ')"),true,'Empty state after restore');await noOverflow('trash empty '+width);
+   if(width===375)await shot('trash-empty-'+width,true);
+  }
+  assert.deepEqual(responsiveFailures,[]);assert.deepEqual(errors,[]);console.log('PASS account trash: complete frame, keyboard summary, long positive/negative rows, restore/empty state at320/375/430/1280, balance/ledger/budget preserved. Chrome only, not iPhone.');return;
+ }
+ if(process.argv.includes('--history-cards-only')){
+  const checkCards=async selector=>{
+   const cards=await ev(`(()=>[...document.querySelectorAll('${selector}')].map(e=>{const s=getComputedStyle(e),r=e.getBoundingClientRect();return {border:parseFloat(s.borderTopWidth),radius:parseFloat(s.borderTopLeftRadius),overflow:e.scrollWidth>e.clientWidth+1,left:r.left,right:r.right,amount:e.querySelector('.entry-amount').textContent,meta:e.querySelector('.entry-meta').textContent,date:History.dateLabel(History.today())}}))()`);
+   assert(cards.length===4&&cards.every(c=>c.border===1&&c.radius===14&&!c.overflow&&c.left>=0&&c.right<=awaitWidth&&!c.meta.includes(c.date)),'Compact bordered cards fit without repeating day: '+JSON.stringify(cards));
+   assert(cards.some(c=>c.amount.startsWith('+500.00'))&&cards.some(c=>c.amount.startsWith('−650.00')),'Income/expense signs unchanged');
+   assert(cards.some(c=>c.amount.startsWith('100.00')&&c.amount.includes('โอน')),'Transfer stays unsigned, separately labeled');
+  };
+  let awaitWidth;
+  for(const width of [320,375,430,1280]){
+   awaitWidth=width;await call('Emulation.setDeviceMetricsOverride',{width,height:812,deviceScaleFactor:1,mobile:width<600});
+   await ev("(()=>{const today=History.today();state=Money.migrate({budget:0,accounts:[{id:'cash',kind:'wallet',name:'บัญชีทดสอบชื่อยาวที่ยังต้องอ่านได้ครบ',opening:10000},{id:'bank',kind:'wallet',name:'บัญชีปลายทางทดสอบ',opening:0},{id:'debt',kind:'borrower',name:'ลูกหนี้ทดสอบ',opening:0}],entries:[{id:'in',type:'income',amount:500,account:'cash',category:'เงินเดือน',note:'รายรับทดสอบ',date:today},{id:'out',type:'expense',amount:650,account:'cash',category:'อาหาร',note:'ชื่อรายจ่ายทดสอบยาวสำหรับตรวจกรอบรายการ',date:today},{id:'move',type:'transfer',amount:100,account:'cash',toAccount:'bank',note:'โอนทดสอบ',date:today},{id:'adjust',type:'adjustment',direction:'increase',amount:9999999.99,account:'debt',note:'ปรับยอดทดสอบ',date:today}]});render();tab('history');historyView='list';renderHistory();window.scrollTo({top:0,behavior:'instant'})})()");
+   const ledger=await ev('JSON.stringify(state)');await checkCards('#allEntries .ledger-entry');await noOverflow('history cards '+width);
+   assert.equal(await ev("document.querySelectorAll('#allEntries .history-day-heading').length"),1,'One day header outside four cards');
+   if(width===375||width===1280)await shot('history-cards-'+width);
+   await ev("document.querySelector('#allEntries [data-edit=out]').focus();new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)))");await call('Input.dispatchKeyEvent',{type:'keyDown',key:'Enter',code:'Enter',text:'\r',unmodifiedText:'\r',windowsVirtualKeyCode:13});await call('Input.dispatchKeyEvent',{type:'keyUp',key:'Enter',code:'Enter',windowsVirtualKeyCode:13});await ev('new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)))');assert.equal(await ev("document.getElementById('editDialog').open"),true,'Card is keyboard operable '+JSON.stringify(errors));
+   await ev("new Promise(r=>{document.getElementById('editDialog').addEventListener('close',r,{once:true});document.getElementById('closeEdit').click()})");
+   await ev("historyView='calendar';calendarMonth=History.today().slice(0,7);calendarSelected=History.today();renderHistory();document.querySelector('[data-calendar-day=\"'+History.today()+'\"]').click()");
+   await checkCards('#calendarModalEntries .ledger-entry');await noOverflow('day cards '+width);if(width===375||width===1280)await shot('day-cards-'+width);
+   await ev("document.querySelector('#calendarModalEntries [data-edit]').click()");assert.equal(await ev("document.getElementById('editDialog').open"),true);
+   await ev("new Promise(r=>{document.getElementById('editDialog').addEventListener('close',r,{once:true});document.getElementById('closeEdit').click()})");
+   await ev("document.getElementById('closeCalendarDay').click()");assert.equal(await ev('JSON.stringify(state)'),ledger,'Card navigation/cancel does not change ledger');
+  }
+  assert.deepEqual(responsiveFailures,[]);assert.deepEqual(errors,[]);console.log('PASS history/day cards: 320/375/430/1280, grouped headers, long names/amounts, income/expense/transfer/adjustment, keyboard/edit/cancel, no repeated date, no overflow, ledger unchanged. Chrome only, not iPhone.');return;
+ }
+ if(process.argv.includes('--header-only')){
+  for(const width of [320,375,430,1280]){
+   await call('Emulation.setDeviceMetricsOverride',{width,height:812,deviceScaleFactor:1,mobile:width<600});
+   await ev('new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)))');
+   if(width<600)await checkMobileHomeHeading('home '+width);
+   await noOverflow('header '+width);await shot('home-'+width);
+   await ev("document.getElementById('floatingCapture').click()");assert.equal(await ev('document.activeElement.id'),'quick');await ev("document.getElementById('closeQuick').click()");
+  }
+  assert.deepEqual(responsiveFailures,[]);assert.deepEqual(errors,[]);
+  console.log('PASS home header: date content-right alignment, brand/date single row, capture focus, no overflow at 320/375/430/1280. Synthetic isolated Chrome, not real iOS.');return;
+ }
+ if(process.argv.includes('--home-order-only')){
+  const seed=()=>ev("(()=>{const today=History.today(),d=new Date(today+'T12:00:00Z');d.setUTCDate(d.getUTCDate()-1);const yesterday=d.toISOString().slice(0,10);state=Money.migrate({budget:0,accounts:[{id:'cash',name:'บัญชีทดสอบ',opening:10000,kind:'wallet',group:'cash'}],entries:['กาแฟ','อาหารกลางวัน','เดินทาง','ของใช้','อาหารเย็น'].flatMap((note,j)=>Array.from({length:3},(_,i)=>({id:'repeat'+j+'-'+i,type:'expense',account:'cash',amount:50+j*10,category:'อาหาร',note,date:i===0?yesterday:today})))});render()})()");
+  for(const width of [320,375,430,1024,1280]){
+   await call('Emulation.setDeviceMetricsOverride',{width,height:812,deviceScaleFactor:1,mobile:width<600});await seed();await ev("state.entries.forEach(e=>e.note+=' '+innerWidth);render()");
+   await ev('new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)))');
+   const ledger=await ev('JSON.stringify(state)');
+   const order=await ev("(()=>{const f=document.getElementById('frequentSection'),r=document.querySelector('.recent-card'),g=document.getElementById('moneyOverview');return {dom:!!(f.compareDocumentPosition(r)&Node.DOCUMENT_POSITION_FOLLOWING),above:f.getBoundingClientRect().bottom<=r.getBoundingClientRect().top,afterGraph:g.getBoundingClientRect().bottom<=f.getBoundingClientRect().top,count:document.querySelectorAll('[data-frequent]').length,recent:document.querySelectorAll('#recent .entry').length,receipt:document.getElementById('frequentReceipt').parentElement===f.parentElement,templates:!!document.getElementById('quickTemplates').closest('.capture-column')}})()");
+   assert(order.dom&&order.above&&order.afterGraph,'Graph → frequent → recent in DOM/rendered order at '+width);
+   assert(order.count===4&&order.recent===3&&order.receipt&&order.templates,'Bounded lists, nearby receipt, recurring preserved at '+width);
+   await noOverflow('home reorder '+width);if(width===375||width===1280){await ev("document.getElementById('toast').style.display='none'");await shot('home-order-'+width,true)}
+   await ev("document.querySelector('[data-frequent]').click()");assert.equal(await ev("document.getElementById('frequentDialog').open"),true);
+   assert.equal(await ev('JSON.stringify(state)'),ledger,'Opening suggestion never saves automatically');await ev("new Promise(r=>{document.getElementById('frequentDialog').addEventListener('close',r,{once:true});document.getElementById('closeFrequent').click()})");
+   assert.equal(await ev('JSON.stringify(state)'),ledger,'Cancel preserves ledger');
+   await ev("document.querySelector('[data-frequent]').click();document.getElementById('frequentForm').requestSubmit()");
+   if(await ev('state.entries.length')!==16)console.log('Frequent save diagnostic:',await ev("({error:document.getElementById('frequentError').textContent,valid:document.getElementById('frequentForm').checkValidity(),inputs:[...document.getElementById('frequentForm').elements].map(e=>({id:e.id,value:e.value,message:e.validationMessage}))})"));
+   assert.equal(await ev('state.entries.length'),16,'Frequent save adds exactly one entry');assert.equal(await ev("document.getElementById('frequentReceipt').textContent.includes('บันทึกแล้ว')"),true);
+   await ev("document.getElementById('undoFrequentEntry').click()");assert.equal(await ev('JSON.stringify(state)'),ledger,'Undo restores original ledger');
+   await ev("document.querySelector('#recent [data-edit]').click()");assert.equal(await ev("document.getElementById('editDialog').open"),true,'Recent card opens existing edit dialog');
+   await ev("new Promise(r=>{document.getElementById('editDialog').addEventListener('close',r,{once:true});document.getElementById('closeEdit').click()})");assert.equal(await ev('JSON.stringify(state)'),ledger,'Closing recent details preserves ledger');
+   const hiddenBefore=await ev('state.entries.length');await ev("document.querySelector('[data-hide-frequent]').click()");assert.equal(await ev('state.entries.length'),hiddenBefore,'Hide control hides suggestion without deleting entries');
+   await ev("state.frequentDismissed=[];state.accounts[0].name='บัญชีธนาคารชื่อยาวสำหรับตรวจการตัดบรรทัดโดยไม่ซ่อนรายละเอียด';state.entries.forEach(e=>{e.note+=' ชื่อรายการยาวทดสอบการจัดกรอบ';e.amount=9999999.99});state.entries.at(-1).type='income';render()");
+   const cards=await ev("(()=>{const all=[...document.querySelectorAll('#frequentList .frequent-row,#recent .home-entry')];return all.map(e=>{const s=getComputedStyle(e),r=e.getBoundingClientRect();return {border:parseFloat(s.borderTopWidth),radius:parseFloat(s.borderTopLeftRadius),overflow:e.scrollWidth>e.clientWidth+1,left:r.left,right:r.right,children:[...e.querySelectorAll('button,.entry-amount,.template-value>b')].map(c=>{const b=c.getBoundingClientRect();return b.left>=r.left-1&&b.right<=r.right+1}),hide:e.querySelector('[data-hide-frequent]')?.getBoundingClientRect().width}})})()");
+   assert(cards.length===7&&cards.every(c=>c.border>=1&&c.radius>=12&&!c.overflow&&c.left>=0&&c.right<=width&&c.children.every(Boolean)&&(!c.hide||c.hide>=44)),'Individual cards fit long content and keep separate44px hide control at '+width+': '+JSON.stringify(cards));
+   assert.equal(await ev("document.querySelector('#recent .entry-amount').textContent.startsWith('+')"),true,'Income card preserves plus sign');await noOverflow('home cards long '+width);
+   await ev("state=Money.migrate({budget:0,accounts:[],entries:[]});render()");
+   assert.equal(await ev("getComputedStyle(document.getElementById('frequentSection')).display"),'none','No suggestions hide the whole section');
+   assert.equal(await ev("document.getElementById('frequentReceipt').getBoundingClientRect().height"),0,'Empty receipt leaves no blank block');
+   assert.equal(await ev("document.getElementById('recent').textContent.includes('ยังไม่มีรายการ')"),true,'Recent empty state remains');
+   await noOverflow('home reorder empty '+width);
+  }
+  assert.deepEqual(responsiveFailures,[]);assert.deepEqual(errors,[]);console.log('PASS home order: graph/frequent/recent at320/375/430/1024/1280, max4 suggestions/max3 recent, empty collapse, open/cancel/save/undo, recurring preserved, ledger invariant. Chrome, not real iOS.');return;
+ }
+ if(process.argv.includes('--trend-only')){
+  const silhouette=path=>{
+   const values=path.match(/-?\d+(?:\.\d+)?/g).map(Number),points=[];
+   for(let i=0;i<values.length;i+=2)points.push({x:values[i],y:values[i+1]});
+   return Array.from({length:321},(_,i)=>{const x=20+i;let j=0;while(j<points.length-2&&points[j+1].x<x)j++;const a=points[j],b=points[j+1]||a,t=b.x===a.x?0:Math.max(0,Math.min(1,(x-a.x)/(b.x-a.x)));return a.y+(b.y-a.y)*t});
+  };
+  const sameShape=(a,b)=>{const target=silhouette(b);return silhouette(a).every((v,i)=>Math.abs(v-target[i])<.05)};
+  const settle=async()=>{await until(()=>ev("!document.getElementById('trendPlot').dataset.motion"));await ev('Promise.all(document.getAnimations().map(a=>a.finished.catch(()=>{}))).then(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))))')};
+  const measure=()=>ev("(()=>{const p=document.getElementById('trendPlot').getBoundingClientRect(),s=document.getElementById('trendSelection').getBoundingClientRect();return {top:p.top,height:p.height,selection:s.top}})()");
+  const seed=single=>ev(`(()=>{const today=History.today(),shift=n=>{const d=new Date(today+'T12:00:00Z');d.setUTCDate(d.getUTCDate()+n);return d.toISOString().slice(0,10)};state=Money.migrate({budget:0,accounts:[{id:'cash',name:'Synthetic cash',opening:10000,kind:'wallet',group:'cash'}],entries:${single?"[{id:'only',account:'cash',type:'expense',amount:25,date:today,category:'Food',note:'synthetic'}]":"[40,20,7,1,0].map((n,i)=>({id:'trend'+i,account:'cash',type:i===1?'income':'expense',amount:25+i*10,date:shift(-n),category:'Food',note:'synthetic'}))"}});render();document.querySelector('[data-trend-range=week]').click();document.getElementById('trendToday').click()})()`);
+  for(const width of [320,375,430,1280]){
+   await call('Emulation.setDeviceMetricsOverride',{width,height:812,deviceScaleFactor:1,mobile:width<600});
+   for(const single of [false,true]){
+    await seed(single);await settle();const before=await measure(),ledger=await ev('JSON.stringify(state)');
+    if(!single&&(width===375||width===1280))await shot('trend-week-'+width);
+    for(const range of ['month','year','week']){
+     const motion=await ev(`(()=>{document.querySelector('[data-trend-range=${range}]').click();return document.getElementById('trendPlot').dataset.motion||''})()`);
+     if(!single&&range==='month')assert.equal(motion,'morph','Range changes reshape the existing graph');
+     if(single)assert.equal(motion,'','Identical one-date geometry stays still across ranges');
+     await settle();const after=await measure();
+     for(const key of ['top','height','selection'])assert(Math.abs(after[key]-before[key])<2,`${width}px ${single?'single':'multi'} ${range} stable ${key}: ${before[key]} -> ${after[key]}`);
+     if(!single&&range==='month'&&(width===375||width===1280))await shot('trend-month-'+width);
+     assert.equal(await ev('JSON.stringify(state)'),ledger,'Range switching preserves ledger');await noOverflow('trend '+width+' '+range);
+    }
+   }
+   await seed(false);await settle();
+   if(width===375){
+    const probe=await ev("(async()=>{const p=document.getElementById('trendPlot'),old=p.querySelector(':scope>svg>.trend-line').getAttribute('d');document.querySelector('[data-trend-range=month]').click();const pick=()=>p.querySelector('.trend-morph .trend-line'),start=pick().getAttribute('d'),target=p.querySelector(':scope>svg>.trend-line').getAttribute('d'),value=document.getElementById('trendTooltipValue').textContent;await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));const mid=pick().getAttribute('d'),midValue=document.getElementById('trendTooltipValue').textContent;document.querySelector('[data-trend-range=week]').click();return {old,start,target,mid,resume:pick().getAttribute('d'),value,midValue}})()");
+    assert(sameShape(probe.old,probe.start),'Morph begins at the exact original silhouette');
+    assert(!sameShape(probe.mid,probe.start),'Graph shape actually changes between frames');
+    assert(sameShape(probe.mid,probe.resume),'Rapid interruption resumes the visible silhouette without a jump');
+    assert.equal(probe.value,probe.midValue,'Numeric tooltip does not interpolate during shape morph');
+    await settle();
+    await ev("document.querySelector('[data-trend-range=week]').click()");assert.equal(await ev("document.getElementById('trendPlot').dataset.motion||''"),'','Repeated unchanged range does not replay motion');
+    const fallback=await ev("(async()=>{document.querySelector('[data-trend-range=month]').click();await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));const p=document.getElementById('trendPlot'),old=p.querySelector('.trend-morph .trend-line').getAttribute('d');document.getElementById('trendPrev').click();const group=p.querySelector('.trend-morph'),fills=[...group.querySelectorAll('path[fill]')].filter(e=>e.getAttribute('fill').startsWith('url(#'));return {mode:p.dataset.motion,old,start:group.querySelector('.trend-line').getAttribute('d'),fills:fills.length,resolved:fills.every(e=>document.getElementById(e.getAttribute('fill').slice(5,-1))),unique:new Set([...document.querySelectorAll('[id]')].map(e=>e.id)).size===document.querySelectorAll('[id]').length}})()");
+    assert.equal(fallback.mode,'morph');assert(sameShape(fallback.old,fallback.start),'Disjoint period interruption preserves displayed shape');assert(fallback.fills>0&&fallback.resolved&&fallback.unique,'Morph gradient references resolve without duplicate IDs');await settle();
+    await ev("document.getElementById('trendToday').click();document.querySelector('[data-trend-range=week]').click()");await settle();
+   }
+   await ev("(()=>{const c=document.getElementById('trendCursor');c.value='0';c.dispatchEvent(new Event('input',{bubbles:true}))})()");await settle();
+   assert.equal(await ev("document.getElementById('trendCursor').value"),'0');assert.equal(await ev("document.getElementById('trendDot').getAttribute('cx')"),'20');
+   await ev("document.querySelector('[data-trend-range=month]').click();document.querySelector('[data-trend-range=week]').click();document.querySelector('[data-trend-range=month]').click()");await settle();assert.equal(await ev('document.body.dataset.trendRange'),'month');
+   for(const navRange of ['month','week']){
+   await ev(`document.querySelector('[data-trend-range=${navRange}]').click()`);await settle();
+   const navBefore=await measure(),navLedger=await ev('JSON.stringify(state)');
+   for(const action of ['trendPrev','trendNext']){
+    const morph=await ev(`(()=>{const p=document.getElementById('trendPlot'),old=p.querySelector(':scope>svg>.trend-line').getAttribute('d');document.getElementById('${action}').click();return {mode:p.dataset.motion||'',old,start:p.querySelector('.trend-morph .trend-line')?.getAttribute('d'),target:p.querySelector(':scope>svg>.trend-line').getAttribute('d'),wrappers:p.querySelectorAll('.trend-previous,.trend-incoming').length}})()`);
+    const changed=!sameShape(morph.old,morph.target);
+    assert.equal(morph.mode,changed?'morph':'','Historical '+navRange+' navigation morphs changed shapes; unchanged shapes stay still');
+    assert.equal(morph.wrappers,0,'No sliding snapshots or incoming wrappers remain');
+    if(changed)assert(sameShape(morph.old,morph.start),'Historical morph starts at the old silhouette even for unrelated dates');
+    if(process.argv.includes('--motion-shots')&&navRange==='month'&&action==='trendPrev'&&(width===375||width===1280)){
+     await ev("new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)))");await noOverflow('mid-morph '+width);
+     const shot=await call('Page.captureScreenshot',{format:'png',captureBeyondViewport:false});fs.writeFileSync(path.join(out,'ui6-shape-morph-mid-'+width+'.png'),Buffer.from(shot.data,'base64'));
+    }
+    if(width===375&&navRange==='week'&&action==='trendPrev'){
+     const selected=await ev("(async()=>{await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));const p=document.getElementById('trendPlot'),b=p.getBoundingClientRect(),c=document.getElementById('trendCursor'),expected=Math.round(Number(c.max)/2);p.dispatchEvent(new PointerEvent('pointerdown',{bubbles:true,pointerType:'mouse',buttons:1,clientX:b.left+b.width/2,clientY:b.top+b.height/2}));return {expected,actual:Number(c.value),motion:p.dataset.motion||''}})()");
+     assert.equal(selected.actual,selected.expected,'Pointer at plot center selects the center date even during morph');assert.equal(selected.motion,'','Pointer cancels shape motion before selection');
+    }
+    await settle();const navAfter=await measure();for(const key of ['top','height','selection'])assert(Math.abs(navAfter[key]-navBefore[key])<2,'Period navigation keeps '+key+' stable');
+    assert(sameShape(morph.target,await ev("document.querySelector('#trendPlot>svg>.trend-line').getAttribute('d')")),'Final shape equals actual target');
+    assert.equal(await ev('JSON.stringify(state)'),navLedger,'Historical navigation leaves data unchanged');await noOverflow('morph '+width);
+    assert.equal(await ev("document.querySelectorAll('#trendPlot .trend-previous,#trendPlot .trend-incoming').length"),0,'Period navigation cleans temporary wrappers');
+   }
+   }
+   if(width===375){
+    await ev("(()=>{const today=History.today(),first=new Date(today.slice(0,7)+'-01T12:00:00Z');first.setUTCDate(0);state=Money.migrate({budget:0,accounts:[{id:'cash',name:'Synthetic sparse',opening:10000,kind:'wallet',group:'cash'}],entries:[{id:'last',account:'cash',type:'expense',amount:50,date:first.toISOString().slice(0,10),category:'Food',note:'synthetic'}]});render();document.querySelector('[data-trend-range=month]').click();document.getElementById('trendToday').click()})()");await settle();
+    assert.equal(await ev("(()=>{document.getElementById('trendPrev').click();return document.getElementById('trendPlot').dataset.motion})()"),'morph','Line collapses into a sparse dot via morph');await settle();
+    assert.equal(await ev("document.querySelectorAll('#trendPlot .trend-line,#trendPlot .trend-area,#trendPlot .trend-morph').length"),0,'Sparse endpoint retains only the actual dot, no invented line/area');
+    assert.equal(await ev("(()=>{document.getElementById('trendNext').click();return document.getElementById('trendPlot').dataset.motion})()"),'morph','Sparse dot expands into the actual target line');await settle();
+    await ev("state=Money.migrate({budget:0,accounts:[],entries:[]});render();document.querySelector('[data-trend-range=year]').click()");await settle();
+    assert.equal(await ev("document.querySelectorAll('#trendPlot svg,#trendPlot .trend-morph').length"),0,'Empty state has no fabricated zero-balance shape');
+    await seed(false);await settle();
+   }
+   await ev("tab('home');openCapture();document.getElementById('closeQuick').click()");
+  }
+  await ev("document.getElementById('trendToday').click();document.querySelector('[data-trend-range=month]').click();document.getElementById('trendPrev').click()");
+  await call('Emulation.setEmulatedMedia',{features:[{name:'prefers-reduced-motion',value:'reduce'}]});
+  await ev("document.getElementById('trendToday').click();document.querySelector('[data-trend-range=week]').click()");await settle();
+  assert.equal(await ev("document.getElementById('trendPlot').getAnimations({subtree:true}).length"),0,'Reduced motion leaves no graph animation');
+  assert.equal(await ev("document.querySelectorAll('#trendPlot .trend-morph,#trendPlot .trend-previous,#trendPlot [data-motion-hidden]').length"),0,'Reduced motion cancels pending frames and removes temporary geometry');
+  assert.equal(await ev("getComputedStyle(document.querySelector('.trend-tooltip')).transitionDuration"),'0s','Reduced motion disables cursor tooltip movement');
+  assert.equal(await ev("getComputedStyle(document.getElementById('trendPlot')).touchAction"),'pan-y','Graph preserves native vertical touch scrolling');
+  assert.deepEqual(responsiveFailures,[]);assert.deepEqual(errors,[]);
+  console.log('PASS graph continuity: week/month/year plot and controls aligned at 320/375/430/1280, single/multiple dates, rapid switching, point selection, capture, reduced motion, unchanged ledger. Chrome only, not real iOS.');return;
+ }
+ // The full historical fixtures below intentionally use 2026-10-12.
+ // Freeze only this isolated test page, never the app or the user's browser.
+ await ev("(()=>{const RealDate=Date;window.Date=class extends RealDate{constructor(...args){super(...(args.length?args:['2026-10-12T12:00:00Z']))}static now(){return new RealDate('2026-10-12T12:00:00Z').getTime()}};render()})()");
  await call('Emulation.setDeviceMetricsOverride',{width:375,height:812,deviceScaleFactor:1,mobile:true});await shot('empty-home');await noOverflow('empty');
  await ev("document.getElementById('floatingCapture').click()");assert.equal(await ev('document.activeElement.id'),'quick');assert.equal(await ev("document.getElementById('quickDialog').open"),true);await shot('empty-capture');await ev("document.getElementById('closeQuick').click()");
  await ev("state=Money.migrate({budget:2000,accounts:[{id:'cash',name:'เงินสดทดสอบ',opening:10000,kind:'wallet',group:'cash'},{id:'bank',name:'บัญชีธนาคารทดสอบ',opening:5000,kind:'wallet',group:'bank'},{id:'debt',name:'ลูกหนี้ทดสอบ',opening:300,kind:'borrower',group:'debt'}],entries:[{id:'past',account:'cash',type:'income',amount:1000,date:'2026-09-25',category:'เงินเดือน',note:'รายรับทดสอบ'},...Array.from({length:12},(_,i)=>({id:'daily'+i,account:'cash',type:i===3||i===9?'income':'expense',amount:i===3?3200:i===9?1800:120+i*45,date:'2026-10-'+String(i+1).padStart(2,'0'),category:i===3||i===9?'เงินเดือน':'อาหาร',note:i<3?'กาแฟ':'รายการทดสอบ '+(i+1)}))]});persist();render()");
@@ -77,12 +252,12 @@ async function main(){
  await ev("state=Money.migrate({budget:0,accounts:[{id:'cash',name:'Synthetic cash',opening:10000,kind:'wallet',group:'cash'}],entries:[{id:'onepoint',account:'cash',type:'expense',amount:25,date:'2026-10-12',category:'Food',note:'synthetic'}]});render()");
  assert.equal(await ev("document.getElementById('balanceTrend').classList.contains('is-sparse')"),true,'Single-point chart state is identified');
  assert.equal(await ev("!document.getElementById('trendSparseText').classList.contains('hidden')&&document.getElementById('trendSparseText').textContent.trim().length>0"),true,'Single-point state has a visible truthful hint');
- assert.equal(await ev("getComputedStyle(document.getElementById('trendCursor')).display"),'none','Single-point cursor is hidden');
+ assert.equal(await ev("getComputedStyle(document.getElementById('trendCursor')).visibility"),'hidden','Single-point cursor is hidden while preserving its layout footprint');
  assert.equal(await ev("document.querySelectorAll('.trend-ranges button').length===3&&[...document.querySelectorAll('.trend-ranges button')].every(b=>getComputedStyle(b).display!=='none')"),true,'Week/month/year range choices remain available');
  assert.notEqual(await ev("getComputedStyle(document.getElementById('trendSparseExplore')).display"),'none','Explore-month action is visible for a sparse current week');
  const sparseMoney=await ev("document.getElementById('moneyCurrent').textContent"),sparseLedger=await ev('JSON.stringify(state)');await shot('sparse-320');
  await ev("document.getElementById('trendSparseExplore').click()");assert.equal(await ev("document.body.dataset.trendRange"),'month','Explore-month action selects the current month');assert.equal(await ev("document.getElementById('trendPeriod').textContent.includes('2569')"),true,'Month exploration lands in 2026');assert.equal(await ev("document.getElementById('moneyCurrent').textContent"),sparseMoney,'Exploring month preserves main money');assert.equal(await ev('JSON.stringify(state)'),sparseLedger,'Exploring month preserves ledger');
- assert.equal(await ev("getComputedStyle(document.getElementById('trendCursor')).display"),'none','One-point month still hides cursor');
+ assert.equal(await ev("getComputedStyle(document.getElementById('trendCursor')).visibility"),'hidden','One-point month still hides cursor');
  await ev("state=Money.migrate({budget:0,accounts:[{id:'cash',name:'Synthetic cash',opening:10000,kind:'wallet',group:'cash'}],entries:[{id:'onepoint',account:'cash',type:'expense',amount:25,date:'2026-10-06',category:'Food',note:'synthetic'},{id:'twopoint',account:'cash',type:'income',amount:10,date:'2026-10-05',category:'Income',note:'synthetic'}]});render()");const multiLedger=await ev('JSON.stringify(state)'),multiMoney=await ev("document.getElementById('moneyCurrent').textContent");
  assert.equal(await ev("document.body.dataset.trendRange"),'month','Month remains selected for multi-day synthetic range');assert.equal(await ev("document.getElementById('balanceTrend').classList.contains('is-sparse')"),false,'Multi-point chart restores full chart state');assert.equal(await ev("getComputedStyle(document.getElementById('trendCursor')).display!=='none'&&!document.getElementById('trendCursor').disabled"),true,'Multi-point cursor is visible and enabled');await ev("document.querySelector('[data-trend-range=week]').click();document.getElementById('trendPrev').click()");assert.equal(await ev("document.body.dataset.trendRange"),'week','Can navigate back to a multi-point week');assert.equal(await ev("document.getElementById('balanceTrend').classList.contains('is-sparse')"),false,'Prior week with two dates is not sparse');assert.equal(await ev("getComputedStyle(document.getElementById('trendCursor')).display!=='none'&&!document.getElementById('trendCursor').disabled"),true,'Multi-day week restores visible enabled cursor');
  assert.equal(await ev("document.getElementById('moneyCurrent').textContent"),multiMoney,'Sparse/chart range interaction preserves main money');assert.equal(await ev('JSON.stringify(state)'),multiLedger,'Sparse/chart range interaction preserves ledger');
@@ -91,7 +266,7 @@ async function main(){
   await call('Emulation.setDeviceMetricsOverride',{width,height:width===1280?900:812,deviceScaleFactor:1,mobile:width<600});
   await ev("tab('home');document.getElementById('trendToday').click();window.scrollTo({top:0,behavior:'instant'})");await shot('home-'+width,width===1280||width===375);await noOverflow('home '+width);
   await skipToMain('home '+width);if(width<=430)await checkMobileHomeHeading('home '+width);
-  if(width===375&&!await ev("(()=>{const row=document.querySelector('#recent .entry'),dock=document.querySelector('.ui6-dock');return Boolean(row&&row.getBoundingClientRect().bottom<=dock.getBoundingClientRect().top)})()"))responsiveFailures.push('First complete recent entry is below dock at 375x812');
+  if(width===375){const priority=await ev("(()=>{const f=document.querySelector('#frequentList [data-frequent]'),first=f?.getClientRects().length?f:document.querySelector('#recent .entry'),dock=document.querySelector('.ui6-dock'),r=first?.getBoundingClientRect();return {bottom:r?.bottom,top:r?.top,dock:dock.getBoundingClientRect().top,frequent:!!(f?.getClientRects().length)}})()");if(!(priority.bottom<=priority.dock)){console.log('Priority viewport diagnostic:',priority);responsiveFailures.push('First priority home action/record is below dock at 375x812')}}
   assert.equal(await ev("document.getElementById('home').contains(document.getElementById('quickCard'))"),false,'No inline capture');assert.equal(await ev("document.querySelectorAll('button:not(.hidden)#floatingCapture').length"),1);assert.equal(await ev("document.getElementById('floatingCapture').getBoundingClientRect().bottom<=innerHeight-12"),true,'Capture remains inside viewport');assert.equal(await ev("document.getElementById('floatingCapture').closest('.ui6-dock')!==null"),width<=900,'Same capture action joins mobile dock');
   assert.equal(await ev("(()=>{const p=document.getElementById('trendPlot').getBoundingClientRect(),t=document.querySelector('.trend-tooltip').getBoundingClientRect();return t.left>=p.left-1&&t.right<=p.right+1})()"),true,'tooltip fits');
   await ev("document.getElementById('floatingCapture').click()");assert.equal(await ev('document.activeElement.id'),'quick');assert.equal(await ev("document.getElementById('entryDate').value"),await ev('History.today()'));assert.equal(await ev("document.getElementById('floatingCapture').classList.contains('hidden')"),true);await shot('capture-'+width);await noOverflow('capture '+width);

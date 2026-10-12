@@ -38,11 +38,18 @@ let timer;function toast(message){$('toast').textContent=message;$('toast').styl
 function persist(){try{localStorage.setItem(KEY,JSON.stringify(state));return true}catch{toast('บันทึกในเครื่องไม่ได้ กรุณาส่งออกข้อมูลก่อนปิด');return false}}
 function options(selected,entryType=type){return Money.categories(state,entryType).map(c=>`<option ${c===selected?'selected':''}>${esc(c)}</option>`).join('')}
 $('category').innerHTML=options('รอจัดหมวด');$('today').textContent=new Intl.DateTimeFormat('th-TH',{weekday:'long',day:'numeric',month:'long'}).format(new Date());
-function row(e,context=null,dayDetail=false){
+function row(e,context=null,dayDetail=false,homeCard=false){
  const acc=state.accounts.find(a=>a.id===e.account),to=state.accounts.find(a=>a.id===e.toAccount);
  const transfer=e.type==='transfer',plus=transfer?e.toAccount===context:e.type==='income'||e.type==='repay'||(e.type==='adjustment'&&e.direction==='increase');
  const route=transfer?esc(acc?.name||'ไม่พบบัญชี')+' ไป '+esc(to?.name||'ไม่พบบัญชี'):esc(acc?.name||'ไม่พบบัญชี')+' · '+esc(e.category);
  const sign=transfer&&!context?'':plus?'+':'−';
+ if(homeCard){
+  const ledgerCard=homeCard==='ledger';
+  const category=[e.category,e.subcategory].filter(Boolean).map(esc).join(' · ');
+  const accountMeta=ledgerCard?(transfer?'':esc(acc?.name||'ไม่พบบัญชี')):(transfer?'':esc(acc?.name||'ไม่พบบัญชี')+' · ')+esc(History.dateLabel(History.dayKey(e.date)));
+  const details=`<span class="entry-meta-main">${transfer?route:category}</span>${accountMeta?'<span class="entry-meta-account">'+accountMeta+'</span>':''}${e.extraNote?'<span class="entry-meta-note">'+esc(e.extraNote)+'</span>':''}`;
+  return `<button type="button" class="entry ${ledgerCard?'ledger-entry':'home-entry'}${dayDetail?' day-entry':''}" data-edit="${esc(e.id)}" aria-label="ดูและแก้ไข ${esc(e.note||e.category||labels[e.type])}"><span class="entry-info"><span class="entry-title">${esc(e.note||e.category||labels[e.type])}</span><span class="entry-meta">${details}</span></span><span class="entry-amount ${transfer?'transfer-amount':plus?'plus':''}"><span>${sign}${fmt(e.amount)}</span><small>${esc(labels[e.type]||'รายการ')}</small></span></button>`;
+ }
  return `<button type="button" class="entry${dayDetail?' day-entry':''}" data-edit="${esc(e.id)}" aria-label="แก้ไข ${esc(e.note)}"><span class="entry-icon ${transfer?'transfer-icon':plus?'incoming':e.category==='รอจัดหมวด'?'pending':''}" aria-hidden="true">${icon(transfer?'transfer':plus?'down':'up')}</span><span class="entry-info"><span class="entry-title">${esc(e.note||(dayDetail?e.category||labels[e.type]:''))}</span><span class="entry-meta">${route}${e.subcategory?' · '+esc(e.subcategory):''}${e.extraNote?' · '+esc(e.extraNote):''} · ${labels[e.type]}${dayDetail?'':' · '+esc(History.dateLabel(History.dayKey(e.date)))}</span></span><span class="entry-amount ${transfer&&!context?'transfer-amount':plus?'plus':''}">${sign}${fmt(e.amount)}</span>${dayDetail?'<span class="day-entry-edit" aria-hidden="true">'+icon('chevron-right')+'</span>':''}</button>`;
 }
 function rememberCaptureAccount(id){if(!Money.wallets(state).some(a=>a.id===id))return;try{localStorage.setItem(LAST_ACCOUNT_KEY,id)}catch{}}
@@ -116,7 +123,7 @@ $('confirmCaptureAccount').onclick=()=>{
 $('captureAccountSearch').addEventListener('input',renderCaptureAccountList);
 function render(){
  document.dispatchEvent(new window.Event('ledger-rendered'));
- $('borrowerTrash').innerHTML=state.accounts.filter(a=>a.kind==='borrower'&&a.deleted).map(a=>`<div class="category-manager-row"><span>${esc(a.name)} · ${fmt(Money.balance(state,a.id))}</span><button type="button" class="text-button" data-restore-borrower="${esc(a.id)}">นำกลับ</button></div>`).join('')||'<p class="empty">ไม่มีบัญชีในถังขยะ</p>';
+ $('borrowerTrash').innerHTML=state.accounts.filter(a=>a.kind==='borrower'&&a.deleted).map(a=>`<div class="category-manager-row trash-account-row"><span class="trash-account-copy"><b>${esc(a.name)}</b><small>ยอดที่เก็บไว้ ${fmt(Money.balance(state,a.id))}</small></span><button type="button" class="text-button" data-restore-borrower="${esc(a.id)}" aria-label="${esc('นำบัญชี '+a.name+' กลับ')}">นำกลับ</button></div>`).join('')||'<p class="empty">ไม่มีบัญชีในถังขยะ</p>';
  $('category').innerHTML=options($('category').value);
  if(!Money.wallets(state).some(a=>a.id===explicitCaptureAccount))explicitCaptureAccount=null;
  if(!Money.wallets(state).some(a=>a.id===account))account=Money.wallets(state)[0]?.id;
@@ -128,7 +135,7 @@ function render(){
  $('accounts').innerHTML=Money.wallets(state).length?'':'<div class="empty-state"><div><strong>จดครั้งแรก เริ่มด้วยบัญชีของคุณ</strong><p>ตั้งชื่อบัญชีและยอดตั้งต้น แล้วกลับมาจดต่อได้ทันที</p></div><button type="button" class="outline" data-add-account data-first-account>เพิ่มบัญชีแรก '+icon('plus')+'</button></div>';
  $('accounts').classList.toggle('hidden',Money.wallets(state).length>0);
  renderCaptureAccount();
- const entries=[...state.entries].reverse();$('recent').innerHTML=entries.slice(0,4).map(e=>row(e)).join('')||emptyBlock('list','ยังไม่มีรายการ','เมื่อจดแล้ว รายการล่าสุดจะแสดงที่นี่');renderHistory();
+ const entries=[...state.entries].reverse();$('recent').innerHTML=entries.slice(0,3).map(e=>row(e,null,false,document.body.classList.contains('ui6-theme'))).join('')||emptyBlock('list','ยังไม่มีรายการ','เมื่อจดแล้ว รายการล่าสุดจะแสดงที่นี่');renderHistory();
  const grouped={};state.entries.filter(e=>e.type==='expense'&&Date.now()-new Date(e.date).getTime()<7*86400000).forEach(e=>grouped[e.category]=(grouped[e.category]||0)+e.amount);const sum=Object.values(grouped).reduce((a,b)=>a+b,0);
  $('spending').innerHTML=Object.entries(grouped).sort((a,b)=>b[1]-a[1]).map(([c,n])=>`<div class="bar-row"><span>${esc(c)}</span><div class="bar-track"><div class="bar-fill" style="width:${n/sum*100}%"></div></div><b>${fmt(n)}</b></div>`).join('')||emptyBlock('chart-no-axes-combined','ยังไม่มีรายจ่ายใน 7 วันนี้','หมวดและสัดส่วนการใช้จ่ายจะแสดงเมื่อมีรายการ');
  $('settingsList').innerHTML=renderAccountGroups()+`<details class="settings-item budget-item"><summary><span class="settings-list-icon budget-icon" aria-hidden="true"><svg class="icon" aria-hidden="true"><use href="#i-shield"/></svg></span><span class="settings-list-copy"><b>งบที่กันไว้</b><small>ค่าน้ำมันคงเหลือ</small></span><span class="settings-list-value">${fmt(state.budget)}<small>แก้ไขงบ ${icon('chevron-down')}</small></span></summary><div class="settings-item-detail"><label for="budget">ค่าน้ำมันที่ต้องกันไว้ตอนนี้ (บาท)</label><input id="budget" type="number" min="0" step="0.01" value="${state.budget}" required><p>เมื่อจ่ายค่าน้ำมัน ให้ลดงบคงเหลือที่นี่ด้วย ไม่มีการรีเซ็ตอัตโนมัติ</p><button type="submit" class="save">บันทึกงบ ${icon('check')}</button></div></details>`;
@@ -227,7 +234,7 @@ function renderHistory(){
  $('historyFilterNotice').textContent=q?`แสดงผลค้นหา “${$('search').value.trim()}” · ${entries.length} รายการ ยอดทุกส่วนคำนวณจากผลค้นหานี้`:'';
  $('clearHistorySearch').classList.toggle('hidden',!q);
  $('historySearchStatus').textContent=q?'พบ '+entries.length+' รายการ · ผลค้นหาใช้ร่วมกับลิสต์และปฏิทิน':'ค้นหาด้วยชื่อรายการ หมวด หรือบัญชี';
- $('allEntries').innerHTML=groups.map(g=>`<section class="history-day" aria-labelledby="history-day-${g.key||'unknown'}"><header class="history-day-heading"><h3 id="history-day-${g.key||'unknown'}">${g.key?`<button type="button" class="history-date-trigger" data-capture-date="${g.key}" aria-haspopup="dialog" aria-label="จดรายการวันที่ ${esc(History.dateLabel(g.key,new Date(),true))}"><time datetime="${g.key}">${esc(History.dateLabel(g.key))}</time><span class="count-badge">${g.count} รายการ</span><span class="history-date-plus" aria-hidden="true">${icon('plus')}</span></button>`:`ไม่ระบุวันที่ <span class="count-badge">${g.count} รายการ</span>`}</h3><div class="history-totals">${historyTotals(g)}</div></header>${g.entries.map(e=>row(e)).join('')}</section>`).join('')||emptyBlock('search',q?'ไม่พบรายการที่ค้นหา':'ยังไม่มีรายการ',q?'ลองค้นด้วยชื่อรายการ หมวด หรือบัญชีอื่น':'จดรายการใหม่ หรือนำเข้าประวัติจาก Excel');
+ $('allEntries').innerHTML=groups.map(g=>`<section class="history-day" aria-labelledby="history-day-${g.key||'unknown'}"><header class="history-day-heading"><h3 id="history-day-${g.key||'unknown'}">${g.key?`<button type="button" class="history-date-trigger" data-capture-date="${g.key}" aria-haspopup="dialog" aria-label="จดรายการวันที่ ${esc(History.dateLabel(g.key,new Date(),true))}"><time datetime="${g.key}">${esc(History.dateLabel(g.key))}</time><span class="count-badge">${g.count} รายการ</span><span class="history-date-plus" aria-hidden="true">${icon('plus')}</span></button>`:`ไม่ระบุวันที่ <span class="count-badge">${g.count} รายการ</span>`}</h3><div class="history-totals">${historyTotals(g)}</div></header>${g.entries.map(e=>row(e,null,false,document.body.classList.contains('ui6-theme')?'ledger':false)).join('')}</section>`).join('')||emptyBlock('search',q?'ไม่พบรายการที่ค้นหา':'ยังไม่มีรายการ',q?'ลองค้นด้วยชื่อรายการ หมวด หรือบัญชีอื่น':'จดรายการใหม่ หรือนำเข้าประวัติจาก Excel');
  $('historyListView').classList.toggle('hidden',historyView!=='list');
  $('calendarView').classList.toggle('hidden',historyView!=='calendar');
  $('summary').classList.toggle('hidden',historyView!=='summary');
@@ -262,7 +269,7 @@ function renderHistory(){
  $('calendarModalCount').textContent=day.entries.length;
  $('calendarModalAdd').dataset.captureDate=calendarSelected;
  $('calendarModalAdd').setAttribute('aria-label','จดรายการวันที่ '+History.dateLabel(calendarSelected,new Date(),true));
- $('calendarModalEntries').innerHTML=day.entries.map(e=>row(e,null,true)).join('')||emptyBlock('list','ยังไม่มีรายการในวันนี้',q?'ไม่มีรายการตรงกับคำค้นในวันที่เลือก':'รายการที่จดในวันนี้จะแสดงที่นี่');
+ $('calendarModalEntries').innerHTML=day.entries.map(e=>row(e,null,true,document.body.classList.contains('ui6-theme')?'ledger':false)).join('')||emptyBlock('list','ยังไม่มีรายการในวันนี้',q?'ไม่มีรายการตรงกับคำค้นในวันที่เลือก':'รายการที่จดในวันนี้จะแสดงที่นี่');
  $('calendarDayDialog').classList.toggle('is-empty-day',day.entries.length===0);
  if($('calendarModalEditHint'))$('calendarModalEditHint').hidden=day.entries.length===0;
 }

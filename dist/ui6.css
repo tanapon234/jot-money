@@ -399,3 +399,81 @@ body.ui6-theme footer,body.ui6-theme .footer-brand,body.ui6-theme .footer-brand 
 @media (prefers-reduced-motion:reduce) {
   body.ui6-theme *,body.ui6-theme *::before,body.ui6-theme *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }
+/* Compact individual ledger cards; day headings and totals keep their own space. */
+body.ui6-theme :is(#history #allEntries,#calendarModalEntries) .ledger-entry {
+  display: grid; grid-template-columns: minmax(0,1.4fr) minmax(0,1fr); align-items: start;
+  width: 100%; min-width: 0; min-height: 72px; gap: 8px 12px; margin: 8px 0 0; padding: 10px 12px;
+  border: 1px solid var(--glass-border); border-radius: 14px; background: #d5e6ff08; box-shadow: none;
+  -webkit-backdrop-filter: none; backdrop-filter: none; text-align: left;
+}
+body.ui6-theme :is(#history #allEntries,#calendarModalEntries) .ledger-entry:hover {
+  background: #d5e6ff0e; border-color: var(--line-strong); box-shadow: none;
+}
+body.ui6-theme :is(#history #allEntries,#calendarModalEntries) .ledger-entry .entry-info { min-width: 0; }
+body.ui6-theme :is(#history #allEntries,#calendarModalEntries) .ledger-entry .entry-title {
+  display: block; color: var(--ink); font-size: 14px; font-weight: 500; line-height: 1.6; overflow-wrap: anywhere;
+}
+body.ui6-theme :is(#history #allEntries,#calendarModalEntries) .ledger-entry .entry-meta {
+  display: grid; gap: 1px; margin-top: 3px; color: var(--secondary); font-size: 13px; line-height: 1.65;
+  white-space: normal; overflow-wrap: anywhere;
+}
+body.ui6-theme :is(#history #allEntries,#calendarModalEntries) .ledger-entry .entry-meta-main { color: var(--ink); }
+body.ui6-theme :is(#history #allEntries,#calendarModalEntries) .ledger-entry .entry-amount {
+  display: grid; gap: 2px; width: 100%; min-width: 0; max-width: none; font-size: 16px; line-height: 1.5;
+  white-space: normal; overflow-wrap: anywhere; text-align: right;
+}
+body.ui6-theme :is(#history #allEntries,#calendarModalEntries) .ledger-entry .entry-amount small {
+  font-family: var(--font); color: var(--secondary); font-size: 12px; line-height: 1.65;
+}
+@media (max-width:600px) {
+  body.ui6-theme :is(#history #allEntries,#calendarModalEntries) .ledger-entry .entry-meta { font-size: 14px; }
+  body.ui6-theme :is(#history #allEntries,#calendarModalEntries) .ledger-entry .entry-amount small { font-size: 13px; }
+}
+@media (max-width:360px) {
+  body.ui6-theme :is(#history #allEntries,#calendarModalEntries) .ledger-entry { grid-template-columns: minmax(0,1fr); gap: 6px; }
+  body.ui6-theme :is(#history #allEntries,#calendarModalEntries) .ledger-entry .entry-amount { justify-self: start; text-align: left; }
+}
+@media (prefers-reduced-transparency:reduce) {
+  body.ui6-theme :is(#history #allEntries,#calendarModalEntries) .ledger-entry { background: var(--surface); }
+}
+/* Deleted borrower accounts: a complete disclosure frame and clear restore rows. */
+body.ui6-theme #settings .borrower-trash {
+  margin-top: 24px; padding: 0; min-width: 0; border: 1px solid var(--glass-border); border-radius: 16px;
+  background: #d5e6ff08; color: var(--ink); box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none;
+}
+body.ui6-theme #settings .borrower-trash:hover { background: #d5e6ff08; border-color: var(--glass-border); }
+body.ui6-theme #settings .borrower-trash>summary {
+  display: grid; grid-template-columns: 20px minmax(0,1fr) 20px; align-items: center; gap: 12px;
+  min-height: 56px; margin: 0; padding: 12px 16px; border-radius: 15px; cursor: pointer; list-style: none;
+  color: var(--ink); font-size: 14px; font-weight: 500; line-height: 1.7; overflow-wrap: anywhere;
+}
+body.ui6-theme #settings .borrower-trash>summary::marker { content: ''; }
+body.ui6-theme #settings .borrower-trash>summary::-webkit-details-marker { display: none; }
+body.ui6-theme #settings .borrower-trash>summary:hover { background: #d5e6ff0a; }
+body.ui6-theme #settings .borrower-trash>summary:focus-visible { outline: 2px solid var(--accent); outline-offset: -3px; }
+body.ui6-theme #settings .borrower-trash>summary .icon { width: 20px; height: 20px; margin: 0; color: var(--secondary); }
+body.ui6-theme #settings .borrower-trash[open]>summary { border-radius: 15px 15px 0 0; border-bottom: 1px solid var(--line); }
+body.ui6-theme #settings .borrower-trash[open]>summary .icon:last-child { transform: rotate(180deg); }
+body.ui6-theme #settings .borrower-trash>.form-foot { margin: 0; padding: 12px 16px; color: var(--secondary); font-size: 13px; line-height: 1.8; }
+body.ui6-theme #settings #borrowerTrash { display: grid; gap: 8px; min-width: 0; padding: 0 12px 12px; }
+body.ui6-theme #settings #borrowerTrash .trash-account-row {
+  display: grid; grid-template-columns: minmax(0,1fr) auto; align-items: center; gap: 12px; min-width: 0;
+  margin: 0; padding: 10px 12px; border: 1px solid var(--line); border-radius: 12px; background: #d5e6ff05; box-shadow: none;
+}
+body.ui6-theme #settings #borrowerTrash .trash-account-copy { display: grid; gap: 3px; min-width: 0; overflow-wrap: anywhere; }
+body.ui6-theme #settings #borrowerTrash .trash-account-copy b { color: var(--ink); font-size: 14px; font-weight: 500; line-height: 1.7; }
+body.ui6-theme #settings #borrowerTrash .trash-account-copy small { color: var(--secondary); font-size: 14px; line-height: 1.7; font-variant-numeric: tabular-nums; white-space: normal; overflow-wrap: anywhere; }
+body.ui6-theme #settings #borrowerTrash [data-restore-borrower] {
+  min-width: 72px; min-height: 44px; padding: 8px 12px; border: 1px solid var(--line-strong); border-radius: 10px;
+  background: #a6e7da0d; color: var(--accent); font-size: 14px; line-height: 1.7; white-space: normal;
+}
+body.ui6-theme #settings #borrowerTrash [data-restore-borrower]:hover { background: #a6e7da1a; border-color: var(--accent); }
+body.ui6-theme #settings #borrowerTrash>.empty { margin: 0; padding: 12px 4px 4px; color: var(--secondary); font-size: 14px; line-height: 1.8; text-align: left; }
+@media (max-width:600px) {
+  body.ui6-theme #settings #borrowerTrash .trash-account-row { grid-template-columns: minmax(0,1fr); gap: 8px; }
+  body.ui6-theme #settings #borrowerTrash [data-restore-borrower] { justify-self: start; }
+}
+@media (prefers-reduced-transparency:reduce) {
+  body.ui6-theme #settings .borrower-trash,body.ui6-theme #settings .borrower-trash:hover { background: var(--surface); }
+  body.ui6-theme #settings #borrowerTrash .trash-account-row { background: var(--field); }
+}

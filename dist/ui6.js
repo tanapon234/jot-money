@@ -6,6 +6,12 @@
  dock.className='ui6-dock';document.body.append(dock);
  const brand=document.createElement('span');brand.className='afterglow-brand';brand.textContent='จดไว';brand.setAttribute('aria-hidden','true');
  document.querySelector('.page-header>div').prepend(brand);
+ // Keep recording suggestions ahead of the audit trail in both DOM and visual order.
+ const recent=document.querySelector('#home .recent-card'),activity=document.createElement('div');
+ activity.className='home-activity';recent.before(activity);
+ activity.append(document.getElementById('frequentSection'),document.getElementById('frequentReceipt'),recent);
+ const recentHint=document.createElement('p');recentHint.className='section-description home-recent-hint';recentHint.textContent='แตะรายการเพื่อดูและแก้ไข';
+ recent.querySelector('.section-heading').after(recentHint);
  document.querySelector('.skip-link').addEventListener('click',event=>{
   event.preventDefault();document.getElementById('appContent').focus({preventScroll:true});window.scrollTo({top:0,behavior:'instant'});
  });
