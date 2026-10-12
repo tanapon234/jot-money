@@ -1,5 +1,6 @@
 // Presentation only. No ledger/storage access and no replacement of app handlers.
 (() => {
+ if(document.body.classList.contains('ui6-theme'))return;
  const reduced=()=>window.matchMedia('(prefers-reduced-motion: reduce)').matches;
  const fade=element=>{if(!element||reduced())return;element.getAnimations().forEach(a=>a.cancel());element.animate([{opacity:.45},{opacity:1}],{duration:260,easing:'ease-out'})};
  document.addEventListener('click',event=>{

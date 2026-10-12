@@ -1,0 +1,401 @@
+/* UI6 Afterglow — shared controls, ledger surfaces and native sheets.
+   The home composition and navigation are owned by ui6-home.css. */
+body.ui6-theme {
+  color-scheme: dark;
+  --paper: #101b2c;
+  --ink: #e9f1ff;
+  --secondary: #aebed4;
+  --muted: var(--secondary);
+  --accent: #a6e7da;
+  --accent-hover: #c6f3ea;
+  --lavender: #c2c0ff;
+  --income: #a6e7da;
+  --expense: #f3b0b8;
+  --income-on-dark: var(--income);
+  --expense-on-dark: var(--expense);
+  --income-soft: #203f43;
+  --expense-soft: #423241;
+  --surface: #1b2a40;
+  --surface-soft: #24344b;
+  --surface-hover: #2d4057;
+  --field: #17263b;
+  --line: #e9f1ff1c;
+  --line-strong: #b1c5e154;
+  --glass-bg: #1d2c43;
+  --glass-sheet: #203049;
+  --glass-nav: #23344c;
+  --glass-border: #e9f1ff25;
+  --glass-blur: blur(26px) saturate(130%);
+  --glass-radius: 16px;
+  --green: var(--accent);
+  --dark: var(--surface);
+  --red: var(--expense);
+  --shadow: none;
+  background-color: var(--paper);
+  background-image: radial-gradient(ellipse at 92% 12%, #4e529f70, transparent 62%), radial-gradient(ellipse at 4% 78%, #236c7a60, transparent 66%);
+  background-attachment: fixed;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  accent-color: var(--accent);
+  -webkit-tap-highlight-color: #a6e7da25;
+  scrollbar-color: #849bb9 #18263a;
+  scrollbar-width: thin;
+}
+body.ui6-theme ::selection { background: #38676c; color: #f4fffc; }
+body.ui6-theme ::-webkit-scrollbar { width: 7px; height: 7px; }
+body.ui6-theme ::-webkit-scrollbar-thumb { background: #849bb980; border-radius: 7px; }
+body.ui6-theme ::-webkit-scrollbar-track { background: transparent; }
+body.ui6-theme :is(h1,h2,h3) { color: var(--ink); font-weight: 500; text-wrap: balance; }
+body.ui6-theme .eyebrow { display: none; }
+body.ui6-theme :is(input,select,textarea) { caret-color: var(--accent); }
+body.ui6-theme :is(button,input,select,textarea,summary,a):focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+body.ui6-theme :is(button,summary,a) { touch-action: manipulation; }
+body.ui6-theme :is(button,summary) { min-height: 44px; }
+body.ui6-theme .skip-link { background: var(--accent); color: #152e31; min-height: 44px; padding: 12px 16px; border-radius: 12px; }
+body.ui6-theme #appContent:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+body.ui6-theme #cancelTemplate { min-width: 44px; }
+body.ui6-theme .capture-format-hint { color: var(--secondary); font-size: 14px; line-height: 1.8; margin: 8px 0 0; }
+body.ui6-theme button { transition: background-color 160ms ease-out, color 160ms ease-out, border-color 160ms ease-out; }
+body.ui6-theme button:disabled { opacity: .5; cursor: not-allowed; }
+body.ui6-theme .ui3-touch-glow { display: none; }
+body.ui6-theme .page-header h1 { font-size: 28px; line-height: 1.5; letter-spacing: -.025em; }
+body.ui6-theme .page-header p { color: var(--secondary); font-size: 13px; line-height: 1.8; }
+body.ui6-theme :is(.section-description,.form-foot,.report-footnote,.sample-banner,.history-explanation,.calendar-legend,.calendar-mobile-legend,.weekly-help,.history-filter-notice,.history-net-note,.day-edit-hint,.list-caption) { color: var(--secondary); font-size: 13px; line-height: 1.8; }
+
+/* One continuous ledger plane. Inner sections use spacing and rules. */
+body.ui6-theme :is(.panel,.account-overview) {
+  background: var(--glass-bg); border: 0; border-radius: 16px;
+  box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none;
+}
+body.ui6-theme .panel { padding: 28px; }
+body.ui6-theme .panel h2 { font-size: 20px; letter-spacing: -.02em; }
+body.ui6-theme .panel>.section-heading { margin-bottom: 14px; }
+body.ui6-theme :is(.panel .panel,dialog .panel,dialog .quick-card,dialog .account-overview) { background: transparent; border: 0; box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none; }
+body.ui6-theme :is(.count-badge,.period-badge,.day-list-count) { background: #d5e6ff0b; color: var(--secondary); border: 0; font-size: 12px; border-radius: 7px; }
+body.ui6-theme :is(label,.field-label) { color: var(--secondary); font-size: 13px; }
+
+/* Native input behavior remains intact, including visible date editing. */
+body.ui6-theme :is(input,select,textarea),body.ui6-theme #quick {
+  background: var(--field); border: 1px solid var(--line-strong); border-radius: 12px;
+  color: var(--ink); font-size: 16px; min-height: 50px; box-shadow: none;
+  max-width: 100%; min-width: 0;
+}
+body.ui6-theme :is(input,textarea)::placeholder,body.ui6-theme #quick::placeholder { color: var(--secondary); opacity: 1; font-size: 16px; }
+body.ui6-theme :is(input,select,textarea):focus { border-color: var(--accent); box-shadow: none; }
+body.ui6-theme select option { background: #17263b; color: var(--ink); }
+body.ui6-theme input[type=date] { width: 100%; min-width: 0; min-height: 50px; font-size: 16px; color-scheme: dark; }
+body.ui6-theme input[type=checkbox] { min-height: 20px; width: 20px; height: 20px; flex-shrink: 0; border-radius: 5px; }
+body.ui6-theme :is(.import-consent,label:has(input[type=checkbox])) { min-height: 44px; }
+body.ui6-theme input[type=range] { min-height: 44px; background: transparent; border: 0; }
+body.ui6-theme input[type=file] { font-size: 16px; padding: 7px; }
+body.ui6-theme input[type=file]::file-selector-button { min-height: 44px; padding: 8px 12px; font: inherit; background: #2d4057; color: var(--ink); border: 1px solid var(--line-strong); border-radius: 8px; cursor: pointer; }
+body.ui6-theme :is(.save,.primary-small,.calendar-modal-add) { background: var(--accent); color: #152e31; border: 0; border-radius: 12px; min-height: 48px; box-shadow: none; font-size: 14px; font-weight: 600; }
+body.ui6-theme .save { min-height: 52px; font-size: 15px; }
+body.ui6-theme :is(.save,.primary-small,.calendar-modal-add):hover:not(:disabled) { background: var(--accent-hover); box-shadow: none; }
+body.ui6-theme :is(.outline,.icon-button,.close-button,.analytics-trigger,.category-manager-row button,.borrower-trash) { background: #d5e6ff08; color: var(--ink); border: 1px solid var(--line-strong); border-radius: 12px; min-height: 44px; font-size: 13px; box-shadow: none; }
+body.ui6-theme :is(.outline,.icon-button,.close-button,.analytics-trigger,.category-manager-row button,.borrower-trash):hover:not(:disabled) { background: #d5e6ff16; border-color: #c2c0ff80; }
+body.ui6-theme .text-button { min-height: 44px; color: var(--accent); font-size: 13px; }
+body.ui6-theme .delete { min-height: 48px; background: #493342; color: var(--expense); border: 0; border-radius: 12px; font-size: 14px; }
+body.ui6-theme .delete:hover { background: #593b4a; }
+body.ui6-theme :is(.error,.danger-text) { color: var(--expense); }
+body.ui6-theme :is(.segments,.analytics-tabs),body.ui6-theme #history.calendar-compact .history-switch { background: #101b2c55; border: 0; border-radius: 12px; padding: 4px; }
+body.ui6-theme .segments button,body.ui6-theme .analytics-tabs button { color: var(--secondary); min-height: 44px; border-radius: 9px; font-size: 13px; box-shadow: none; }
+body.ui6-theme .segments button.selected,body.ui6-theme #types [data-type].selected,body.ui6-theme #history.calendar-compact .history-switch .selected,body.ui6-theme .analytics-tabs button[aria-pressed=true] { background: #c2c0ff21; color: var(--ink); box-shadow: none; }
+body.ui6-theme #types [data-type=expense].selected { background: #f3b0b820; color: #ffd4da; }
+body.ui6-theme #types [data-type=income].selected { background: #a6e7da20; color: var(--income); }
+
+/* Flat activity and account rows carry a clear amount column. */
+body.ui6-theme :is(.entry,.settings-list-row,.category-manager-row,.weekly-week,.template-manager-row) { border: 0; border-bottom: 1px solid var(--line); border-radius: 0; background: transparent; box-shadow: none; margin-top: 0; }
+body.ui6-theme .entry { padding: 17px 2px; gap: 12px; }
+body.ui6-theme :is(.entry,.settings-list-row):hover { background: #d5e6ff07; border-color: var(--line); box-shadow: none; }
+body.ui6-theme :is(.entry-title,.settings-list-copy b) { color: var(--ink); font-size: 14px; font-weight: 500; }
+body.ui6-theme :is(.entry-meta,.settings-list-copy small,.settings-list-value small,.category-manager-row small,.debt-line small) { color: var(--secondary); font-size: 12px; line-height: 1.8; }
+body.ui6-theme .entry-amount { color: var(--expense); font-size: 16px; letter-spacing: -.02em; }
+body.ui6-theme .entry-amount.plus { color: var(--income); }
+body.ui6-theme .entry-amount.transfer-amount { color: var(--secondary); }
+body.ui6-theme .entry-icon { background: #f3b0b812; color: var(--expense); border: 0; border-radius: 10px; }
+body.ui6-theme .entry-icon.incoming { background: #a6e7da12; color: var(--income); }
+body.ui6-theme .entry-icon.transfer-icon,body.ui6-theme .entry-icon.pending { background: #c2c0ff12; color: var(--lavender); }
+body.ui6-theme :is(.settings-list-icon,.account-icon,.round-icon,.capture-account-icon) { background: #c2c0ff10; border: 0; border-radius: 10px; color: var(--lavender); }
+body.ui6-theme :is(.debt-line,.transfer-hint,.secondary,.data-management,.template-receipt) { background: #d5e6ff06; border-color: var(--line); color: var(--secondary); border-radius: 12px; box-shadow: none; }
+body.ui6-theme :is(.debt-line b,.settings-list-value,.account-group-heading h3,.weekly-week h3,.bar-row b,.secondary h2,.data-management>summary) { color: var(--ink); }
+body.ui6-theme .bar-row { color: var(--secondary); font-size: 13px; }
+body.ui6-theme .bar-track { background: #e9f1ff0d; }
+body.ui6-theme .bar-fill { background: var(--accent); }
+body.ui6-theme :is(.empty-state,.capture-onboarding .empty-state) { background: transparent; border: 1px dashed var(--line-strong); border-radius: 12px; padding: 24px 18px; }
+body.ui6-theme .empty-state p,body.ui6-theme .empty-state .icon { color: var(--secondary); font-size: 13px; }
+body.ui6-theme .account-overview { padding: 26px 0; background: transparent; border-radius: 0; border-bottom: 1px solid var(--line); margin-bottom: 28px; }
+body.ui6-theme :is(.account-overview .section-description,.account-overview-total span) { color: var(--secondary); font-size: 13px; }
+body.ui6-theme .account-overview-total strong { color: var(--ink); font-size: 38px; letter-spacing: -.025em; }
+body.ui6-theme .account-group-heading { background: transparent; border: 0; border-bottom: 1px solid var(--line); border-radius: 0; padding: 18px 0 10px; }
+body.ui6-theme .account-group-heading>span { color: var(--secondary); font-size: 12px; }
+body.ui6-theme .settings-list-row { padding: 18px 0; }
+body.ui6-theme .weekly-week { padding: 22px 0; margin-bottom: 0; }
+body.ui6-theme .weekly-week h3 { font-size: 16px; }
+body.ui6-theme #history.calendar-compact .weekly-week { padding-block: 22px; }
+body.ui6-theme #history.calendar-compact .weekly-week h3 { font-size: 15px; }
+body.ui6-theme #history.calendar-compact .weekly-week .report-totals>span { font-size: 12px; }
+body.ui6-theme #history.calendar-compact .weekly-week .report-totals b { font-size: 16px; }
+body.ui6-theme .settings-item { border-color: var(--line); border-radius: 12px; background: transparent; }
+body.ui6-theme .settings-item summary { padding: 20px 0; min-height: 76px; }
+body.ui6-theme .settings-item-detail { padding: 0 0 22px; }
+body.ui6-theme .search-field input { background: var(--field); border-color: var(--line-strong); }
+body.ui6-theme .search-field .icon { color: var(--secondary); }
+
+/* History flows on one open plane; only current controls carry a fill. */
+body.ui6-theme #history.calendar-compact .history-panel { padding: 0; background: transparent; border: 0; border-radius: 0; -webkit-backdrop-filter: none; backdrop-filter: none; }
+body.ui6-theme #history.calendar-compact .history-toolbar { gap: 12px; margin-bottom: 24px; }
+body.ui6-theme #history.calendar-compact .history-switch { background: #101b2c40; padding: 4px; border-radius: 12px; }
+body.ui6-theme #history.calendar-compact .history-switch button { color: var(--secondary); font-size: 14px; font-weight: 500; }
+body.ui6-theme #history.calendar-compact .history-switch button.selected { background: #c2c0ff26; color: var(--ink); }
+body.ui6-theme #history.calendar-compact #toggleHistoryTools { border-color: transparent; background: transparent; color: var(--secondary); }
+body.ui6-theme #history.calendar-compact #toggleHistoryTools:hover { color: var(--ink); background: #d5e6ff0b; }
+body.ui6-theme #history.calendar-compact .calendar-summary { background: transparent; border: 0; border-bottom: 1px solid var(--line); border-radius: 0; padding: 0 0 24px; margin: 24px 0 20px; overflow: visible; }
+body.ui6-theme #history.calendar-compact .calendar-summary :is(h3,.history-totals>span,.history-filter-caption),body.ui6-theme #history.calendar-compact .calendar-summary>.section-heading h3,body.ui6-theme #history.calendar-compact .calendar-summary .history-totals>span { color: var(--secondary); font-size: 12px; }
+body.ui6-theme #history.calendar-compact .calendar-summary .history-totals b { color: var(--ink); font-size: 22px; }
+body.ui6-theme #history.calendar-compact .calendar-summary b.history-income { color: var(--income); }
+body.ui6-theme #history.calendar-compact .calendar-summary b.history-expense { color: var(--expense); }
+body.ui6-theme #history.calendar-compact .calendar-summary .history-totals>span+span { border-color: var(--line); padding-left: 16px; }
+body.ui6-theme #history.calendar-compact .calendar-summary .count-badge { background: transparent; border: 0; padding: 0; color: var(--secondary); font-size: 12px; }
+body.ui6-theme #history.calendar-compact:has(#calendarPeriod:not(.hidden)) #calendarMonthSummary>.section-heading h3 { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+body.ui6-theme #history.calendar-compact :is(.calendar-grid,.calendar-weekdays) { grid-template-columns: repeat(7,minmax(0,1fr)); gap: 4px; }
+body.ui6-theme #history.calendar-compact .calendar-weekdays { color: var(--secondary); font-size: 13px; padding-block: 8px; margin-bottom: 8px; }
+body.ui6-theme #history.calendar-compact .calendar-day,body.ui6-theme #history.calendar-compact .calendar-day.has-entries { min-width: 0; min-height: 128px; padding: 12px 10px; background: transparent; border: 1px solid transparent; color: var(--ink); box-shadow: none; border-radius: 10px; }
+body.ui6-theme #history.calendar-compact .calendar-day.has-entries { background: #d5e6ff06; }
+body.ui6-theme #history.calendar-compact .calendar-day:hover { background: #d5e6ff12; border-color: var(--line); color: var(--ink); box-shadow: none; }
+body.ui6-theme #history.calendar-compact .calendar-day.is-selected { background: #a6e7da1c; border-color: #a6e7da80; color: var(--ink); box-shadow: none; }
+body.ui6-theme #history.calendar-compact .calendar-day.is-today:not(.is-selected) { background: #c2c0ff0b; border-color: transparent; }
+body.ui6-theme #history.calendar-compact .calendar-day-top { font-size: 16px; }
+body.ui6-theme #history.calendar-compact .calendar-day-top b { font-weight: 500; }
+body.ui6-theme #history.calendar-compact .calendar-day.is-today .calendar-day-top b { outline: 1.5px solid var(--lavender); outline-offset: 2px; border-radius: 50%; }
+body.ui6-theme #history.calendar-compact .calendar-day.is-selected.is-today .calendar-day-top b { outline-color: var(--lavender); }
+body.ui6-theme #history.calendar-compact .calendar-day:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+body.ui6-theme #history.calendar-compact .calendar-today-tag { color: var(--lavender); }
+body.ui6-theme #history.calendar-compact :is(.calendar-value,.calendar-entry-mark) { color: var(--secondary); }
+body.ui6-theme #history.calendar-compact :is(.calendar-net,.calendar-net b) { color: var(--ink); }
+body.ui6-theme #history.calendar-compact :is(.calendar-income,.calendar-income b,.calendar-mobile-net.positive) { color: var(--income); }
+body.ui6-theme #history.calendar-compact :is(.calendar-expense,.calendar-expense b,.calendar-mobile-net.negative) { color: var(--expense); }
+body.ui6-theme #history.calendar-compact .calendar-day .calendar-mobile-net.zero { color: var(--secondary); }
+body.ui6-theme #history.calendar-compact .history-day { background: transparent; border: 0; border-radius: 0; margin: 28px 0 0; overflow: visible; }
+body.ui6-theme #history.calendar-compact .history-day-heading { background: transparent; border: 0; border-bottom: 1px solid var(--line); padding: 0 0 14px; gap: 8px; }
+body.ui6-theme #history.calendar-compact .history-date-trigger { color: var(--ink); font-size: 16px; gap: 10px; }
+body.ui6-theme #history.calendar-compact .history-day-heading .count-badge { background: transparent; border: 0; padding: 0; color: var(--secondary); font-size: 12px; }
+body.ui6-theme #history.calendar-compact .history-date-plus { min-width: 44px; min-height: 44px; background: transparent; border: 0; color: var(--accent); border-radius: 10px; }
+body.ui6-theme #history.calendar-compact .history-day .history-totals { gap: 16px; margin: 0; }
+body.ui6-theme #history.calendar-compact .history-day .history-totals>span { display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px; font-size: 13px; }
+body.ui6-theme #history.calendar-compact .history-day .history-totals b { font-size: 15px; line-height: 1.6; overflow-wrap: normal; word-break: normal; }
+body.ui6-theme #history.calendar-compact .history-day>.entry { width: 100%; margin: 0; padding: 18px 0; background: transparent; border-radius: 0; }
+body.ui6-theme #history.calendar-compact .history-day>.entry:hover { background: #d5e6ff07; }
+body.ui6-theme #history.calendar-compact .list-caption { padding: 0 0 12px; margin-top: 24px; border-color: var(--line); font-size: 13px; }
+body.ui6-theme #history.calendar-compact .calendar-navigation { gap: 10px; margin: 26px 0 20px; }
+body.ui6-theme #history.calendar-compact .calendar-navigation h3 { color: var(--ink); font-size: 22px; font-weight: 500; letter-spacing: -.02em; }
+body.ui6-theme #history.calendar-compact .calendar-navigation .icon-button { border-color: transparent; background: #d5e6ff08; }
+body.ui6-theme #history.calendar-compact .calendar-navigation .icon-button:hover { background: #d5e6ff16; border-color: var(--line); }
+body.ui6-theme #history.calendar-compact #calendarCurrent { border-color: transparent; background: transparent; color: var(--accent); font-size: 14px; }
+body.ui6-theme #history.calendar-compact #calendarCurrent:hover { background: #a6e7da0d; }
+body.ui6-theme #history.calendar-compact .calendar-grid-note { margin: 0 0 4px; color: var(--secondary); font-size: 14px; line-height: 1.6; }
+body.ui6-theme .history-search-dialog .history-search { display: grid; grid-template-columns: minmax(0,1fr) auto; align-items: center; gap: 12px; }
+body.ui6-theme .history-search-dialog .history-search .search-field { width: 100%; min-width: 0; margin: 0; }
+body.ui6-theme .history-search-dialog #clearHistorySearch { min-width: 44px; min-height: 44px; padding: 8px; font-size: 14px; white-space: nowrap; }
+
+/* The interruption is visibly smoked glass, with steady solid form fields. */
+body.ui6-theme dialog,body.ui6-theme dialog[class] {
+  background: var(--glass-sheet); color: var(--ink); border: 0; border-radius: 16px;
+  box-shadow: 0 24px 80px #050d1c80; padding: 26px;
+  max-height: calc(var(--app-viewport,100dvh) - 24px); max-width: calc(100vw - 24px);
+  overflow-y: auto; overscroll-behavior: contain; scroll-padding: 20px;
+  scrollbar-color: #849bb9 transparent; -webkit-backdrop-filter: none; backdrop-filter: none;
+}
+body.ui6-theme dialog[open] { animation: afterglow-sheet 260ms cubic-bezier(.16,1,.3,1); }
+@keyframes afterglow-sheet { from { opacity: .86; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+body.ui6-theme dialog::backdrop { background: #071120a6; -webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px); }
+body.ui6-theme dialog:not(.calendar-day-dialog):not(.analytics-dialog):not(.quick-dialog)>.section-heading:first-child,
+body.ui6-theme dialog>form>.section-heading,
+body.ui6-theme .quick-dialog .sheet-heading,
+body.ui6-theme .day-dialog-hero,
+body.ui6-theme .analytics-header { background: transparent; color: var(--ink); border: 0; border-bottom: 1px solid var(--line); border-radius: 0; box-shadow: none; }
+body.ui6-theme dialog:not(.calendar-day-dialog):not(.analytics-dialog):not(.quick-dialog)>.section-heading:first-child,
+body.ui6-theme dialog>form>.section-heading { padding: 0 0 18px; margin-bottom: 22px; align-items: center; }
+body.ui6-theme dialog:not(.calendar-day-dialog):not(.analytics-dialog):not(.quick-dialog)>.section-heading:first-child h2,
+body.ui6-theme dialog>form>.section-heading h2,
+body.ui6-theme .day-dialog-hero h2 { color: var(--ink); font-size: 23px; font-weight: 500; letter-spacing: -.02em; }
+body.ui6-theme dialog .close-button,
+body.ui6-theme dialog>form>.section-heading .close-button,
+body.ui6-theme dialog:not(.calendar-day-dialog):not(.analytics-dialog):not(.quick-dialog)>.section-heading:first-child .close-button,
+body.ui6-theme .day-dialog-hero .close-button { width: 44px; height: 44px; min-height: 44px; flex: 0 0 44px; color: var(--ink); background: #d5e6ff0c; border: 0; border-radius: 12px; }
+body.ui6-theme .day-dialog-hero { padding: 0 0 20px; }
+body.ui6-theme .day-dialog-hero::before,body.ui6-theme .day-dialog-hero::after { display: none; }
+body.ui6-theme .day-dialog-hero p,body.ui6-theme .day-hero-label { color: var(--secondary); font-size: 12px; }
+body.ui6-theme .day-list-toolbar .calendar-modal-add { background: var(--accent); color: #152e31; border: 0; min-height: 44px; font-size: 13px; }
+body.ui6-theme #calendarModalSummary .history-totals>span:nth-child(n) { background: transparent; border: 0; border-right: 1px solid var(--line); color: var(--secondary); border-radius: 0; font-size: 12px; padding-inline: 10px; }
+body.ui6-theme #calendarModalSummary .history-totals>span:last-child { border-right: 0; }
+body.ui6-theme #calendarModalSummary .history-totals b { color: var(--ink); }
+body.ui6-theme #calendarModalSummary b.history-income { color: var(--income); }
+body.ui6-theme #calendarModalSummary b.history-expense { color: var(--expense); }
+body.ui6-theme #calendarModalEntries .day-entry { background: transparent; border: 0; border-bottom: 1px solid var(--line); border-radius: 0; box-shadow: none; padding-block: 18px; }
+body.ui6-theme #calendarModalEntries .day-entry:hover { background: #d5e6ff08; border-color: var(--line); box-shadow: none; }
+body.ui6-theme #calendarModalEntries .entry-title { color: var(--ink); font-size: 14px; }
+body.ui6-theme .calendar-day-dialog #calendarModalEntries .day-entry .entry-meta { color: var(--secondary); font-size: 12px; line-height: 1.8; }
+body.ui6-theme #calendarModalSummary .history-net-note { color: var(--secondary); font-size: 12px; }
+body.ui6-theme .calendar-day-dialog.is-empty-day .day-dialog-hero { padding-bottom: 12px; }
+body.ui6-theme .calendar-day-dialog.is-empty-day :is(.day-hero-bottom,#calendarModalSummary,.day-list-toolbar>div) { display: none; }
+body.ui6-theme .calendar-day-dialog.is-empty-day .day-list-toolbar { justify-content: flex-end; margin-top: 0; }
+body.ui6-theme .calendar-day-dialog.is-empty-day #calendarModalEntries .empty-block { margin-top: 16px; padding: 16px 0; background: transparent; border: 0; border-radius: 0; }
+body.ui6-theme .calendar-day-dialog.is-empty-day #calendarModalEntries .empty-block>svg { display: none; }
+body.ui6-theme .calendar-day-dialog.is-empty-day #calendarModalEntries .empty-block strong { font-size: 16px; font-weight: 500; }
+body.ui6-theme .calendar-day-dialog.is-empty-day #calendarModalEntries .empty-block p { font-size: 14px; }
+body.ui6-theme .account-detail-summary { background: #d5e6ff07; border: 0; border-radius: 12px; }
+body.ui6-theme .account-detail-summary>b { color: var(--ink); overflow-wrap: anywhere; }
+body.ui6-theme .account-detail-summary>span,body.ui6-theme .account-detail-summary>small { color: var(--secondary); font-size: 12px; }
+
+/* Capture and account choice: a single scroll surface above the keyboard. */
+body.ui6-theme .quick-dialog { width: min(510px,calc(100% - 24px)); padding: 24px; }
+body.ui6-theme .quick-dialog .sheet-heading { padding: 0 0 14px; margin: 0 0 20px; min-height: 44px; }
+body.ui6-theme .quick-dialog .sheet-heading>span { color: var(--secondary); font-size: 13px; }
+body.ui6-theme .quick-dialog #quickCard { padding: 0; background: transparent; border: 0; box-shadow: none; }
+body.ui6-theme .quick-dialog #quickCard>.capture-heading { padding: 0; margin: 0 0 18px; gap: 8px; flex-wrap: wrap; background: transparent; border: 0; }
+body.ui6-theme .quick-dialog .capture-heading h2 { color: var(--ink); font-size: 25px; }
+body.ui6-theme .quick-dialog #quick { min-height: 64px; font-size: 22px; background: #142237; border-color: #b1c5e154; }
+body.ui6-theme .quick-dialog #quick::placeholder { font-size: 21px; }
+body.ui6-theme .quick-dialog #entryForm>label { margin-top: 20px; }
+body.ui6-theme .quick-dialog .save { margin-top: 18px; }
+body.ui6-theme .quick-dialog #entryForm .segments { margin-bottom: 18px; }
+body.ui6-theme.app-keyboard .quick-dialog { top: var(--app-view-top,0px); bottom: auto; margin: 12px auto 0; }
+body.ui6-theme .quick-dialog #quickCard .capture-date-control { color: var(--secondary); background: transparent; border: 0; width: 148px; min-height: 44px; height: 44px; }
+body.ui6-theme .quick-dialog #quickCard .capture-date-control:hover { color: var(--ink); background: #d5e6ff0c; }
+body.ui6-theme .quick-dialog #quickCard .capture-date-display { font-size: 12px; }
+body.ui6-theme .quick-dialog #quickCard .capture-date-control input { color-scheme: dark; background: #17263b; color: var(--ink); font-size: 16px; min-height: 44px; width: 100%; }
+body.ui6-theme .quick-dialog #quickCard .capture-date-control:focus-within { outline: 2px solid var(--accent); outline-offset: 3px; }
+body.ui6-theme .quick-dialog #quickCard .capture-date-status { color: var(--income); background: #203f43; font-size: 12px; }
+body.ui6-theme .capture-account-trigger { background: var(--field); border-color: var(--line-strong); border-radius: 12px; min-height: 68px; }
+body.ui6-theme .capture-account-trigger:hover { background: #24344b; border-color: #c2c0ff80; }
+body.ui6-theme .capture-account-chevron { color: var(--secondary); }
+body.ui6-theme #captureAccountName { color: var(--ink); font-size: 14px; }
+body.ui6-theme :is(#captureAccountHint,#captureReviewHint,.capture-review>small) { color: var(--secondary); font-size: 12px; }
+body.ui6-theme #captureAccountList { gap: 4px; }
+body.ui6-theme #captureAccountList>button { background: transparent; border: 1px solid transparent; border-bottom-color: var(--line); border-radius: 10px; min-height: 70px; padding: 14px 10px; margin: 0; }
+body.ui6-theme #captureAccountList>button:hover { background: #d5e6ff0a; }
+body.ui6-theme #captureAccountList>button[aria-pressed=true] { background: #a6e7da16; border-color: #a6e7da60; box-shadow: none; }
+body.ui6-theme #captureAccountList .capture-account-value { color: var(--ink); }
+body.ui6-theme #captureAccountList small { color: var(--secondary); font-size: 12px; }
+body.ui6-theme .capture-review { border-color: var(--line); background: transparent; }
+body.ui6-theme .transfer-direction .icon { background: #c2c0ff0c; border: 0; color: var(--lavender); }
+body.ui6-theme .transfer-dialog :is(.transfer-hint,.transfer-footnote) { font-size: 12px; line-height: 1.8; }
+
+/* Import is a readable table and mapping flow inside the same sheet. */
+body.ui6-theme .import-dialog details,body.ui6-theme .import-account-map { background: transparent; border-color: var(--line); border-radius: 12px; }
+body.ui6-theme .import-dialog details { padding: 16px; margin-block: 16px; }
+body.ui6-theme .import-dialog summary { color: var(--ink); font-size: 14px; }
+body.ui6-theme .import-table th { background: #293c55; color: var(--ink); }
+body.ui6-theme .import-table tr:nth-child(even) td { background: #d5e6ff04; }
+body.ui6-theme .import-table td { color: var(--secondary); border-color: var(--line); font-size: 12px; }
+
+/* Analytics keeps category hues; its chrome follows the ledger. */
+body.ui6-theme .analytics-dialog :is(.chart-selection,#analyticsCategories .chart-selection,.donut-total-pill,.chart-category.is-selected) { background: #c2c0ff0d; border: 0; box-shadow: none; border-radius: 12px; }
+body.ui6-theme .analytics-dialog .chart-category { border-color: var(--line); }
+body.ui6-theme .analytics-dialog .chart-category:hover { background: #d5e6ff0c; }
+body.ui6-theme .analytics-dialog :is(.chart-hint,.chart-empty,.chart-category-copy small,.chart-data summary,.chart-subtitle,.chart-total-label,.chart-detail-totals span,.week-detail-heading>span,.donut-list-heading,.donut-list-heading span,.donut-center-content small,#donutPosition,#donutCenterName,.chart-net-explanation) { color: var(--secondary); font-size: 12px; }
+body.ui6-theme .analytics-dialog :is(.chart-category-copy>span:first-child,.chart-category b) { font-size: 13px; }
+body.ui6-theme .analytics-header h2 { font-size: 25px; letter-spacing: -.02em; }
+body.ui6-theme .analytics-dialog :is(.donut-center,#donutCenterPercent,#donutCenterAmount) { color: var(--ink); fill: var(--ink); }
+body.ui6-theme .analytics-dialog .donut-stage::before { background: #c2c0ff06; box-shadow: none; }
+body.ui6-theme .analytics-dialog :is(.chart-axis,.chart-date-label,.donut-center-small) { fill: var(--secondary); }
+body.ui6-theme .analytics-dialog :is(.chart-gridline,.donut-guide,.donut-guide-inner) { stroke: var(--line); }
+body.ui6-theme .analytics-dialog .category-track { background: #e9f1ff12; }
+body.ui6-theme .analytics-dialog .chart-income-value { color: var(--income); }
+body.ui6-theme .analytics-dialog .chart-expense-value { color: var(--expense); }
+body.ui6-theme .analytics-dialog .chart-week:focus-visible .chart-hit-area { stroke: var(--accent); }
+body.ui6-theme .analytics-dialog button:focus-visible,body.ui6-theme .calendar-day-dialog button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+body.ui6-theme .analytics-dialog .donut-category-nav button { min-width: 44px; width: 44px; height: 44px; min-height: 44px; background: #d5e6ff09; color: var(--lavender); border-color: var(--line-strong); }
+body.ui6-theme .donut-orbit { animation: none; }
+body.ui6-theme #toast { background: #25434a; color: #effffc; border: 0; border-radius: 12px; font-size: 13px; box-shadow: 0 8px 28px #0005; }
+body.ui6-theme footer,body.ui6-theme .footer-brand,body.ui6-theme .footer-brand span { color: var(--secondary); border-color: var(--line); font-size: 12px; }
+
+@supports ((-webkit-backdrop-filter:blur(1px)) or (backdrop-filter:blur(1px))) {
+  body.ui6-theme { --glass-bg: #c9dfff08; --glass-sheet: #1b2c4399; --glass-nav: #d8e9ff12; }
+  body.ui6-theme :is(.panel,dialog),body.ui6-theme dialog[class] { -webkit-backdrop-filter: var(--glass-blur); backdrop-filter: var(--glass-blur); }
+  body.ui6-theme :is(.panel .panel,dialog .panel,dialog .quick-card) { -webkit-backdrop-filter: none; backdrop-filter: none; }
+}
+@media (max-width:900px) {
+  body.ui6-theme .panel { padding: 20px; }
+  body.ui6-theme #history.calendar-compact .history-panel { padding: 0; }
+  body.ui6-theme .account-overview { padding: 16px 0 24px; }
+  body.ui6-theme .page-header h1 { font-size: 25px; }
+  body.ui6-theme .quick-dialog { padding: 20px 20px calc(20px + env(safe-area-inset-bottom)); margin: auto auto 8px; max-height: calc(var(--app-viewport,100dvh) - 16px); }
+  body.ui6-theme .quick-dialog .sheet-heading { margin-bottom: 16px; }
+}
+@media (max-width:640px),(max-height:500px) {
+  body.ui6-theme .capture-account-dialog {
+    display: block; position: fixed; inset: calc(var(--app-view-top,0px) + 12px) 0 auto;
+    margin: 0 auto; padding: 20px; max-height: calc(var(--app-viewport,100dvh) - 24px);
+    overflow-y: auto; overflow-x: hidden; scroll-padding: 16px;
+    -webkit-overflow-scrolling: touch; touch-action: pan-y;
+  }
+  body.ui6-theme .capture-account-dialog:not([open]) { display: none; }
+  body.ui6-theme #captureAccountList { flex: none; overflow: visible; min-height: 0; }
+  body.ui6-theme #captureAccountList>button { flex-shrink: 0; }
+}
+@media (max-width:600px) {
+  body.ui6-theme dialog { padding: 20px; }
+  body.ui6-theme[data-page=history] .page-header { margin-bottom: 12px; }
+  body.ui6-theme #history.calendar-compact .history-toolbar { gap: 8px; margin-bottom: 12px; }
+  body.ui6-theme #history.calendar-compact .history-panel { padding: 0; }
+  body.ui6-theme #history.calendar-compact .history-switch button { font-size: 14px; padding-inline: 6px; }
+  body.ui6-theme #history.calendar-compact .history-switch { padding: 3px; }
+  body.ui6-theme #history.calendar-compact .calendar-navigation { gap: 4px; margin: 12px 0; }
+  body.ui6-theme #history.calendar-compact .calendar-navigation h3 { font-size: 18px; }
+  body.ui6-theme #history.calendar-compact .calendar-navigation #calendarCurrent { padding-inline: 5px; }
+  body.ui6-theme #history.calendar-compact .calendar-summary { padding: 0 0 12px; margin: 12px 0 8px; }
+  body.ui6-theme #history.calendar-compact .calendar-summary>.section-heading { margin-bottom: 6px; }
+  body.ui6-theme #history.calendar-compact .calendar-summary .history-filter-caption { margin: 4px 0; font-size: 14px; line-height: 1.6; }
+  body.ui6-theme #history.calendar-compact .calendar-summary :is(h3,.history-totals>span,.count-badge),body.ui6-theme #history.calendar-compact .calendar-summary :is(.section-heading h3,.history-totals>span) { font-size: 14px; }
+  body.ui6-theme #history.calendar-compact .calendar-summary .history-totals { gap: 8px; }
+  body.ui6-theme #history.calendar-compact .calendar-summary .history-totals>span+span { padding-left: 8px; }
+  body.ui6-theme #history.calendar-compact .calendar-summary.has-long-totals .history-totals>span+span { padding-left: 0; }
+  body.ui6-theme #history.calendar-compact :is(.history-explanation,.calendar-legend,.calendar-mobile-legend,.history-filter-notice,.weekly-help) { font-size: 14px; }
+  body.ui6-theme #history.calendar-compact :is(#toggleHistoryTools,#calendarCurrent) { font-size: 14px; }
+  body.ui6-theme #history.calendar-compact :is(.calendar-grid,.calendar-weekdays) { margin-inline: 0; gap: 2px; }
+  body.ui6-theme #history.calendar-compact .calendar-weekdays { padding-block: 6px; margin-bottom: 4px; }
+  body.ui6-theme #history.calendar-compact .calendar-day,body.ui6-theme #history.calendar-compact .calendar-day.has-entries { min-height: 68px; padding: 8px 0; gap: 6px; background: transparent; }
+  body.ui6-theme #history.calendar-compact .calendar-day:hover { background: #d5e6ff12; }
+  body.ui6-theme #history.calendar-compact .calendar-day.is-selected { background: #a6e7da1c; }
+  body.ui6-theme #history.calendar-compact .calendar-day.is-today:not(.is-selected) { background: #c2c0ff0b; }
+  body.ui6-theme #history.calendar-compact .calendar-day-top { font-size: 16px; }
+  body.ui6-theme #history.calendar-compact .calendar-day-top>.icon { right: 3px; top: -5px; width: 11px; height: 11px; color: var(--accent); }
+  body.ui6-theme #history.calendar-compact .history-day { margin-top: 12px; }
+  body.ui6-theme #history.calendar-compact .history-day-heading { gap: 4px; padding-bottom: 8px; }
+  body.ui6-theme #history.calendar-compact .history-day .history-totals { display: flex; flex-wrap: wrap; gap: 4px 14px; }
+  body.ui6-theme #history.calendar-compact .history-day .history-totals>span { display: flex; flex: 0 1 auto; align-items: baseline; gap: 4px; min-width: 0; font-size: 14px; }
+  body.ui6-theme #history.calendar-compact .history-day .history-totals b { display: inline; font-size: 14px; white-space: nowrap; }
+  body.ui6-theme #history.calendar-compact .list-caption { margin-top: 8px; padding-bottom: 4px; }
+  body.ui6-theme #history.calendar-compact .history-filterbar { align-items: center; gap: 8px; }
+  body.ui6-theme #history.calendar-compact .history-filterbar .history-filter-notice { margin: 0; padding: 4px 0; background: transparent; border: 0; line-height: 1.6; }
+  body.ui6-theme #history.calendar-compact .history-filterbar>button { min-width: 44px; margin-top: 0; padding-inline: 4px; font-size: 14px; }
+  body.ui6-theme #history.calendar-compact .history-day>.entry { padding: 16px 0; }
+  body.ui6-theme #history.calendar-compact .history-day-heading .count-badge,body.ui6-theme #history.calendar-compact .list-caption,body.ui6-theme #history.calendar-compact .entry-meta { font-size: 14px; }
+  body.ui6-theme #history.calendar-compact .calendar-summary .history-totals b { font-size: 16px; overflow-wrap: normal; word-break: normal; }
+  body.ui6-theme #history.calendar-compact .calendar-help>summary,body.ui6-theme #history.calendar-compact .calendar-weekdays { font-size: 14px; }
+  body.ui6-theme #history.calendar-compact .calendar-day .calendar-mobile-net { font-size: 14px; letter-spacing: -.02em; }
+  body.ui6-theme .account-overview-total strong { font-size: 34px; }
+  body.ui6-theme .settings-list-row { gap: 10px; }
+  body.ui6-theme .settings-list-value { font-size: 20px; }
+  body.ui6-theme #calendarModalEntries .day-entry { padding-inline: 0; }
+  body.ui6-theme #calendarModalSummary .history-totals>span:nth-child(n) { padding-inline: 7px; }
+  body.ui6-theme .analytics-dialog .analytics-tabs button { font-size: 12px; }
+}
+@media (max-width:360px) {
+  body.ui6-theme #history.calendar-compact .history-panel { padding: 0; }
+  body.ui6-theme #history.calendar-compact :is(.calendar-grid,.calendar-weekdays) { margin-inline: -10px; gap: 0; }
+  body.ui6-theme #history.calendar-compact .calendar-day { padding-inline: 0; }
+  body.ui6-theme #history.calendar-compact .calendar-summary .history-totals b { font-size: 14px; }
+  body.ui6-theme .template-fields { grid-template-columns: minmax(0,1fr); }
+  body.ui6-theme .quick-dialog #quickCard>.capture-heading { flex-wrap: wrap; }
+}
+@media (prefers-reduced-transparency:reduce) {
+  body.ui6-theme { --glass-bg: #1d2c43; --glass-sheet: #203049; --glass-nav: #23344c; }
+  body.ui6-theme :is(.panel,dialog,.sidebar,.sidebar nav),body.ui6-theme dialog[class] { -webkit-backdrop-filter: none; backdrop-filter: none; }
+  body.ui6-theme dialog::backdrop { background: #071120e0; -webkit-backdrop-filter: none; backdrop-filter: none; }
+}
+@media (prefers-reduced-motion:reduce) {
+  body.ui6-theme *,body.ui6-theme *::before,body.ui6-theme *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}

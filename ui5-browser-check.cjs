@@ -24,6 +24,9 @@ async function main(){
  await ev("document.getElementById('floatingCapture').click()");assert.equal(await ev('document.activeElement.id'),'quick');assert.equal(await ev("document.getElementById('quickDialog').open"),true);await shot('empty-capture');await ev("document.getElementById('closeQuick').click()");
  await ev("state=Money.migrate({budget:2000,accounts:[{id:'cash',name:'เงินสดทดสอบ',opening:10000,kind:'wallet',group:'cash'},{id:'bank',name:'บัญชีธนาคารทดสอบ',opening:5000,kind:'wallet',group:'bank'},{id:'debt',name:'ลูกหนี้ทดสอบ',opening:300,kind:'borrower',group:'debt'}],entries:[{id:'past',account:'cash',type:'income',amount:1000,date:'2026-09-25',category:'เงินเดือน',note:'รายรับทดสอบ'},...Array.from({length:12},(_,i)=>({id:'daily'+i,account:'cash',type:i===3||i===9?'income':'expense',amount:i===3?3200:i===9?1800:120+i*45,date:'2026-10-'+String(i+1).padStart(2,'0'),category:i===3||i===9?'เงินเดือน':'อาหาร',note:i<3?'กาแฟ':'รายการทดสอบ '+(i+1)}))]});persist();render()");
  const ledger=await ev('JSON.stringify(state)'),total=await ev('BalanceTrend.build(state).currentBalance');
+ assert.equal(await ev("document.querySelector('[data-trend-range=week]').getAttribute('aria-pressed')"),'true','Week is the initial chart range');
+ assert.equal(await ev("document.getElementById('trendPeriod').textContent.startsWith('สัปดาห์นี้')"),true,'Current week label');
+ assert.equal(await ev("document.getElementById('balanceTrend').textContent.includes('วันนี้ · ถึงตอนนี้')"),false,'No today-until-now label');
  for(const width of [320,375,430,1280]){
   await call('Emulation.setDeviceMetricsOverride',{width,height:width===1280?900:812,deviceScaleFactor:1,mobile:width<600});
   await ev("tab('home');window.scrollTo({top:0,behavior:'instant'})");await shot('home-'+width,width===1280||width===375);await noOverflow('home '+width);
@@ -49,7 +52,38 @@ async function main(){
  assert.equal(await ev("document.getElementById('moneyCurrent').scrollWidth<=document.getElementById('moneyCurrent').clientWidth"),true,'Full unbroken amount fits');
  await ev("document.getElementById('floatingCapture').click()");await shot('short-capture-320');await noOverflow('short capture');assert.equal(await ev("document.getElementById('quickDialog').getBoundingClientRect().bottom<=innerHeight"),true);assert.equal(await ev("getComputedStyle(document.querySelector('.capture-date-control')).color"),'rgb(198, 189, 213)','Date inherits UI5 secondary, not old olive');await ev("document.getElementById('closeQuick').click()");
  await call('Emulation.setEmulatedMedia',{features:[{name:'prefers-reduced-motion',value:'reduce'},{name:'prefers-reduced-transparency',value:'reduce'}]});await ev("render();document.getElementById('floatingCapture').click()");assert.equal(await ev('document.activeElement.id'),'quick');await ev("document.getElementById('closeQuick').click()");assert.equal(await ev("getComputedStyle(document.getElementById('moneyOverview')).backdropFilter"),'none');
- await ev('state=Money.migrate(initial());render()');assert.deepEqual(errors,[]);
+ // Phone account picker: many accounts and a still-closing software keyboard.
+ // VisualViewport overrides model its geometry, not a real iOS keyboard.
+ await call('Emulation.setTouchEmulationEnabled',{enabled:true,maxTouchPoints:1});
+ await ev("state=Money.migrate({budget:0,entries:[],accounts:Array.from({length:24},(_,i)=>({id:'scroll'+i,name:'บัญชีทดสอบ '+i,opening:1000,kind:'wallet',group:'bank'}))});account='scroll0';render()");
+ const scrollLedger=await ev('JSON.stringify(state)');
+ for(const [width,height,visible,offset] of [[320,568,568,0],[375,812,812,0],[390,844,320,45],[430,932,380,0],[844,390,390,0],[1280,900,900,0]]){
+  await call('Emulation.setDeviceMetricsOverride',{width,height,deviceScaleFactor:1,mobile:width<1000});
+  await ev(`Object.defineProperty(visualViewport,'height',{configurable:true,value:${visible}});Object.defineProperty(visualViewport,'offsetTop',{configurable:true,value:${offset}});visualViewport.dispatchEvent(new Event('resize'));tab('home');openCapture();document.getElementById('chooseCaptureAccount').click()`);
+  assert.equal(await ev('document.activeElement.id'),'closeCaptureAccount','Picker must not summon search keyboard');
+  await shot('account-scroll-'+width);
+  const geometry=await ev("(()=>{const d=document.getElementById('captureAccountDialog'),r=d.getBoundingClientRect();return {top:r.top,bottom:r.bottom,height:r.height,client:d.clientHeight,scroll:d.scrollHeight,x:r.left+r.width/2,y:r.top+Math.min(r.height/2,180)}})()");
+  assert(geometry.height>200,'Picker has usable height');if(width<1000)assert(geometry.scroll>geometry.client,'Many accounts can scroll');
+  if(width<1000){assert(geometry.top>=offset,'Picker above keyboard viewport top');assert(geometry.bottom<=offset+visible+1,'Picker fits visual viewport');}
+  const initialScroll=await ev("document.getElementById('captureAccountDialog').scrollTop");
+  await call('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:geometry.x,y:geometry.y}]});
+  for(let step=1;step<=10;step++){await call('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:geometry.x,y:geometry.y-step*12}]});await new Promise(r=>setTimeout(r,20));}
+  await call('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});await new Promise(r=>setTimeout(r,150));
+  if(width<1000)assert(await ev("document.getElementById('captureAccountDialog').scrollTop")>initialScroll,'Synthesized touch scroll moves picker '+width);
+  await ev("document.querySelector('[data-capture-account=scroll23]').scrollIntoView({block:'center',behavior:'instant'})");
+  const hit=await ev("(()=>{const b=document.querySelector('[data-capture-account=scroll23]'),r=b.getBoundingClientRect(),d=document.getElementById('captureAccountDialog').getBoundingClientRect();return {x:r.left+r.width/2,y:r.top+r.height/2,visible:r.top>=d.top&&r.bottom<=d.bottom}})()");assert(hit.visible,'Last account reachable');
+  await call('Input.dispatchMouseEvent',{type:'mousePressed',x:hit.x,y:hit.y,button:'left',clickCount:1});await call('Input.dispatchMouseEvent',{type:'mouseReleased',x:hit.x,y:hit.y,button:'left',clickCount:1});
+  assert.equal(await ev('account'),'scroll23');assert.equal(await ev("document.getElementById('captureAccountDialog').open"),false);assert.equal(await ev('JSON.stringify(state)'),scrollLedger,'Picking account does not alter ledger');
+  await ev('new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)))');
+  await ev("document.getElementById('quick').value='ข้าว 50';document.getElementById('quick').dispatchEvent(new Event('input'));document.getElementById('entryForm').requestSubmit()");await shot('account-scroll-review-'+width);
+  assert.equal(await ev('Boolean(captureReview)'),true,'Review opened '+width+' '+await ev("JSON.stringify({error:document.getElementById('formError').textContent,type,account,invalid:[...document.getElementById('entryForm').elements].filter(e=>e.validity&&!e.validity.valid).map(e=>({id:e.id,value:e.value,message:e.validationMessage}))})"));
+  assert.equal(await ev('document.activeElement.id'),'closeCaptureAccount');
+  await ev("document.getElementById('confirmCaptureAccount').scrollIntoView({block:'center',behavior:'instant'})");
+  assert.equal(await ev("(()=>{const d=document.getElementById('captureAccountDialog').getBoundingClientRect(),b=document.getElementById('confirmCaptureAccount').getBoundingClientRect();return b.top>=d.top&&b.bottom<=d.bottom})()"),true,'Confirm reachable with keyboard-sized viewport '+width+' '+await ev("(()=>{const d=document.getElementById('captureAccountDialog'),b=document.getElementById('confirmCaptureAccount');return JSON.stringify({dialog:d.getBoundingClientRect().toJSON(),button:b.getBoundingClientRect().toJSON(),scroll:d.scrollTop})})()"));
+  await ev("document.getElementById('closeCaptureAccount').click();document.getElementById('closeQuick').click()");
+ }
+ await ev("delete visualViewport.height;delete visualViewport.offsetTop;visualViewport.dispatchEvent(new Event('resize'));state=Money.migrate(initial());render()");assert.deepEqual(errors,[]);
+ console.log('PASS account picker: 24 accounts, keyboard-sized VisualViewport/offset, synthesized Chromium touch scrolling, last account selection, review confirmation reachable; ledger unchanged. Not real iOS.');
  console.log('PASS UI5 real Chrome: empty/new user, one capture action/no inline form, synchronous focus, native Enter, account review/cancel/draft, quota rollback/duplicate guard, save/edit total refresh, calendar retro capture, transfer expense reset, navigation invariance, long amounts, 320/375/430/1280, 320x568 short viewport, reduced motion/transparency. Not real Safari/iPhone.');
 }
 main().catch(e=>{console.error(e);process.exitCode=1}).finally(()=>{ws?.close();chrome?.kill();server?.close()});

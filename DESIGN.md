@@ -1,63 +1,58 @@
 ---
-name: จดไว — Glass Ledger
-description: A purple-black Thai ledger with shared tinted glass, a mint cash timeline, and recording on demand.
+name: จดไว — Afterglow
+description: A continuous Thai cash ledger on midnight navy with smoke-glass sheets and a shared recording dock.
 colors:
-  mint: "#74e3bf"
-  mint-hover: "#9aefd2"
-  mint-ink: "#102b23"
-  capture-mint: "#a5f0d7"
-  capture-hover: "#c0ffe9"
-  capture-ink: "#132a23"
-  income: "#8beac7"
-  income-soft: "#243c36"
-  expense: "#ffc0ba"
-  expense-soft: "#412e3c"
-  paper: "#100c1b"
-  surface: "#211b30"
-  surface-soft: "#2b243a"
-  surface-hover: "#352d46"
-  ink: "#f5f1fc"
-  secondary: "#c6bdd5"
-  line: "#ffffff20"
-  line-strong: "#b9a5d25c"
-  glass-bg: "#251e34"
-  glass-sheet: "#282135"
-  glass-nav: "#261f35"
-  glass-border: "#f3e8ff29"
-  field: "#211c2e"
-  field-border: "#8d7c9d69"
-  annotation: "#ffffff09"
-  text-action: "#a6f3d9"
-  timeline: "#a6efd9"
+  mint: "#a6e7da"
+  mint-hover: "#c6f3ea"
+  action-ink: "#152e31"
+  lavender: "#c2c0ff"
+  expense: "#f3b0b8"
+  income-soft: "#203f43"
+  expense-soft: "#423241"
+  paper: "#101b2c"
+  ink: "#e9f1ff"
+  secondary: "#aebed4"
+  surface: "#1b2a40"
+  surface-soft: "#24344b"
+  surface-hover: "#2d4057"
+  field: "#17263b"
+  line: "#e9f1ff1c"
+  line-strong: "#b1c5e154"
+  glass-bg: "#1d2c43"
+  glass-sheet: "#203049"
+  dock: "#1b2b40"
+  annotation: "#d5e6ff0b"
 rounded:
   badge: "7px"
-  timeline-selector: "10px"
-  tooltip: "11px"
-  inner-control: "12px"
+  segment: "9px"
+  dock-control: "10px"
+  control: "12px"
   glass: "16px"
 spacing:
   tight: "8px"
-  control: "12px"
-  mobile-panel: "18px"
-  panel: "22px"
-  desktop-gap: "24px"
-  mobile-gap: "26px"
+  row-gap: "12px"
+  mobile-gap: "18px"
+  mobile-panel: "20px"
+  mobile-inset: "22px"
+  panel: "28px"
+  home-gap: "32px"
+  home-column-gap: "44px"
 typography:
   display:
     fontFamily: '"Jotwai Thai", "Leelawadee UI", Tahoma, sans-serif'
-    fontSize: "48px"
+    fontSize: "54px"
     fontWeight: 500
-    lineHeight: 1.2
-    letterSpacing: "-1.4px"
+    lineHeight: 1.25
+    letterSpacing: "-.035em"
   headline:
     fontFamily: '"Jotwai Thai", "Leelawadee UI", Tahoma, sans-serif'
-    fontSize: "25px"
+    fontSize: "24px"
     fontWeight: 500
     lineHeight: 1.5
     letterSpacing: "-.025em"
   title:
     fontFamily: '"Jotwai Thai", "Leelawadee UI", Tahoma, sans-serif'
-    fontSize: "21px"
+    fontSize: "20px"
     fontWeight: 500
     letterSpacing: "-.02em"
   body:
@@ -67,34 +62,43 @@ typography:
   label:
     fontFamily: '"Jotwai Thai", "Leelawadee UI", Tahoma, sans-serif'
     fontSize: "13px"
-    fontWeight: 500
+  metadata:
+    fontFamily: '"Jotwai Thai", "Leelawadee UI", Tahoma, sans-serif'
+    fontSize: "12px"
+    lineHeight: 1.8
 components:
   button-primary:
     backgroundColor: "{colors.mint}"
-    textColor: "{colors.mint-ink}"
-    rounded: "{rounded.glass}"
+    textColor: "{colors.action-ink}"
+    rounded: "{rounded.control}"
     padding: "12px 17px"
+    height: "52px"
   button-primary-hover:
     backgroundColor: "{colors.mint-hover}"
   button-capture:
-    backgroundColor: "{colors.capture-mint}"
-    textColor: "{colors.capture-ink}"
-    rounded: "{rounded.glass}"
-    padding: "12px 22px"
+    backgroundColor: "{colors.mint}"
+    textColor: "{colors.action-ink}"
+    rounded: "{rounded.control}"
   button-secondary:
-    backgroundColor: "{colors.annotation}"
+    backgroundColor: "#d5e6ff08"
     textColor: "{colors.ink}"
-    rounded: "{rounded.glass}"
+    rounded: "{rounded.control}"
+    padding: "9px 14px"
   button-text:
-    textColor: "{colors.text-action}"
+    textColor: "{colors.mint}"
+  button-delete:
+    backgroundColor: "#493342"
+    textColor: "{colors.expense}"
+    rounded: "{rounded.control}"
   input:
     backgroundColor: "{colors.field}"
     textColor: "{colors.ink}"
-    rounded: "{rounded.glass}"
+    rounded: "{rounded.control}"
   navigation:
-    backgroundColor: "{colors.glass-nav}"
+    backgroundColor: "{colors.dock}"
     textColor: "{colors.secondary}"
     rounded: "{rounded.glass}"
+    padding: "8px"
   badge:
     backgroundColor: "{colors.annotation}"
     textColor: "{colors.secondary}"
@@ -103,127 +107,134 @@ components:
     backgroundColor: "{colors.glass-bg}"
     textColor: "{colors.ink}"
     rounded: "{rounded.glass}"
+    padding: "{spacing.panel}"
 ---
 
-# Design System: จดไว — Glass Ledger
+# Design System: จดไว — Afterglow
 
 ## Overview
 
-**Creative North Star: "Glass Ledger"**
+**Creative North Star: "Afterglow — กระจกยามค่ำ"**
 
-An everyday Thai finance ledger on a purple-black ground, with stationary purple and green light visible through tinted glass. The integrated current balance and mint cash timeline remain the visual anchor. The user approved extending this material across every page and sheet, with recording one intentional tap away.
+An everyday Thai ledger on a midnight navy canvas, lit by stationary lavender and teal light. Open amounts, a continuous cash graph, flat activity rows, and thin dividers provide the working surface. Smoke glass gives navigation and modal sheets a quiet material presence.
 
-The web app uses HTML, CSS, and JavaScript. UI5 extends the existing implementation through `dist/ui5.css` and `dist/ui5-home.css`; those final overrides govern the visual system. Self-hosted Noto Sans Thai, registered as Jotwai Thai, and the existing Lucide line icons carry the identity. The iPhone-like material is a visual direction, not a native iOS or device-verification claim.
+The user approved replacing the previous visual world with Afterglow. The final implementation is the cascade ending in `dist/ui6.css` and `dist/ui6-home.css`, with presentation behavior in `dist/ui6.js`. Self-hosted Noto Sans Thai, registered as Jotwai Thai, and the existing Lucide line icons preserve the product identity. This is a web material treatment.
 
 **Key Characteristics:**
 
-- Purple-black ground with restrained tinted glass across pages, navigation, and sheets.
-- Mint actions and income, warm coral expenses, and a pale mint cash timeline.
-- Readable Thai labels, unbroken tabular balance amounts, and visible keyboard focus.
-- One labelled floating recording action, with the existing editor available on demand.
+- Midnight navy ground with ice text, mint actions, lavender support, and coral expenses.
+- Continuous unboxed cash overview and recent activity.
+- One outer smoke-glass layer, with strong opaque fallbacks.
+- Readable Thai labels, adaptive tabular amounts, and visible keyboard focus.
+- Four mobile destinations and one labelled recording action in a shared dock.
 
 ## Colors
 
-The palette separates interaction, financial direction, and chart history against purple neutrals. Frontmatter records base tokens; conditional transparency and gradients are specified under Elevation & Depth and in the sidecar.
+The palette separates financial direction and interaction from the quiet blue working plane. Frontmatter records the base colors; conditional transparency belongs to Elevation & Depth.
 
 ### Primary
 
-Mint marks saving, carets, active controls, and focus. Mint-hover brightens actions; mint-ink supplies their dark text. The persistent recording button uses the lighter capture-mint and capture-ink pair. Income and income-soft identify incoming money.
+Mint carries primary actions, income, the cash line, carets, and keyboard focus. Mint-hover brightens save actions. Action-ink keeps primary labels dark and readable. The capture button has its own observed hover fill (`#c3f4e9`).
 
 ### Secondary
 
-Expense and expense-soft distinguish outgoing money; warm coral also marks validation and destructive actions. The timeline uses pale mint for historical cash and the selected point. Text-action provides lighter mint for supporting links and active navigation text.
+Lavender supports selected neutral controls, account and transfer icon treatments. Coral expense identifies outgoing amounts, validation, and destructive actions. Income-soft and expense-soft support financial states without replacing their labels or signs.
 
 ### Neutral
 
-Paper anchors the stationary light field. Surface, surface-soft, and surface-hover provide purple tonal grouping. Ink carries headings and money; secondary carries explanatory copy. Line divides rows, while line-strong outlines supporting controls. Glass-bg, glass-sheet, and glass-nav are opaque fallback surfaces; glass-border supplies the faint light rim. Fields remain mostly opaque for steady reading; annotation supports quiet counts and control fills.
+Paper grounds the canvas. Ice ink carries headings, amounts, and primary content; secondary blue carries dates, explanations, and metadata. Surface tones group supporting content. Fields remain opaque. Line divides rows; line-strong outlines fields and secondary controls. Glass-bg and glass-sheet are opaque material fallbacks. Dock is the opaque mobile navigation fallback.
 
-**The Financial Meaning Rule.** Preserve mint for incoming money and coral for outgoing money; accompany financial direction with words or signs. The cash timeline uses pale mint without changing the meaning of income or cash balance.
+**The Financial Meaning Rule.** Pair mint income and coral expense with readable words or signs; keep cash balance, net income, available money, and debt distinct.
 
 ## Typography
 
-All roles use self-hosted Noto Sans Thai, registered as Jotwai Thai, with Leelawadee UI and Tahoma fallbacks. Thai body copy has open line spacing; amounts use tabular numerals.
+**Display Font:** self-hosted Jotwai Thai (Noto Sans Thai), with Leelawadee UI, Tahoma, and sans-serif fallbacks.
+**Body Font:** the same Thai family. Existing amount columns can inherit the established Arial-first numeric stack.
 
-The display balance starts at (48px) desktop and (38px) at or below (900px), with mobile letter spacing of (-1px). `money-overview.js` measures the text and available width, then reduces its size when necessary, down to (16px). Refit after fonts load and widths change. The current balance remains independent of the selected historical point.
+The balance is the strongest type on the page. Thai content keeps generous line spacing, and the body sets tabular numerals. Display starts at (54px), weight (500), line height (1.25), letter spacing (-.035em); it becomes (43px) at (900px) and below, and (38px) at (360px) and below. The existing fitting behavior can reduce it further for long values.
 
-Page headings are (25px) desktop and (24px) mobile. Panel headings are (21px); dialog headings generally use (22px), and the recording heading (24px). Labels use (13px); contextual copy generally uses (12–13px) with generous line height. Timeline tooltip amounts use (17px) desktop and (15px) mobile, with (12px) dates. Ordinary form values remain (16px); quick capture uses (22px) and a (64px) minimum height.
+Page headings use (24px), or (23px) on mobile. Panel and home list headings use (20px). General sheet headings use (23px); capture and analytics headings use (25px). Body is (15px/1.65). Labels and support text use (13px); dates and row metadata use (12px), commonly with (1.8) line height. Standard fields remain (16px); quick capture uses (22px), with a (21px) placeholder and (64px) minimum height.
 
 **The Whole Amount Rule.** Keep the current balance unbroken and adapt its size to the available width.
 
 ## Layout
 
-The desktop shell retains its fixed sidebar and bounded main region. Home places the integrated balance/timeline beside frequent and pinned shortcuts in a (1.5fr / minmax(260px, 1fr)) grid, with (24px) gaps. The editor is absent from this layout. Recent records and spending follow across the full grid width.
+Desktop uses a (224px) quiet left rail and main padding of (34px clamp(24px,4vw,64px) 120px), bounded by (1600px). Home uses (minmax(0,1.6fr) minmax(250px,1fr)), with gaps of (32px 44px). Overview and recent activity form the left flow; recurring and learned shortcuts sit beside them, separated by a thin rule and (28px) inset. Spending, calculation disclosure, and storage information follow.
 
-At (900px) and below, home becomes one column: overview, frequent and pinned shortcuts, recent records, spending, and storage information. Main padding is (22px 18px), with bottom clearance of (178px + safe-area inset). General mobile panels use (18px) padding; compact history uses (14px), reducing to (10px) at (360px). Four navigation destinations move into the fixed bottom dock.
+Between (901px) and (1100px), the rail narrows to (190px) and home becomes one column. At (900px) and below, the rail disappears; main is bounded by (720px), with (22px) insets and bottom clearance of (190px + safe-area inset). Home order is overview, recent, shortcuts, spending, calculation disclosure, storage. Home gap is (18px); the header bottom margin is (16px), balance metadata bottom margin is (6px), and period bottom margin is (0). At (360px) and below, horizontal insets become (16px).
 
-The single labelled floating recording button sits (32px) from desktop right and bottom edges. On mobile it sits (18px) from the right, above the dock at (94px + safe-area inset). Its minimum size is (150px × 54px) desktop and (145px × 52px) mobile. Hide it while any dialog is open. Match its element ID and compact-calendar state when styling it so older capture rules cannot shrink it to an icon.
+The mobile dock is fixed with (16px) minimum side clearance, (12px + safe-area inset) bottom clearance, (500px) maximum width, and (8px) padding/gap. Four equal navigation targets sit above the full-width capture action. Navigation targets are at least (50px) tall; capture is at least (46px). Desktop capture is at least (150px × 52px), (32px) from the right and (30px) from the bottom. The existing navigation and capture nodes move between layouts, preserving handlers and focus.
 
-The existing recording dialog is centered on desktop and settles near the mobile bottom edge. It is bounded by the visual viewport and scrolls above the keyboard. Preserve safe-area padding, overscroll containment, and clearance for the recording action and dock at narrow widths.
+Sheets scroll within the visible viewport. Quick capture is bounded by (510px) and settles near the mobile bottom; keyboard state moves it to the visible viewport top and hides the dock. The compact account picker is a single scroll surface at (640px) width or below, or (500px) height or below. Native date editing remains available.
 
 ## Elevation & Depth
 
-Stationary radial purple and green light fields sit behind tinted surfaces. Panels, sidebar, dialogs, and mobile navigation use one material layer: faint light borders, modest rounding, and `blur(22px) saturate(125%)` where supported. Opaque frontmatter glass colors are the default. Within the backdrop-filter support query, glass-bg becomes (#2b233cba), glass-sheet (#292235eb), and glass-nav (#261e35c9). Reduced transparency restores the opaque defaults and disables blur.
+Two stationary radial light fields cross the navy ground: lavender (`#4e529f70`) at (92% 12%), fading by (62%), and teal (`#236c7a60`) at (4% 78%), fading by (66%). The overview, graph, recent rows, and shortcut rows remain unboxed.
 
-The summary uses `linear-gradient(145deg,#332b4ad9,#242237b8 45%,#1b473cc4)` and (16px) blur. Unsupported blur and reduced transparency use the same gradient with opaque stops (#332b4a, #242237, #1b473c). The chart remains transparent inside the summary.
+General panels and sheets have no border and use one outer material layer. Without blur support, panels use glass-bg and sheets use glass-sheet. With support, panels use (`#c9dfff08`), sheets (`#1b2c4399`), and blur (26px) with saturation (130%). The dock uses (`#1b2b40bb`) with blur (24px) and saturation (130%), falling back to dock. Reduced transparency restores opaque materials and removes blur, including the chart tooltip.
 
-Resting panels have no shadow. Structural lift belongs to dialogs (`0 24px 80px #0008`), mobile dock (`0 10px 32px #0006`), recording action (`0 8px 24px #0004`), chart tooltip (`0 8px 20px #0003`), and toast (`0 8px 28px #0005`). The modal backdrop is dark without another blur layer.
+Shadow vocabulary: sheets use (`0 24px 80px #050d1c80`), dock (`0 12px 36px #0006`), desktop capture (`0 8px 28px #0004`), and chart tooltip (`0 10px 26px #0004`). Modal backdrop uses (`#071120a6`) and blur (5px); reduced transparency uses (`#071120e0`) without blur.
 
-**The Single Material Rule.** Blur the outer surface once; inner rows, nested panels, and chart content borrow it without another backdrop filter.
+**The Single Material Rule.** Blur the outer surface once; nested panels, rows, and form content stay transparent or opaque without another backdrop filter.
+
+Controls transition color, background, and border over (160ms ease-out). The mobile active surface moves over (340ms cubic-bezier(.16,1,.3,1)). JavaScript reveals views over (300ms) from (5px) below, and newly opened sheets over (340ms) from (12px) below; CSS also defines a (260ms) sheet entrance. Both use the same easing. Reduced motion removes CSS transitions/animations and skips JavaScript reveals. Graph movement never fabricates financial data.
 
 ## Shapes
 
-Glass panels, dialogs, standard fields, supporting buttons, and the recording action share (16px) corners. Inner segmented controls and selected rows use (12px); timeline selectors retain (10px) outer and (7px) inner corners. Tooltips use (11px), small counts (7px). Ledger, settings, account, category, and frequent-record rows use separators and quiet hover fills rather than independent nested glass cards. Lucide icons retain their simple strokes.
+Outer glass panels, sheets, and dock use gently rounded (16px) corners. Fields and most actions use (12px); dock navigation and mobile capture use (10px); segments use (9px); quiet badges use (7px). Activity and shortcut rows use square edges, transparent fills, and a bottom divider. Thin strokes define fields and supporting actions. Existing line icons remain SVG, with no decorative glyph substitution.
 
 ## Components
 
 ### Buttons
 
-Save actions use mint with dark text, semibold weight, and a (52px) minimum height; supporting primary actions are at least (48px). Secondary controls use a faint white fill and line-strong border, brightening on hover. Text actions use light mint. Disabled buttons use (0.5) opacity. Focus is a (2px) mint outline offset by (3px). Most buttons and disclosure summaries provide a (44px) minimum target.
+Primary save uses mint and action-ink, (12px) radius, (52px) minimum height, (15px) type, and weight (600). Supporting primary actions use (48px) minimum height and (14px) type. Hover uses mint-hover; disabled actions use opacity (.5). Secondary actions use a faint ice fill, line-strong border, and (44px) minimum height; hover brightens fill and shifts the border toward lavender. Text actions use mint and (44px) minimum height. Delete uses a muted coral surface and coral text, brightening on hover.
 
-The persistent button reads “จดรายการ” with the existing plus icon. It opens the existing sheet and focuses the quick field synchronously in the click handler. It preserves drafts and hides while any modal is open; closing restores the appropriate trigger or daily-history focus. Daily-history actions may open the same sheet on a selected date. Do not restore duplicate overview capture buttons or an inline editor.
+All interactive controls expose a mint (2px) focus outline with (3px) offset. Native form behavior and focus timing remain part of the implementation.
+
+The keyboard skip link uses mint with action-ink and focuses the shared main landmark, regardless of active destination. The mobile home heading remains available to assistive technology while visually clipped beside the brand treatment.
 
 ### Chips
 
-Type and analytics selectors use a shallow dark container, muted green selection, and pale mint text. Expense selection uses muted coral. The integrated chart retains its pale mint selected range with dark green text. Keep pressed-state semantics synchronized. Counts and period annotations stay quiet and do not imply interactivity.
+Quiet counts use annotation fill, secondary text, no border, (7px) radius, and (12px) type. General segmented controls sit on translucent navy with (4px) padding and (12px) corners; selected options use translucent lavender. Income/expense selection uses matching tinted fills and financial colors. Home graph ranges instead use open tabs with a mint (2px) selected underline and no container fill.
 
 ### Cards / Containers
 
-Panels share glass-bg, glass-border, and the glass radius, generally with (22px) desktop padding. Balance and timeline form one gradient surface, padded (24px 24px 14px) desktop and (20px 16px 8px) mobile. Avoid another glass card around chart content. Reserve and after-budget summaries remain hidden while stored budgets remain intact. Rows and empty-state copy preserve the established financial meanings.
+General panels use the single material layer, (16px) corners, and (28px) padding, reducing to (20px) below (900px). Nested panels are transparent. Home overview and recent activity have no fill, border, radius, blur, or shadow. Flat entry rows use thin dividers, a clear amount column, (14px) title and (12px) metadata; home rows have (16px) vertical padding and (12px) gap.
+
+History is an open working plane, aligned with the page heading rather than inset in another glass card. Its shared view switch retains one quiet segment rail; search remains a separate named action. Month totals use a flat divider strip, while daily list groups use a clear date header and continuous entry rows. Empty calendar dates have no tile fill or stroke; selected dates use a mint outline/fill and today retains a lavender date ring. Mobile calendar rows are compact, with at least44px date targets at320/375/430px. Daily summary amounts wrap as whole fields when space is limited rather than breaking a decimal.
 
 ### Inputs / Fields
 
-Ordinary fields use the mostly opaque field color, field-border, ink text, and mint caret. Focus strengthens the border and supplies the shared outline. The sheet's quick field uses darker translucent fill (#141525b3) and (#b8d5d72e) border. Preserve parser validation, category disclosure, and account selection.
+Mobile history summaries and daily totals use compact spacing and inline label/amount pairs that wrap as whole fields. Calendar meaning is visible above the grid: daily net is an approximate abbreviated value, not account balance; exact values remain in day details. Empty days use a shorter sheet without decorative hero, zero-value totals or an edit hint. Search clear retains at least44×44px with14px type. Calendar editing restores the originating entry's keyboard focus; moved/deleted entries fall back to remaining entries or Add when empty.
 
-The recording date control is secondary text on a transparent background. Hover brightens it to light mint; chosen-date status uses a muted green fill and mint text at (12px). The actual date input remains (16px), with a visible focus-within outline.
+Fields use field fill, line-strong stroke, ice text, (12px) corners, and (50px) minimum height. Focus shifts the border to mint; the keyboard outline remains visible. Placeholders use secondary blue at full opacity. The quick field uses its darker observed fill (`#142237`), larger type, and (64px) minimum height. Account choice uses a (68px) minimum trigger and selectable rows at least (70px) tall.
 
-Multiple accounts continue through the existing account picker and explicit confirmation. Keep note, amount, date, and category available before saving; show selected accounts and learned suggestions clearly. Account rows scroll independently and long notes retain their bounded scrolling region. Closing preserves the draft. A single account retains direct saving.
+Capture shows a (14px) one-amount format hint. An explicit payment account belongs to the current draft and takes precedence over learned suggestions; cancellation preserves it, while saving or starting a new draft releases it. Ambiguous multi-number text stays in the field with a specific correction example.
 
 ### Navigation
 
-Four destinations retain icons, text, and active-state semantics. Inactive labels use secondary; active items use a faint mint field and light mint text. Desktop sidebar and mobile dock share tinted purple glass with opaque and reduced-transparency fallbacks. Mobile tabs are at least (54px) high and preserve safe-area spacing.
+Desktop navigation uses a transparent rail with a faint mint active fill and ice active label. Mobile uses one smoke-glass dock, four equal destinations, SVG icons (20px), and labels (12px). A translucent mint surface moves behind the selected item. The full-width capture action belongs to the same dock, with no additional shadow.
 
-### Cash Timeline
+### Continuous Cash Timeline
 
-The real current balance and real-data chart share one summary. A pale mint (2px) SVG line has straight segments, rounded joins and caps, a selected dot, faint gridlines, and a mint area fading to transparent. Month is the default range. Period navigation changes the chart and comparison while the large current balance stays independent. Keep the actual baseline date visible and use increase/decrease language rather than profit/loss.
+The default range is week; month and year remain available. Current owned money remains separate from a selected historical point. The mint cash line uses (2.2px) stroke, subtle blue gridlines at opacity (.08), and secondary date labels (12px). Period arrows have (44px) targets. The tooltip uses a smoked navy fill, (12px) corners, (17px) amount, and (12px) date. Pointer inspection, the keyboard range control, and the daily-history action use actual dated records. The calculation disclosure is moved below the working overview and recent flow, near the bottom of home. It explains historical reconstruction and limits; there is no forecast.
 
-Support pointer selection and the existing keyboard range control. The tooltip shows selected amount and date on dark green (#152b25f5), with pale text (#f1fff8). Clamp it using measured dimensions and reposition on plot resize so both edges remain readable. Preserve the accessible selected-point summary and daily-history action. Historical cash reconstructs recorded movements from the current balance; its completeness caveat belongs in the help disclosure.
-
-Frequent and pinned entries stay compact rows. Learned entries retain their confirmation before saving and separate hide action. They do not become a second editor.
-
-Shared button color transitions last (160ms); inherited field and segmented-control transitions remain brief. The current balance may acknowledge changes with a (320ms) animation. Reduced motion disables transitions, animations, smooth scrolling, and floating-button movement.
+A single actual date uses a compact (360×134) plot with a one-day explanation, no redundant disabled slider, and a route to the month view. Selected date/amount remain available to assistive technology. Multi-date plots retain their original geometry and keyboard inspection. On mobile, history tabs, search/current-month actions, explanatory text and compact net figures use (14px); the calendar extends to the panel edges, reaching (44px) date targets even at (320px) without horizontal scrolling. Month summary figures use (16px), or (14px) at (360px) and below, with no word break inside a decimal amount.
 
 ## Do's and Don'ts
 
 ### Do:
 
-- Do preserve Thai labels, tabular amounts, and visible mint keyboard focus.
-- Do share tinted glass across pages and sheets with opaque and reduced-transparency fallbacks.
-- Do keep the current balance unbroken and the mint timeline paired with a readable selected value, date, and daily-history action.
-- Do keep one labelled floating recording action that opens the existing sheet and focuses typing synchronously.
+- **Do** preserve Thai labels, tabular amounts, and visible mint keyboard focus.
+- **Do** keep the cash overview and recent activity continuous and unboxed.
+- **Do** use one outer smoke-glass layer with opaque and reduced-transparency fallbacks.
+- **Do** keep four mobile destinations and one labelled capture action in the shared dock.
+- **Do** show actual dated history with week selected by default.
 
 ### Don't:
 
-- Don't add decorative rasters, emoji, or new UI dependencies.
-- Don't turn income, expense, cash balance, available money, and debt into interchangeable labels.
-- Don't stack backdrop blur on nested rows or restore the permanent inline capture form.
-- Don't describe this web material as native iPhone support or as verified Safari behavior.
+- **Don't** interchange cash balance, net income, available money, and debt.
+- **Don't** stack backdrop blur on nested rows or restore the permanent inline capture form.
+- **Don't** animate invented financial data or imply a forecast.
+- **Don't** replace the existing SVG icon vocabulary with emoji or decorative glyphs.
+- **Don't** describe this web material as verified native iPhone or Safari behavior.

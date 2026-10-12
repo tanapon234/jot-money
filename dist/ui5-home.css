@@ -44,6 +44,19 @@ body.ui5-theme .quick-dialog #entryForm .segments{margin-bottom:18px}
 body.ui5-theme .quick-dialog :is(input,select){font-size:16px}
 body.ui5-theme.app-keyboard .quick-dialog{top:var(--app-view-top,0px);bottom:auto;margin:12px auto 0}
 body.ui5-theme .capture-account-dialog{max-height:calc(var(--app-viewport,100dvh) - 24px)}
+/* One scroll surface on phones, including the keyboard's closing animation.
+   A non-shrinking review footer must never squeeze the account list to zero. */
+@media(max-width:640px),(max-height:500px){
+ body.ui5-theme .capture-account-dialog{
+  display:block;position:fixed;inset:calc(var(--app-view-top,0px) + 12px) 0 auto;
+  margin:0 auto;padding:20px;max-height:calc(var(--app-viewport,100dvh) - 24px);
+  overflow-y:auto;overflow-x:hidden;scroll-padding:16px;
+  -webkit-overflow-scrolling:touch;touch-action:pan-y;
+ }
+ body.ui5-theme .capture-account-dialog:not([open]){display:none}
+ body.ui5-theme #captureAccountList{flex:none;overflow:visible;min-height:0}
+ body.ui5-theme #captureAccountList>button{flex-shrink:0}
+}
 body.ui5-theme .ui3-touch-glow{display:none}
 body.ui5-theme #moneyOverview :is(#trendOpenDay,#trendNotice){font-size:12px}
 body.ui5-theme #home .sample-banner,body.ui5-theme #home .sample-banner :is(p,small){font-size:12px;line-height:1.8}

@@ -1,5 +1,68 @@
 # ส่งต่องานให้ Codex
 
+## demo.27 — release authorized (2026-10-12)
+
+- User explicitly requested updating the website after approving all five history fixes. This supersedes older local-only notes below for this release. Use feature/demo27-afterglow preview, verify deployed bytes/browser, then fast-forward demo for existing Cloudflare Git integration. No shutdown/email requested in this turn.
+- VERSION, dist/version.json and footer now demo.27 / UI6 Afterglow. Preserve localStorage and approved UI6/account-picker/sparse-chart/focus/input fixes. Exclude local .agents/.codex, screenshots/mocks/review artifacts, design-picker utility and new UI backup folders from staging.
+- Release checks: 18 syntax/core/history/weekly/analytics/chart/category/new-user/frequent/templates/capture/synthetic-import checks plus UI6 Chrome passed. No physical Safari/iPhone verification. Sol / Medium read-only release review; Luna / Medium repetitive checks. Public deployment verification remains a required release step, not implied by a successful push.
+
+## Local — approved five history critique fixes (2026-10-12)
+
+- User approved both efficiency and clarity, all five issues from critique2026-10-12T09-54-20Z__dist-index-html.md. Preserve Afterglow, financial rules and jot-money-v1. No commit/push/deploy; VERSION stays demo.26 until authorized release.
+- index.html/ui6.css: compact mobile summaries/day totals/search scope, visible calendar net/approximation explanation, clear-search >=44px/14px, empty-day variant with no decorative hero/zero-total scaffolding or misleading edit hint.
+- app.js: transient calendar edit return context captured from actual invoking row; cancel/save restore original entry after render, move/delete choose remaining row by index, empty day Add fallback. Close without context is a no-op, and newly opened sheets are not focus-stolen. No schema/ledger writes added.
+- Sol / Medium owns visual implementation and independently reviews root's focus logic; root owns behavior/integration and capture unit regression; Luna / Medium owns mechanical browser assertions/captures, not design judgment. No Astra escalation.
+- Final node ui6-browser-check.cjs --review passes all five assertions plus existing responsive/account flows at320/375/430/1280. Core/history/history-UI/analytics/capture regressions pass. Sol and root inspected final screens; list first record ~420px vs525, searched first record ~500px vs650 at375px; empty day ~286px vs609. No new numeric critique score; not physical iPhone/Safari/VoiceOver verification. Review verdict ui6-history-five-fixes-verdict.md. All critique priorities resolved; snapshot closed after final verification. App8000 remains running; critique/test-only processes stopped.
+
+## Local — history/calendar Afterglow refinement (2026-10-12)
+
+- User requested more beautiful list/calendar views; local only, no commit/push/deploy. VERSION remains published demo.26. CSS-only product change in dist/ui6.css, no ledger/storage/schema changes or dependencies.
+- Open history working plane, shared segmented switch/search, flatter month totals, integrated month controls, clearer day group hierarchy and quieter empty calendar dates. Keep native day dialog/edit/add, clickable day headings, shared search and signed net meaning unchanged.
+- Helpers: GPT-6.1 Sol / Medium owns scoped CSS/design; GPT-6 Luna / Medium owns browser test captures and regression evidence. Root integrates and visually inspects. No Astra escalation needed for this scoped refinement.
+- Initial Chrome batch passed responsive assertions; visual inspection caught legacy specificity overriding empty-date/day-group surfaces. Corrected in one batch and final `node ui6-browser-check.cjs --review` passed: no page/dialog overflow at320/375/430/1280, mobile dates >=44x44 and control text >=14px, final date scrolls above dock at all four widths. Root and Luna inspected final list/calendar captures. Synthetic core/history/history-UI/analytics/capture tests pass; physical iPhone/Safari not tested. No new critique score claimed.
+
+## Local — Impeccable five-fix follow-up (2026-10-12)
+
+- User approved all five priorities in critique `2026-10-12T08-36-01Z__dist-index-html.md` and compact single-date chart. Preserve Afterglow; no Undo/import-performance expansion, no commit/push/deploy/shutdown, VERSION remains demo.26 until release authorized.
+- Explicit current-draft account overrides learning, including cancel/reopen and validation errors; successful save/new draft clears intent. Multiple-number input receives a specific correction while parser/schema stay unchanged.
+- Skip link targets/focuses shared main with readable mint/action-ink; mobile home H1 stays accessible. Mobile history support text and net amounts enlarged; seven-column calendar reaches 44px cells at320px by using edge space.
+- Single-date chart compact/explained with a month-view action; real dates/balances and multi-date inspection remain unchanged. Final single-point SVG is360×134 so its tooltip does not cover the point at320px. Calendar monthly figures keep whole decimals (16px mobile/14px at320) while date net/control labels use14px.
+- All five priorities verified in `.impeccable/review/ui6-five-fix-verdict.md`: targeted revised Nielsen32/40 from29 and technical15/20 from14, not a fresh whole-app critique or WCAG certification. Final `node ui6-browser-check.cjs --review`, capture/core/history/analytics/balance-trend and synthetic import/rollback checks passed. Chrome emulation/synthesized touch only, no physical iPhone/Safari/screen reader verification.
+- Final confirmation also reproduced a queued quickDialog close-event focus race. Close now preserves focus deliberately moved to main/another live control; normal close still returns to its trigger. Deterministic test `.impeccable/review/ui6-focus-close-check.cjs --assert` and full capture/browser regressions passed.
+- Model preference updated by user during work: repetitive test work GPT-6 Luna / Medium; reasoning/design work GPT-6 Astra / Medium. Earlier account fix was completed by GPT-6.1 Sol / Medium before this preference arrived.
+
+## Local — UI6 Afterglow selected and implemented (2026-10-12)
+
+- User chose Afterglow — กระจกยามค่ำ from prepared chooser. Current app preview http://127.0.0.1:8000/ uses UI6 via dist/ui6.css, ui6-home.css, ui6.js and index.html. No commit/push/deploy/shutdown; VERSION remains published demo.26 pending release authorization. Do not mistake old pending-direction notes below for current state.
+- Continuous unboxed balance/timeline and recent entries; mobile dock reuses actual four navigation nodes and the single capture button (desktop restores them to rail/body). No replacement ledger handlers/storage accesses. UI3 presentation script skips when UI6 is active to avoid duplicate legacy effects.
+- Existing native capture/date/account/transfer/calendar/import flows retained. UI5 visualViewport and outer scrolling account-picker fixes preserved. Graph defaults week; current balance stays independent, month/year comparison still visible. Calculation disclosure moved below spending, remains available.
+- Independent review initial fix: first recent row metadata must fit above375x812 dock; stale DESIGN.md must be refreshed. Both resolved and scored in .impeccable/review/ui6-verdict.md, disposition ship for those two fixes only. DESIGN.md and schema2 .impeccable/design.json now record Afterglow. All9 final captures valid, not a claim of exhaustive whole-app certification.
+- Three fresh helpers used GPT-6.1 Sol / Medium: shared UI CSS, independent finish review/verdict, source-derived design documentation. No Astra escalation. Final app and assets respond200 locally; UI6 browser test includes complete-first-row/dock and month-comparison assertions. Overlapping260msCSS/340msJS sheet entrances noted in documentation as existing implementation, not treated as separate visible failure by review.
+- Passed synthetic core/history/weekly/analytics/balance/category/new-user/frequent/templates/import suites and UI6 real-Chrome flow (320/375/430/1280, short viewport, 24 accounts, synthesized touch, selection/review/draft/save/edit/rollback/reduced modes). No physical iPhone/Safari verification.
+
+## Local — prepared Safer/Bolder picker (2026-10-12)
+
+- User explicitly approved prepared-set switching, not automatic AI generation. Replaced the temporary question-page workflow with separate local utility `.impeccable/local-picker/` at http://127.0.0.1:8016/. Start with `start-design-picker.cmd` or `node .impeccable/local-picker/server.cjs`; no idle expiry, Ctrl+C stops it.
+- Safer = four existing round0 sketches; Bolder = seven existing round1 sketches. Sets preload and switch client-side, including offline after initial loading. Repeat clicks retain the same set; no AI requests and no new designs are implied. UI explains this.
+- Full-screen links, choice buttons and separate chooser localStorage key `jot-ui6-design-picker-choice`; no app storage reads/writes. User must report the selected name in chat. No direction approved or UI6 app implementation yet.
+- Old question URLs/keys below are historical, not current instructions. App dist, VERSION, financial data and production untouched by this picker task; no commit/push/deploy.
+- Verification: isolated Chrome test `../.qa/design-picker-check.cjs` passed all11 routes,100 offline switches with0 requests,320/375/430/1280 widths,keyboard Enter,persistence,retry and no runtime exceptions. Mobile/desktop captures visually inspected. Not tested on physical iPhone/Safari.
+
+## Local — weekly chart and UI6 direction selection pending
+
+- balance-trend-ui.js now defaults to week, labels the active week “สัปดาห์นี้”, removes “วันนี้ · ถึงตอนนี้”; daily selected values remain truthful, calculation unchanged.
+- UI6_DIRECTION.md and .impeccable/mocks/decision/ui6-options.json record the replacement-design round, seed ed5551ef, question key4a54a410. No direction approved and no full UI6 implementation yet. Local preview app is still UI5 plus account-picker fix.
+- User selected Bolder reroll on old question4a54a410; page was stuck waiting for next hand. Old server expired during fix. New live page http://127.0.0.1:63347/, key02761437, payload ui6-bolder-options.json. Collect with impeccable serve-question --wait --key 02761437; update same server for further reroll. Never silently choose for the user. Ask user to notify chat after a choice, as no agent is automatically running after a final reply.
+
+## Local fix — เลือกบัญชีบน iPhone (2026-10-12)
+
+- ยังไม่ commit/push/deploy; เว็บยังเป็น demo.26 ที่เผยแพร่ก่อนหน้า
+- app.js เพิ่ม openCaptureAccounts() blur ช่องพิมพ์ก่อนเปิด dialog และ focus ปุ่มปิดแบบ preventScroll แทนค้นหาอัตโนมัติ ทั้งเลือกบัญชีตรงและหลัง submit; ค้นหายังแตะเพื่อพิมพ์ได้
+- ui5-home.css ใช้ dialog เป็น scroll surface เดียวบนจอกว้าง <=640 หรือสูง <=500; list ไม่ถูก flex footer บีบเป็นศูนย์ ใช้ visualViewport height/offsetTop ทั้งระหว่างคีย์บอร์ดปิด/เปิด
+- เพิ่ม ui5-browser-check หลายบัญชี24บัญชี widths320/375/390/430/844/1280, simulated visualViewport320/380และoffset45, touchStart/move/end ผ่าน Chromium, เลือกบัญชีสุดท้ายและเข้าถึง confirm, ไม่เปลี่ยน ledger
+- สองเฟรมระหว่างปิด manual picker กับ submit ใน test ให้ native close event จบก่อนเปิด review ไม่เรียกสอง user actions ใน task เดียว
+- ยังไม่ได้ตรวจ Safari/iPhoneจริงหรือคีย์บอร์ดจริง ต้องให้ผู้ใช้ยืนยันในเครื่องเป้าหมาย ไม่อ้าง viewport override ว่าเป็น iOS test
+
 ## UI5 / demo.26 — ผู้ใช้อนุมัติเผยแพร่และปิดเครื่องเมื่อครบ (2026-10-12)
 
 - UI5_DIRECTION.md กำหนดสไตล์กราฟเดิม + glass ทั้งแอป; ui5.css ระบบร่วมทุกหน้า ui5-home.css ภาพรวม/FAB/แผงจด ui5.js visualViewport และซ่อน FAB เมื่อมี dialog เปิด ไม่มี storage writes

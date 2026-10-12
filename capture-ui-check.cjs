@@ -14,7 +14,7 @@ function harness(seed=fixture,preference){
  window.HTMLElement.prototype.showModal=function(){this.setAttribute('open','')};
  window.HTMLElement.prototype.close=function(){this.removeAttribute('open');this.dispatchEvent(new window.Event('close'))};
  Object.defineProperty(window.HTMLElement.prototype,'open',{configurable:true,get(){return this.hasAttribute('open')}});
- window.HTMLElement.prototype.reportValidity=()=>true;window.HTMLElement.prototype.focus=function(){focusedDocuments.set(this.ownerDocument,this.id||this.dataset.calendarDay||this.dataset.captureDate)};
+ window.HTMLElement.prototype.reportValidity=()=>true;window.HTMLElement.prototype.focus=function(){focusedDocuments.set(this.ownerDocument,this.id||this.dataset.calendarDay||this.dataset.captureDate||(this.dataset.edit?'entry:'+this.dataset.edit:undefined))};
  window.HTMLElement.prototype.reset=function(){for(const e of this.querySelectorAll('input'))e.value=e.getAttribute('value')||''};
  Object.defineProperty(window.HTMLSelectElement.prototype,'value',{configurable:true,get(){const o=this.querySelector('option[selected]')||this.querySelector('option');return o?.getAttribute('value')??o?.textContent??''},set(v){for(const o of this.querySelectorAll('option'))if((o.getAttribute('value')??o.textContent)===v)o.setAttribute('selected','');else o.removeAttribute('selected')}});
  const ctx=vm.createContext({window,document,localStorage:{getItem:k=>memory.get(k)||null,setItem:(k,v)=>{writes.push(k);memory.set(k,v)}},crypto:require('node:crypto').webcrypto,Intl,Date:CaptureTestDate,Number,JSON,Math,Set,Map,Blob,URL,console,confirm:()=>true,setTimeout:()=>1,clearTimeout:()=>{}});
@@ -29,7 +29,7 @@ for(const [pref,expected] of [[undefined,'w0'],['w19','w19'],['stale','w0'],['hi
 const h=harness(fixture,'w19'),before=h.run('JSON.stringify(state)'),balances=h.run('JSON.stringify(state.accounts.map(a=>Money.balance(state,a.id)))');
 h.fill('quick','ข้าว 50');h.input('quick');h.fill('category','อื่น ๆ');h.change('category');
 const category=h.el('category').value;
-h.click('#chooseCaptureAccount');assert.equal(h.focus(),'captureAccountSearch');
+h.click('#chooseCaptureAccount');assert.equal(h.focus(),'closeCaptureAccount');
 assert.equal(h.document.querySelectorAll('[data-capture-account]').length,25);
 for(const id of ['hidden','deleted','borrower'])assert.equal(h.document.querySelector(`[data-capture-account="${id}"]`),null);
 h.fill('captureAccountSearch','Synthetic wallet 24');h.input('captureAccountSearch');assert.equal(h.document.querySelectorAll('[data-capture-account]').length,1);
@@ -93,7 +93,24 @@ const emptyRetro=harness({budget:0,accounts:[],entries:[]});emptyRetro.run("tab(
 const dayTap=harness({...fixture,entries:[]},'w0');dayTap.run("tab('history');historyView='calendar';changeCalendarMonth('2023-12')");
 const dayTapBefore=dayTap.run('JSON.stringify(state)');dayTap.click('[data-calendar-day="2023-12-31"]');assert.ok(dayTap.el('calendarDayDialog').open);assert.ok(!dayTap.el('quickDialog').open);assert.match(dayTap.el('calendarModalEntries').textContent,/ยังไม่มีรายการ/);assert.equal(dayTap.run('JSON.stringify(state)'),dayTapBefore);
 dayTap.click('#calendarModalAdd');assert.equal(dayTap.el('entryDate').value,'2023-12-31');dayTap.fill('quick','ข้าว 40');dayTap.submit('entryForm');assert.ok(dayTap.el('calendarDayDialog').open);assert.equal(dayTap.focus(),'calendarModalAdd');assert.match(dayTap.el('calendarModalEntries').textContent,/ข้าว/);
-dayTap.click('#calendarModalEntries [data-edit]');assert.ok(dayTap.el('editDialog').open);dayTap.fill('editAmount','65');dayTap.submit('editForm');assert.ok(!dayTap.el('editDialog').open);assert.ok(dayTap.el('calendarDayDialog').open);assert.match(dayTap.el('calendarModalSummary').textContent,/65\.00/);assert.equal(dayTap.focus(),'calendarModalAdd');
+const fallbackDay=harness({...fixture,entries:[
+ {id:'move-first',type:'expense',amount:10,account:'w0',date:'2023-12-31',note:'first',category:'อื่น ๆ'},
+ {id:'stay-next',type:'expense',amount:20,account:'w0',date:'2023-12-31',note:'next',category:'อื่น ๆ'}]},'w0');
+fallbackDay.run("tab('history');historyView='calendar';changeCalendarMonth('2023-12')");
+fallbackDay.click('[data-calendar-day="2023-12-31"]');
+fallbackDay.click('#calendarModalEntries [data-edit="move-first"]');
+const pendingEditContext=fallbackDay.run('JSON.stringify(calendarEditReturn)');
+fallbackDay.run("document.getElementById('editDialog').dispatchEvent(new window.Event('close'))");
+assert.equal(fallbackDay.run('JSON.stringify(calendarEditReturn)'),pendingEditContext,'Queued old close does not consume a newly opened edit context');
+fallbackDay.fill('editDate','2024-01-01');fallbackDay.submit('editForm');
+assert.equal(fallbackDay.focus(),'entry:stay-next','Moving a record returns to a remaining day entry');
+fallbackDay.click('#calendarModalEntries [data-edit="stay-next"]');fallbackDay.click('#deleteEntry');
+assert.equal(fallbackDay.focus(),'calendarModalAdd','Deleting the final record focuses Add');
+assert.ok(fallbackDay.el('calendarDayDialog').classList.contains('is-empty-day'));
+assert.ok(fallbackDay.el('calendarModalEditHint').hidden,'Empty day has no misleading edit hint');
+const editedDayId=dayTap.document.querySelector('#calendarModalEntries [data-edit]').dataset.edit;
+dayTap.click('#calendarModalEntries [data-edit]');assert.ok(dayTap.el('editDialog').open);dayTap.click('#closeEdit');assert.equal(dayTap.focus(),'entry:'+editedDayId,'Cancel returns to the original day entry');
+dayTap.click('#calendarModalEntries [data-edit]');dayTap.fill('editAmount','65');dayTap.submit('editForm');assert.ok(!dayTap.el('editDialog').open);assert.ok(dayTap.el('calendarDayDialog').open);assert.match(dayTap.el('calendarModalSummary').textContent,/65\.00/);assert.equal(dayTap.focus(),'entry:'+editedDayId,'Save returns to the rebuilt day entry');
 dayTap.click('#calendarModalEntries [data-edit]');dayTap.fill('editDate','2024-01-01');dayTap.submit('editForm');assert.match(dayTap.el('calendarModalEntries').textContent,/ยังไม่มีรายการ/);dayTap.click('#closeCalendarDay');assert.equal(dayTap.focus(),'2023-12-31');
 dayTap.run("changeCalendarMonth('2024-01')");dayTap.click('[data-calendar-day="2024-01-01"]');dayTap.click('#calendarModalEntries [data-edit]');dayTap.click('#deleteEntry');assert.match(dayTap.el('calendarModalEntries').textContent,/ยังไม่มีรายการ/);assert.equal(dayTap.run('state.entries.length'),0);dayTap.click('#closeCalendarDay');
 const homeDate=harness(fixture,'w0');homeDate.run("tab('history');openCapture('2024-02-29')");homeDate.fill('quick','กาแฟ 50');homeDate.click('#closeQuick');assert.equal(homeDate.el('entryDate').value,'2024-03-03','Cancel retro capture restores today on the shared home form');assert.equal(homeDate.el('quick').value,'กาแฟ 50','Keep draft note');homeDate.fill('entryDate','2024-02-28');homeDate.run("tab('home')");assert.equal(homeDate.el('entryDate').value,'2024-03-03','Home entry defaults to Bangkok today');homeDate.fill('entryDate','2024-02-27');homeDate.change('entryDate');homeDate.run('render()');assert.equal(homeDate.el('entryDate').value,'2024-02-27','Explicit date stays while using the home form');homeDate.run("tab('history');historyView='calendar';changeCalendarMonth('2024-02')");homeDate.click('[data-calendar-day="2024-02-28"]');homeDate.click('#calendarModalAdd');assert.equal(homeDate.el('entryDate').value,'2024-02-28','Calendar capture still uses the selected date');homeDate.click('#closeQuick');assert.equal(homeDate.el('entryDate').value,'2024-03-03');assert.ok(homeDate.el('calendarDayDialog').open);
@@ -127,3 +144,31 @@ prediction.fill('quick','กาแฟ 80');prediction.click('#confirmCaptureAcco
 const only=harness({budget:7,accounts:[{id:'solo',kind:'wallet',opening:100}],entries:[]});only.fill('quick','ข้าว 10');only.input('quick');only.stage('entryForm');assert.equal(only.run('state.entries.length'),1);assert.ok(!only.el('captureAccountDialog').open);assert.equal(only.run('state.entries[0].account'),'solo');
 const rollback=harness(fixture);rollback.fill('quick','ข้าว 25');rollback.input('quick');rollback.stage('entryForm');const rollbackBefore=rollback.run('JSON.stringify(state)');rollback.run("localStorage.setItem=()=>{throw Error('Synthetic storage failure')}");rollback.click('#confirmCaptureAccount');assert.equal(rollback.run('JSON.stringify(state)'),rollbackBefore);assert.equal(rollback.el('quick').value,'ข้าว 25');assert.ok(rollback.el('captureAccountDialog').open);assert.match(rollback.el('captureReviewError').textContent,/ไม่สำเร็จ/);
 console.log('PASS: multi-account staging, explicit confirmation, learned account, cancellation, single-wallet direct save, draft fingerprint, no chooser writes, duplicate guard, historical date and storage rollback.');
+// Current-purchase intent wins over learned history, including cancelled review.
+const accountHistory={...fixture,entries:[1,2].map(i=>({id:'account-vote-'+i,type:'expense',account:'w5',note:'กาแฟ',amount:65,date:'2024-02-0'+i,category:'อาหาร'}))};
+const explicit=harness(accountHistory,'w0'),explicitBefore=explicit.run('JSON.stringify(state)');
+explicit.click('#floatingCapture');explicit.click('#chooseCaptureAccount');explicit.click('[data-capture-account="w19"]');
+explicit.fill('quick','กาแฟ 2 แก้ว 65');explicit.input('quick');explicit.stage('entryForm');
+assert.match(explicit.el('formError').textContent,/ตัวเลขหลายจำนวน/);assert.match(explicit.el('formError').textContent,/กาแฟสองแก้ว 65/);
+assert.equal(explicit.run('JSON.stringify(state)'),explicitBefore);assert.equal(explicit.el('quick').value,'กาแฟ 2 แก้ว 65');assert.equal(explicit.run('explicitCaptureAccount'),'w19');
+assert.equal(explicit.writes.filter(k=>k==='jot-money-v1').length,0,'Invalid text and picker must not write ledger');
+explicit.fill('quick','กาแฟ 65');explicit.input('quick');explicit.stage('entryForm');
+assert.equal(explicit.run('account'),'w19','Explicit picker choice wins despite prior cash purchases');assert.doesNotMatch(explicit.el('captureReviewHint').textContent,/ใช้กับรายการนี้บ่อย/);
+explicit.click('#closeCaptureAccount');explicit.click('#closeQuick');assert.equal(explicit.run('explicitCaptureAccount'),'w19');assert.equal(explicit.run('JSON.stringify(state)'),explicitBefore);
+explicit.click('#floatingCapture');explicit.stage('entryForm');assert.equal(explicit.run('account'),'w19','Closing and reopening the existing draft keeps its account intent');
+explicit.click('#confirmCaptureAccount');assert.equal(explicit.run('state.entries.at(-1).account'),'w19');assert.equal(explicit.run('explicitCaptureAccount'),null,'Successful save ends draft intent');
+explicit.fill('quick','กาแฟ 70');explicit.input('quick');explicit.stage('entryForm');assert.equal(explicit.run('account'),'w5','New purchase still receives learned account suggestion');
+explicit.click('[data-capture-account="w2"]');explicit.click('#closeCaptureAccount');explicit.stage('entryForm');assert.equal(explicit.run('account'),'w2','A manual choice in review also survives cancellation');
+explicit.click('#closeCaptureAccount');explicit.fill('quick','');explicit.input('quick');assert.equal(explicit.run('explicitCaptureAccount'),null,'Clearing the purchase starts a new draft');
+explicit.fill('quick','กาแฟ 80');explicit.input('quick');explicit.stage('entryForm');assert.equal(explicit.run('account'),'w5');explicit.click('#closeCaptureAccount');
+for(const flag of ['archived','deleted']){
+ const unavailable=harness(accountHistory,'w0');unavailable.click('#chooseCaptureAccount');unavailable.click('[data-capture-account="w19"]');
+ unavailable.fill('quick','กาแฟ 65');unavailable.input('quick');unavailable.run("state.accounts.find(a=>a.id==='w19')."+flag+"=true;render()");
+ assert.equal(unavailable.run('explicitCaptureAccount'),null);assert.notEqual(unavailable.run('account'),'w19');const beforeUnavailable=unavailable.run('JSON.stringify(state)');
+ unavailable.stage('entryForm');assert.equal(unavailable.run('account'),'w5','Unavailable explicit choice falls back to an active learned wallet');assert.equal(unavailable.run('JSON.stringify(state)'),beforeUnavailable);
+ unavailable.click('#confirmCaptureAccount');assert.equal(unavailable.run('state.entries.at(-1).account'),'w5');
+}
+const explicitRollback=harness(accountHistory);explicitRollback.click('#chooseCaptureAccount');explicitRollback.click('[data-capture-account="w19"]');explicitRollback.fill('quick','กาแฟ 65');explicitRollback.input('quick');explicitRollback.stage('entryForm');
+const explicitRollbackBefore=explicitRollback.run('JSON.stringify(state)');explicitRollback.run("localStorage.setItem=()=>{throw Error('Synthetic quota')}");explicitRollback.click('#confirmCaptureAccount');
+assert.equal(explicitRollback.run('JSON.stringify(state)'),explicitRollbackBefore);assert.equal(explicitRollback.run('explicitCaptureAccount'),'w19');assert.equal(explicitRollback.el('quick').value,'กาแฟ 65');
+console.log('PASS: explicit account before typing and in review wins learning; invalid-input/cancel/reopen retain draft without ledger writes; save/clear reset intent; archived/deleted choices fall back; quota preserves intent; multiple-number errors give a valid rewrite.');
