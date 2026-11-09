@@ -418,12 +418,28 @@ $('deleteBorrowerAccount').onclick=()=>{
 let categoryEditing=null,categoryManagerType='expense';
 function renderCategoryManager(){
  $('categoryTitle').textContent=categoryManagerType==='income'?'จัดการหมวดรายรับ':'จัดการหมวดรายจ่าย';
- $('categoryList').innerHTML=Money.categories(state,categoryManagerType).map((name,index)=>`<div class="category-manager-row"><span>${esc(name)}</span>${name==='รอจัดหมวด'?'<small>หมวดระบบ</small>':`<button type="button" class="text-button" data-category-edit="${index}" aria-label="แก้ชื่อหมวด ${esc(name)}">แก้ชื่อ</button>`}</div>`).join('');
+ $('categoryList').innerHTML=Money.categories(state,categoryManagerType).map((name,index)=>`<div class="category-manager-row"><span>${esc(name)}</span>${name==='รอจัดหมวด'?'<small>หมวดระบบ</small>':`<span class="category-manager-actions"><button type="button" class="text-button" data-category-edit="${index}" aria-label="แก้ชื่อหมวด ${esc(name)}">แก้ชื่อ</button><button type="button" class="text-button danger" data-category-delete="${index}" aria-label="ลบหมวด ${esc(name)}">ลบ</button></span>`}</div>`).join('');
 }
 document.addEventListener('click',event=>{
  if(event.target.closest('[data-manage-categories]')){
   categoryManagerType=event.target.closest('[data-manage-categories]').dataset.categoryType||(type==='income'?'income':'expense');
   categoryEditing=null;$('categoryForm').reset();$('categoryNameLabel').textContent='ชื่อหมวดใหม่';$('saveCategory').textContent='เพิ่มหมวด';$('cancelCategoryEdit').classList.add('hidden');$('categoryError').textContent='';renderCategoryManager();$('categoryDialog').showModal();
+ }
+ const del=event.target.closest('[data-category-delete]');
+ if(del){
+  const name=Money.categories(state,categoryManagerType)[Number(del.dataset.categoryDelete)],used=Money.categoryUsage(state,name);
+  if(!name)return;
+  if(!confirm('ลบหมวด “'+name+'”?'+(used?' มี '+used+' รายการใช้หมวดนี้ จะย้ายไป “รอจัดหมวด” โดยยอดเงิน วันที่ และบัญชีไม่เปลี่ยน':' ยังไม่มีรายการใช้หมวดนี้')))return;
+  const snapshot=JSON.stringify(state),quickSelected=$('category').value,editSelected=$('editCategory').value;
+  const restore=()=>{Object.keys(state).forEach(k=>delete state[k]);Object.assign(state,JSON.parse(snapshot))};
+  const problem=Money.deleteCategory(state,name);
+  if(problem){restore();$('categoryError').textContent=problem;return}
+  if(!persist()){restore();renderCategoryManager();return}
+  if(categoryEditing===name)$('cancelCategoryEdit').click();
+  $('category').innerHTML=options(quickSelected===name?'รอจัดหมวด':quickSelected);
+  const editingEntry=state.entries.find(e=>e.id===editing);$('editCategory').innerHTML=options(editSelected===name?'รอจัดหมวด':editSelected,editingEntry?.type==='adjustment'?(editingEntry.direction==='increase'?'income':'expense'):editingEntry?.type||type);
+  manualCategory=false;render();renderCategoryManager();toast(used?'ลบหมวดแล้ว · '+used+' รายการย้ายไปรอจัดหมวด':'ลบหมวดแล้ว');
+  return;
  }
  const edit=event.target.closest('[data-category-edit]');
  if(edit){categoryEditing=Money.categories(state,categoryManagerType)[Number(edit.dataset.categoryEdit)];$('categoryName').value=categoryEditing;$('categoryNameLabel').textContent='เปลี่ยนชื่อหมวด';$('saveCategory').textContent='บันทึกชื่อหมวด';$('cancelCategoryEdit').classList.remove('hidden');$('categoryError').textContent='';$('categoryName').focus();}

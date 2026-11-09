@@ -46,9 +46,10 @@ const Money = {
   },
   categories(state,type=null) {
     const general=state.categoryPreset==='general-v1';
-    const incomeDefaults=(general?this.generalIncomeCategories:this.incomeCategories).map(name=>state.categoryAliases?.[name]||name);
+    const removed=new Set(state.deletedCategories||[]);
+    const incomeDefaults=(general?this.generalIncomeCategories:this.incomeCategories).map(name=>state.categoryAliases?.[name]||name).filter(name=>!removed.has(name));
     const defaults=general?this.generalExpenseCategories:this.defaultCategories;
-    const all=[...new Set(['รอจัดหมวด',...(state.categories||defaults),...incomeDefaults,...state.entries.filter(e=>e.type!=='transfer').map(e=>e.category).filter(Boolean)])];
+    const all=[...new Set(['รอจัดหมวด',...(state.categories||defaults).filter(name=>!removed.has(name)),...incomeDefaults,...state.entries.filter(e=>e.type!=='transfer').map(e=>e.category).filter(Boolean)])];
     if(type!=='expense'&&type!=='income')return all;
     return all.filter(name=>{
       if(name==='รอจัดหมวด'||name==='อื่น ๆ')return true;
@@ -69,6 +70,7 @@ const Money = {
     if(categories.some(c=>c!==previous&&c.toLocaleLowerCase()===name.toLocaleLowerCase()))return 'มีชื่อหมวดนี้แล้ว';
     const previousTypes=previous?['expense','income'].filter(t=>this.categories(state,t).includes(previous)):[];
     state.categories=previous?categories.map(c=>c===previous?name:c):categories.concat(name);
+    if(Array.isArray(state.deletedCategories)){state.deletedCategories=state.deletedCategories.filter(c=>c!==name);if(!state.deletedCategories.length)delete state.deletedCategories}
     state.categoryTypes=state.categoryTypes||{};
     if(previous){state.categoryTypes[name]=previousTypes;delete state.categoryTypes[previous];}
     else state.categoryTypes[name]=[type];
@@ -80,6 +82,23 @@ const Money = {
     }
     return '';
   },
+  // Removes a user-visible category. Entries and templates that used it move to the system
+  // category "รอจัดหมวด"; amounts, dates and accounts never change. Returns '' on success.
+  deleteCategory(state,name) {
+    name=String(name||'');
+    if(name==='รอจัดหมวด')return 'รอจัดหมวดเป็นหมวดระบบ ลบไม่ได้';
+    if(name==='โอน')return 'โอนเป็นชื่อระบบ ลบไม่ได้';
+    const categories=this.categories(state);
+    if(!categories.includes(name))return 'ไม่พบหมวดที่ต้องการลบ';
+    const rest=categories.filter(c=>c!==name);
+    state.entries.forEach(e=>{if(e.type!=='transfer'&&e.category===name){e.category='รอจัดหมวด';delete e.categoryChoice;delete e.categoryChoiceAt}});
+    if(Array.isArray(state.quickTemplates))state.quickTemplates.forEach(t=>{if(t.category===name)t.category='รอจัดหมวด'});
+    state.categories=rest;
+    if(state.categoryTypes)delete state.categoryTypes[name];
+    state.deletedCategories=[...new Set([...(state.deletedCategories||[]),name])];
+    return '';
+  },
+  categoryUsage(state,name) {return state.entries.filter(e=>e.type!=='transfer'&&e.category===name).length},
   categoryNoteKey(note) {return String(note||'').normalize('NFKC').toLocaleLowerCase('th-TH').trim().replace(/\s+/g,' ')},
   categorySuggestion(state,note,type='expense') {
     if(type!=='expense'&&type!=='income')return {category:'รอจัดหมวด',source:'pending'};
