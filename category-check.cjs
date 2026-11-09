@@ -52,3 +52,15 @@ console.log('PASS: explicit-only frequency, recent tie, no auto/legacy feedback,
   assert.equal(M.saveCategory(again,'เงินเดือน',null,'income'),'');assert.ok(M.categories(again,'income').includes('เงินเดือน'),'re-adding restores the name');
   console.log('PASS: category deletion moves entries to pending, keeps balances, stays deleted after reload');
 }
+
+// Review fixes: aliases, import, corrupt flag
+{
+ const M=require('./dist/core.js');
+ const s=M.migrate({...M.createInitialState(),accounts:[{id:'c',name:'x',kind:'wallet',opening:0}],entries:[{id:'1',type:'expense',account:'c',amount:5,category:'อาหารและเครื่องดื่ม',note:'a',date:'2026-01-01'}]});
+ s.categoryAliases={'อาหารและเครื่องดื่ม':'กิน'};s.categories=M.categories(s).concat('กิน');
+ assert.equal(M.deleteCategory(s,'กิน'),'');
+ assert.equal(s.categoryAliases['อาหารและเครื่องดื่ม'],undefined,'alias to deleted name removed');
+ const bad=M.migrate({...M.createInitialState(),accounts:[],entries:[],deletedCategories:5});
+ assert(Array.isArray(M.categories(bad)),'corrupt deletedCategories tolerated');
+ console.log('PASS: alias cleanup on delete, corrupt deletedCategories tolerated');
+}

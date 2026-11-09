@@ -63,7 +63,9 @@ const ExcelImport = {
     const aliases={'food':'อาหาร','ค่าน้ำมัน':'น้ำมัน','work':'งาน/รายได้เสริม','ทำงาน':'งาน/รายได้เสริม','ได้เงิน':'งาน/รายได้เสริม','bonus':'งาน/รายได้เสริม','other':'อื่น ๆ','household':'ของใช้','transport':'เดินทาง','culture':'บันเทิง','gift':'ของขวัญ','apparel':'เสื้อผ้า','social life':'สังคม','beauty':'ความงาม','health':'สุขภาพ'};
     const preferred=aliases[clean]||name;
     const renamed=state.categoryAliases?.[preferred]||preferred;
-    return money.categories(state).find(c=>c.toLowerCase()===renamed.toLowerCase())||renamed;
+    const found=money.categories(state).find(c=>c.toLowerCase()===renamed.toLowerCase());
+    // Never silently bring back a category the user deleted.
+    return found||(money.removedNames(state).includes(renamed)?'รอจัดหมวด':renamed);
   },
   defaultAccount(name,state) {
     // Match only the actual name. Similar bank names must be mapped by the user.
@@ -99,7 +101,7 @@ const ExcelImport = {
       }else{
         entry.category=mapping.categories[original.category]?.trim();
         if(!entry.category||entry.category.length>40||entry.category==='โอน')throw new Error('ตรวจหมวด '+original.category);
-        if(!money.categories(next).includes(entry.category))next.categories=money.categories(next).concat(entry.category);
+        if(!money.categories(next).includes(entry.category)){next.categories=money.categories(next).concat(entry.category);if(Array.isArray(next.deletedCategories)){next.deletedCategories=next.deletedCategories.filter(c=>c!==entry.category);if(!next.deletedCategories.length)delete next.deletedCategories}}
         if(next.accounts.find(a=>a.id===entry.account).kind==='borrower'){
           entry.direction=entry.type==='income'?'increase':'decrease';entry.type='adjustment';
         }

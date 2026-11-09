@@ -64,7 +64,7 @@ body.ui7-theme ::selection { background: #0a84ff80; color: #fff; }
 body.ui7-theme ::-webkit-scrollbar-thumb { background: #ffffff40; }
 body.ui7-theme :is(input,select,textarea) { caret-color: var(--blue-light); color: var(--ink); }
 body.ui7-theme :is(button,input,select,textarea,summary,a):focus-visible { outline: 3px solid #64d2ffcc; outline-offset: 2px; box-shadow: none; }
-body.ui7-theme .skip-link { background: var(--blue); color: #fff; }
+body.ui7-theme .skip-link { background: #0058d8; color: #fff; }
 body.ui7-theme :is(h1,h2,h3) { color: var(--ink); font-weight: 700; letter-spacing: -.02em; }
 body.ui7-theme :is(.section-description,.form-foot,.report-footnote,.sample-banner,.history-explanation,.calendar-legend,.calendar-mobile-legend,.weekly-help,.history-filter-notice,.history-net-note,.day-edit-hint,.list-caption,.capture-format-hint,.page-header p) { color: var(--secondary); }
 
@@ -176,10 +176,10 @@ body.ui7-theme .count-badge { background: #ffffff24; color: #fff; }
 
 /* ---------- Floating glass dock + capture ---------- */
 body.ui7-theme #floatingCapture, body.ui7-theme #floatingCapture.compact-calendar {
-  background: linear-gradient(160deg, #5cb4ff, #0a84ff 55%, #2f5bff); color: #fff; border: 0; border-radius: 999px; font-weight: 600;
+  background: linear-gradient(160deg, #0b6fe0, #0058d8 55%, #3a4fe0); color: #fff; border: 0; border-radius: 999px; font-weight: 600;
   box-shadow: inset 0 1px 0 #ffffffa0, inset 0 0 0 1px #ffffff40, 0 12px 30px -6px #0a84ffcc; -webkit-backdrop-filter: none; backdrop-filter: none;
 }
-body.ui7-theme #floatingCapture:hover { filter: brightness(1.1); }
+body.ui7-theme #floatingCapture:hover { background: linear-gradient(160deg, #0a66d0, #004fc4 55%, #2f44d0); }
 body.ui7-theme #floatingCapture .icon { stroke: #fff; }
 body.ui7-theme .ui6-dock { background: #1e1e2a8c; -webkit-backdrop-filter: blur(34px) saturate(200%); backdrop-filter: blur(34px) saturate(200%); border: 0; border-radius: 36px; box-shadow: var(--float); }
 body.ui7-theme .ui6-dock nav::before { background: #ffffff2e; border-radius: 26px; box-shadow: inset 0 1px 0 var(--glass-hi); }
@@ -196,8 +196,8 @@ body.ui7-theme .close-button { background: #ffffff26; color: #fff; border: 0; bo
 body.ui7-theme .icon-button { color: var(--blue-light); }
 body.ui7-theme footer { color: var(--secondary); }
 
-@media (max-width: 860px) {
-  body.ui7-theme main { margin-left: 0; }
+@media (max-width: 900px) {
+  body.ui7-theme main { margin-left: auto; }
   body.ui7-theme #moneyCurrent { --money-size: 46px; }
   body.ui7-theme .page-header h1 { font-size: 30px; }
   body.ui7-theme #moneyOverview { border-radius: 30px; }
@@ -208,8 +208,8 @@ body.ui7-theme footer { color: var(--secondary); }
 }
 
 /* ---------- Specificity locks over legacy layers ---------- */
-body.ui7-theme.ui6-theme :is(.save,.primary-small,.calendar-modal-add) { background: linear-gradient(160deg, #5cb4ff, #0a84ff 55%, #2f5bff); color: #fff; border: 0; border-radius: 18px; font-weight: 600; box-shadow: inset 0 1px 0 #ffffffa0, 0 10px 24px -8px #0a84ffcc; }
-body.ui7-theme.ui6-theme :is(.save,.primary-small,.calendar-modal-add):hover:not(:disabled) { background: linear-gradient(160deg, #7cc4ff, #2a94ff 55%, #4a70ff); color: #fff; }
+body.ui7-theme.ui6-theme :is(.save,.primary-small,.calendar-modal-add) { background: linear-gradient(160deg, #0b6fe0, #0058d8 55%, #3a4fe0); color: #fff; border: 0; border-radius: 18px; font-weight: 600; box-shadow: inset 0 1px 0 #ffffffa0, 0 10px 24px -8px #0a84ffcc; }
+body.ui7-theme.ui6-theme :is(.save,.primary-small,.calendar-modal-add):hover:not(:disabled) { background: linear-gradient(160deg, #0a66d0, #004fc4 55%, #2f44d0); color: #fff; }
 body.ui7-theme.ui6-theme :is(.segments,.analytics-tabs),
 body.ui7-theme.ui6-theme #history.calendar-compact .history-switch { background: #00000040; border: 0; border-radius: 16px; padding: 3px; box-shadow: inset 0 1px 3px #00000066; }
 body.ui7-theme.ui6-theme :is(.segments button,.analytics-tabs button) { color: #ffffffcc; font-weight: 500; border-radius: 13px; background: transparent; }
@@ -252,24 +252,6 @@ body.ui7-theme.ui6-theme .history-totals b { font-weight: 700; }
 body.ui7-theme.ui6-theme #history .history-panel { background: transparent; box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none; }
 body.ui7-theme.ui6-theme.ui5-theme #moneyOverview .trend-ranges button { border-radius: 13px; }
 
-/* Analytics: vivid system palette over the legacy muted one */
-body.ui7-theme #donutTone0 stop { stop-color: #0a84ff; }
-body.ui7-theme .analytics-dialog .chart-category:nth-child(1) :is(.chart-swatch,i) { background: #0a84ff !important; color: #fff; }
-body.ui7-theme #donutTone1 stop { stop-color: #30d158; }
-body.ui7-theme .analytics-dialog .chart-category:nth-child(2) :is(.chart-swatch,i) { background: #30d158 !important; color: #fff; }
-body.ui7-theme #donutTone2 stop { stop-color: #ff9f0a; }
-body.ui7-theme .analytics-dialog .chart-category:nth-child(3) :is(.chart-swatch,i) { background: #ff9f0a !important; color: #fff; }
-body.ui7-theme #donutTone3 stop { stop-color: #bf5af2; }
-body.ui7-theme .analytics-dialog .chart-category:nth-child(4) :is(.chart-swatch,i) { background: #bf5af2 !important; color: #fff; }
-body.ui7-theme #donutTone4 stop { stop-color: #ff375f; }
-body.ui7-theme .analytics-dialog .chart-category:nth-child(5) :is(.chart-swatch,i) { background: #ff375f !important; color: #fff; }
-body.ui7-theme #donutTone5 stop { stop-color: #64d2ff; }
-body.ui7-theme .analytics-dialog .chart-category:nth-child(6) :is(.chart-swatch,i) { background: #64d2ff !important; color: #fff; }
-body.ui7-theme #donutTone6 stop { stop-color: #ffd60a; }
-body.ui7-theme .analytics-dialog .chart-category:nth-child(7) :is(.chart-swatch,i) { background: #ffd60a !important; color: #fff; }
-body.ui7-theme #donutTone7 stop { stop-color: #ac8e68; }
-body.ui7-theme .analytics-dialog .chart-category:nth-child(8) :is(.chart-swatch,i) { background: #ac8e68 !important; color: #fff; }
-
 /* ---------- Proportion pass: one type scale, one radius scale, one spacing rhythm ----------
    Type: 14 secondary / 15 body / 17 row title / 20 section / 32 page / 56 balance.
    Radius: 28 hero + sheets / 24 panes / 18 rows / 14 controls / pill.
@@ -304,7 +286,7 @@ body.ui7-theme.ui6-theme :is(#home .home-activity,#home .capture-column) { gap: 
 body.ui7-theme.ui6-theme #home :is(#recent,#frequentList) { gap: 12px; }
 body.ui7-theme.ui6-theme #home { gap: 32px 40px; }
 body.ui7-theme.ui6-theme .wallet-fleet-key li { padding: 6px 14px 6px 10px; }
-@media (max-width: 860px) {
+@media (max-width: 900px) {
   body.ui7-theme.ui6-theme { --r-hero: 26px; --pad-hero: 22px; --pad-pane: 20px; }
   body.ui7-theme.ui6-theme #moneyCurrent { --money-size: 46px; }
   body.ui7-theme.ui6-theme .page-header h1 { font-size: 28px; }
@@ -320,3 +302,74 @@ body.ui7-theme .category-manager-actions { display: inline-flex; gap: 8px; flex-
 body.ui7-theme.ui6-theme .category-manager-row button { font-size: 14px; min-height: 40px; padding-inline: 14px; border-radius: 12px; background: var(--glass-strong); color: var(--blue-light); border: 0; }
 body.ui7-theme.ui6-theme .category-manager-row button.danger { color: #ff6b60; background: #ff6b6026; }
 body.ui7-theme.ui6-theme .category-manager-row { font-size: 15px; gap: 12px; align-items: center; }
+
+/* Summary / calendar "all data" totals: one rounded glass pane, no legacy square frame or column rules */
+body.ui7-theme.ui6-theme #history#history .calendar-summary .history-totals {
+ background: linear-gradient(160deg, #ffffff1f, #ffffff0a); border: 0; border-radius: var(--r-pane); padding: 16px 18px; margin: 4px 0 14px;
+ box-shadow: var(--pane); gap: 10px 14px;
+}
+body.ui7-theme.ui6-theme #history#history .calendar-summary .history-totals > span,
+body.ui7-theme.ui6-theme #history#history .calendar-summary .history-totals > span + span { border: 0; padding: 0; font-size: 14px; color: var(--muted, #ebebf599); }
+body.ui7-theme.ui6-theme #history#history .calendar-summary .history-totals b { font-size: 19px; line-height: 1.4; }
+@media (max-width: 420px) {
+ body.ui7-theme.ui6-theme #history#history .calendar-summary .history-totals { padding: 14px 16px; gap: 8px 10px; }
+ body.ui7-theme.ui6-theme #history#history .calendar-summary .history-totals b { font-size: 17px; }
+}
+
+/* ---------- Urgent fixes: retire leaked Afterglow (UI6) navy / mint / lavender ---------- */
+body.ui7-theme.ui6-theme #history.calendar-compact .calendar-day,
+body.ui7-theme.ui6-theme #history.calendar-compact .calendar-day.has-entries { border-radius: 16px; border: 0; }
+body.ui7-theme.ui6-theme #history.calendar-compact .calendar-day.has-entries { background: linear-gradient(160deg, #ffffff1c, #ffffff0b); box-shadow: inset 0 1px 0 #ffffff30, inset 0 0 0 1px #ffffff12; }
+body.ui7-theme.ui6-theme #history.calendar-compact .calendar-day.has-entries:hover { background: linear-gradient(160deg, #ffffff30, #ffffff14); }
+body.ui7-theme.ui6-theme #history.calendar-compact .calendar-day.is-today:not(.is-selected) { background: linear-gradient(160deg, #0a84ff66, #0a84ff33); box-shadow: inset 0 1px 0 #ffffff60, inset 0 0 0 1px #64d2ff88; }
+/* selected = filled + inset ring; keyboard focus = separate 3px outside ring, so the two never look alike */
+body.ui7-theme.ui6-theme #history.calendar-compact .calendar-day.is-selected { background: linear-gradient(160deg, #0a84ff99, #0a84ff55); border: 0; box-shadow: inset 0 1px 0 #ffffff60, inset 0 0 0 2px #64d2ff; outline: 0; }
+body.ui7-theme.ui6-theme #history.calendar-compact .calendar-day:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
+body.ui7-theme.ui6-theme #history.calendar-compact .calendar-day.is-today .calendar-day-top b,
+body.ui7-theme.ui6-theme #history.calendar-compact .calendar-day.is-selected.is-today .calendar-day-top b { outline-color: var(--blue-light); }
+
+body.ui7-theme.ui6-theme .quick-dialog #quickCard .capture-date-control input { background: #ffffff14; border-radius: var(--r-ctl); }
+body.ui7-theme.ui6-theme .quick-dialog #quickCard .capture-date-status { background: #30d15826; }
+body.ui7-theme.ui6-theme .capture-account-trigger:hover { background: #ffffff1a; border-color: #64d2ff80; }
+body.ui7-theme.ui6-theme #captureAccountList > button[aria-pressed=true] { background: #0a84ff2e; border-color: #64d2ff80; }
+body.ui7-theme.ui6-theme #captureAccountList > button:hover { background: #ffffff12; }
+body.ui7-theme.ui6-theme .delete { background: #ff6b6026; color: #ff8a80; border-radius: var(--r-ctl); }
+body.ui7-theme.ui6-theme .delete:hover { background: #ff6b6040; }
+body.ui7-theme.ui6-theme .import-table th { background: #ffffff14; }
+body.ui7-theme.ui6-theme .analytics-dialog :is(.chart-selection,#analyticsCategories .chart-selection,.donut-total-pill,.chart-category.is-selected) { background: #0a84ff1f; }
+body.ui7-theme.ui6-theme :is(.outline,.icon-button,.close-button,.analytics-trigger,.category-manager-row button,.borrower-trash):hover:not(:disabled) { background: #ffffff1c; border-color: #64d2ff80; }
+
+/* ---------- Donut v2: glass dome, glowing gradient ring (palette now lives in chart-view.js) ---------- */
+body.ui7-theme.ui6-theme .analytics-dialog .donut-stage { width: min(100%, 300px); }
+body.ui7-theme.ui6-theme .analytics-dialog .donut-stage::before {
+ inset: 15%; border-radius: 50%;
+ background: radial-gradient(circle at 32% 16%, #ffffff3d, #ffffff0f 38%, #00000022 100%), #0b0e1a;
+ box-shadow: inset 0 1.5px 0 #ffffff66, inset 0 0 0 1px #ffffff1c, inset 0 -22px 44px #00000099, 0 22px 50px -14px #000000d0;
+}
+body.ui7-theme.ui6-theme .analytics-dialog .donut-stage::after {
+ content: ""; position: absolute; inset: -14%; z-index: -1; pointer-events: none;
+ background: radial-gradient(circle, #bf5af233 0%, #0a84ff26 42%, transparent 70%); filter: blur(14px);
+}
+body.ui7-theme .donut-track { fill: none; stroke: #ffffff10; stroke-width: 22px; }
+body.ui7-theme .donut-guide { fill: none; stroke: #ffffff44; stroke-width: 1.6; stroke-dasharray: .1 7; stroke-linecap: round; }
+body.ui7-theme .donut-guide-inner { stroke: #ffffff12; }
+body.ui7-theme.ui6-theme .analytics-dialog .donut-segment { stroke-width: 22px; opacity: .82; filter: drop-shadow(0 0 6px var(--cg, #0a84ff99)); }
+body.ui7-theme.ui6-theme .analytics-dialog .donut-segment.is-selected,
+body.ui7-theme.ui6-theme .analytics-dialog .donut-segment:focus-visible { stroke-width: 28px; opacity: 1; filter: drop-shadow(0 0 14px var(--cg, #0a84ff99)) brightness(1.08); outline: none; }
+body.ui7-theme .donut-center-content { inset: 24% 21%; gap: 2px; }
+body.ui7-theme #donutCenterName { font-size: 13px; color: #ebebf5b3; font-weight: 500; }
+body.ui7-theme #donutCenterPercent { font-size: 42px; line-height: 1.15; font-weight: 800; letter-spacing: -1.5px; background: linear-gradient(180deg, #fff 30%, #aebcff); -webkit-background-clip: text; background-clip: text; color: transparent; }
+body.ui7-theme #donutCenterAmount { font-size: 15px; font-weight: 700; color: #fff; }
+body.ui7-theme .donut-center-content small { font-size: 12px; color: #ebebf599; }
+body.ui7-theme.ui6-theme .analytics-dialog .donut-category-nav button { width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(160deg, #ffffff26, #ffffff0d); border: 0; box-shadow: inset 0 1px 0 #ffffff40, inset 0 0 0 1px #ffffff14; color: var(--blue-light); }
+body.ui7-theme #donutPosition { font-size: 14px; color: var(--secondary); }
+body.ui7-theme.ui6-theme .analytics-dialog .donut-total-pill { background: linear-gradient(160deg, #ffffff1f, #ffffff0a); border: 0; border-radius: var(--r-row); box-shadow: inset 0 1px 0 #ffffff40, inset 0 0 0 1px #ffffff12; padding: 12px 18px; }
+body.ui7-theme .donut-total-pill span { font-size: 14px; color: var(--secondary); }
+body.ui7-theme .donut-total-pill strong { font-size: 20px; color: #fff; }
+body.ui7-theme.ui6-theme .analytics-dialog .chart-category { border: 0; border-radius: var(--r-row); background: linear-gradient(160deg, #ffffff17, #ffffff08); box-shadow: inset 0 1px 0 #ffffff2e, inset 0 0 0 1px #ffffff10; }
+body.ui7-theme.ui6-theme .analytics-dialog .chart-category.is-selected { background: linear-gradient(160deg, #ffffff26, #ffffff10); box-shadow: inset 0 1px 0 #ffffff55, inset 0 0 0 1.5px var(--category-color), 0 0 24px -6px var(--category-color); }
+body.ui7-theme .analytics-dialog .chart-swatch { width: 30px; min-width: 30px; height: 30px; flex: none; display: grid; place-items: center; padding: 0; border-radius: 10px; color: #04101c; font-weight: 800; font-size: 14px; box-shadow: 0 0 14px -2px var(--category-color), inset 0 1px 0 #ffffff80; }
+body.ui7-theme .analytics-dialog .category-track { background: #ffffff14; height: 6px; border-radius: 999px; }
+body.ui7-theme .analytics-dialog .category-track i { border-radius: 999px; box-shadow: 0 0 10px var(--category-color); }
+@media (min-width: 601px) { body.ui7-theme.ui6-theme .analytics-dialog .donut-layout { grid-template-columns: 300px minmax(0, 1fr); } }
+@media (prefers-reduced-motion: reduce) { body.ui7-theme .donut-segment { transition: none; } }

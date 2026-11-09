@@ -44,9 +44,10 @@ const Money = {
     const expense=this.generalExpenseCategories,income=this.generalIncomeCategories;
     return {budget:0,accounts:[],entries:[],categoryPreset:'general-v1',categories:['รอจัดหมวด',...expense,...income],categoryTypes:Object.fromEntries([...expense.map(c=>[c,['expense']]),...income.map(c=>[c,['income']])])};
   },
+  removedNames(state) {return Array.isArray(state.deletedCategories)?state.deletedCategories.filter(c=>typeof c==='string'):[]},
   categories(state,type=null) {
     const general=state.categoryPreset==='general-v1';
-    const removed=new Set(state.deletedCategories||[]);
+    const removed=new Set(this.removedNames(state));
     const incomeDefaults=(general?this.generalIncomeCategories:this.incomeCategories).map(name=>state.categoryAliases?.[name]||name).filter(name=>!removed.has(name));
     const defaults=general?this.generalExpenseCategories:this.defaultCategories;
     const all=[...new Set(['รอจัดหมวด',...(state.categories||defaults).filter(name=>!removed.has(name)),...incomeDefaults,...state.entries.filter(e=>e.type!=='transfer').map(e=>e.category).filter(Boolean)])];
@@ -70,6 +71,7 @@ const Money = {
     if(categories.some(c=>c!==previous&&c.toLocaleLowerCase()===name.toLocaleLowerCase()))return 'มีชื่อหมวดนี้แล้ว';
     const previousTypes=previous?['expense','income'].filter(t=>this.categories(state,t).includes(previous)):[];
     state.categories=previous?categories.map(c=>c===previous?name:c):categories.concat(name);
+    if(!previous&&state.categoryAliases)delete state.categoryAliases[name];
     if(Array.isArray(state.deletedCategories)){state.deletedCategories=state.deletedCategories.filter(c=>c!==name);if(!state.deletedCategories.length)delete state.deletedCategories}
     state.categoryTypes=state.categoryTypes||{};
     if(previous){state.categoryTypes[name]=previousTypes;delete state.categoryTypes[previous];}
@@ -95,7 +97,10 @@ const Money = {
     if(Array.isArray(state.quickTemplates))state.quickTemplates.forEach(t=>{if(t.category===name)t.category='รอจัดหมวด'});
     state.categories=rest;
     if(state.categoryTypes)delete state.categoryTypes[name];
-    state.deletedCategories=[...new Set([...(state.deletedCategories||[]),name])];
+    const hidden=new Set([...this.removedNames(state),name]);
+    // A rename alias pointing at the deleted name must not keep redirecting suggestions to it.
+    Object.keys(state.categoryAliases||{}).forEach(k=>{if(state.categoryAliases[k]===name){delete state.categoryAliases[k];if([...this.incomeCategories,...this.generalIncomeCategories].includes(k))hidden.add(k)}});
+    state.deletedCategories=[...hidden];
     return '';
   },
   categoryUsage(state,name) {return state.entries.filter(e=>e.type!=='transfer'&&e.category===name).length},

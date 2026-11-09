@@ -429,7 +429,7 @@ document.addEventListener('click',event=>{
  if(del){
   const name=Money.categories(state,categoryManagerType)[Number(del.dataset.categoryDelete)],used=Money.categoryUsage(state,name);
   if(!name)return;
-  if(!confirm('ลบหมวด “'+name+'”?'+(used?' มี '+used+' รายการใช้หมวดนี้ จะย้ายไป “รอจัดหมวด” โดยยอดเงิน วันที่ และบัญชีไม่เปลี่ยน':' ยังไม่มีรายการใช้หมวดนี้')))return;
+  if(!confirm('ลบหมวด “'+name+'”?'+(used?' มี '+used+' รายการใช้หมวดนี้ จะย้ายไป “รอจัดหมวด” โดยยอดเงิน วันที่ และบัญชีไม่เปลี่ยน':' ยังไม่มีรายการใช้หมวดนี้')+(Money.categories(state,'income').includes(name)&&Money.categories(state,'expense').includes(name)?' หมวดนี้ใช้ได้ทั้งรายรับและรายจ่าย ลบแล้วจะหายจากทั้งสองฝั่ง':'')))return;
   const snapshot=JSON.stringify(state),quickSelected=$('category').value,editSelected=$('editCategory').value;
   const restore=()=>{Object.keys(state).forEach(k=>delete state[k]);Object.assign(state,JSON.parse(snapshot))};
   const problem=Money.deleteCategory(state,name);
@@ -438,7 +438,7 @@ document.addEventListener('click',event=>{
   if(categoryEditing===name)$('cancelCategoryEdit').click();
   $('category').innerHTML=options(quickSelected===name?'รอจัดหมวด':quickSelected);
   const editingEntry=state.entries.find(e=>e.id===editing);$('editCategory').innerHTML=options(editSelected===name?'รอจัดหมวด':editSelected,editingEntry?.type==='adjustment'?(editingEntry.direction==='increase'?'income':'expense'):editingEntry?.type||type);
-  manualCategory=false;render();renderCategoryManager();toast(used?'ลบหมวดแล้ว · '+used+' รายการย้ายไปรอจัดหมวด':'ลบหมวดแล้ว');
+  if(quickSelected===name)manualCategory=false;render();renderCategoryManager();toast(used?'ลบหมวดแล้ว · '+used+' รายการย้ายไปรอจัดหมวด':'ลบหมวดแล้ว');
   return;
  }
  const edit=event.target.closest('[data-category-edit]');

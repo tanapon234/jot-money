@@ -9,22 +9,25 @@
    const name = row.querySelector('b')?.textContent.trim() || '';
    const raw = row.querySelector('.settings-list-value')?.firstChild?.textContent || '';
    const value = parseFloat(raw.replace(/[^0-9.\-]/g, '')) || 0;
-   return { row, name, value, color: livery[i % livery.length] };
+   const borrower = /^ผู้ยืม/.test(row.querySelector('small')?.textContent.trim() || '');
+   return { row, name, value, borrower, color: livery[i % livery.length] };
   }).filter(w => w.name);
  }
  function paint() {
   queued = false;
   const list = wallets();
   list.forEach(w => { w.row.dataset.wallet = w.name; w.row.style.setProperty('--w', w.color); });
-  const byLength = [...list].sort((a, b) => b.name.length - a.name.length);
+  const byName = new Map(list.map(w => [w.name, w]));
   document.querySelectorAll('.entry-meta-main').forEach(el => {
-   const text = el.textContent.trim(), hit = byLength.find(w => text.startsWith(w.name));
-   if (hit) { el.dataset.wallet = hit.name; el.style.setProperty('--w', hit.color); }
+   // The account name lives in the sibling .entry-meta-account ("name · date"); transfers show a route instead.
+   const acct = el.parentElement?.querySelector('.entry-meta-account')?.textContent.split(' · ')[0].trim();
+   const hit = (acct && byName.get(acct)) || [...list].sort((x, y) => y.name.length - x.name.length).find(w => !acct && el.textContent.trim().startsWith(w.name + ' '));
+   if (hit && !hit.borrower) { el.dataset.wallet = hit.name; el.style.setProperty('--w', hit.color); }
   });
   const host = $('moneyOverview'), anchor = host?.querySelector('.money-overview-bottom');
   if (!host || !anchor) return;
   let fleet = $('walletFleet');
-  const positive = list.filter(w => w.value > 0);
+  const positive = list.filter(w => w.value > 0 && !w.borrower);
   const total = positive.reduce((n, w) => n + w.value, 0);
   if (!positive.length || total <= 0) { fleet?.remove(); return; }
   if (!fleet) { fleet = document.createElement('div'); fleet.id = 'walletFleet'; fleet.className = 'wallet-fleet'; anchor.after(fleet); }
